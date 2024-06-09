@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The SandBox</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/posts.css">
+</head>
+<body>
+    {{ template "navbar" . }}
+    <main>
+        <section class="two-col-container">
+            {{ template "sidebar" . }}
+            {{ template "postsContainer" . }}
+        </section>
+    </main>
+
+    {{ template "footer" . }}
+
+    <!-- Ensure this element exists -->
+    <div id="notificationIcon">Notifications</div>
+    <div id="mySidepanel" class="sidepanel" style="width: 250px;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    </div> <!-- Ensure this element exists for displaying notifications -->
+</body>
+<script src="/static/js/shared.js"></script>
+<script src="/static/js/timeFormatter.js"></script>
+<script src="/static/js/notifications.js"></script>
+</html>

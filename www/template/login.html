@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The SandBox</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/register.css">
+</head>
+
+<body>
+    {{ template "navbar" . }}
+
+    <main>
+        <section class="form-container">
+            <img src="/static/imgs/logo.png" alt="The Sanbox logi">
+            <h1>Login to The Sandbox</h1>
+            <form action="/login" method="post" onsubmit="formChecker(event)">
+                <div class="form-field">
+                    <label for="username">username or email</label>
+                    <br>
+                    <input type="text" name="username" id="username" placeholder="e.g howard@gmail.com" required>
+                </div>
+                <div class="form-field">
+                    <label for="password">password</label>
+                    <!-- <a href="" style="float: right;">Forgot Password</a> -->
+                    <br>
+                    <input type="password" name="password" id="password" placeholder="••••••••"  pattern=".{8,}" required>
+                </div>
+                <button class="primary-button" type="submit">Login</button>
+            </form>
+            <span class="h-divider"></span>
+            <div class="button-group">
+                 <button class="secondary-button" onclick="window.location.href = '/login/google'">Continue with Google</button>
+                 <button class="secondary-button" onclick="window.location.href = '/login/github'">Continue with Github</button>
+               <button class="secondary-button" onclick="window.location.href = '/login/facebook'">Continue with Facebook</button>
+            </div>
+        </section>
+    </main>
+
+    {{ template "footer" . }}
+</body>
+<script src="/static/js/shared.js"></script>
+<script src="/static/js/timeFormatter.js"></script>
+<script src="/static/js/register.js"></script>
+</html>

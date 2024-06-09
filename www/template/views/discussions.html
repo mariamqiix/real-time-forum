@@ -1,0 +1,74 @@
+{{ define "discussionPost" }}
+{{ $post := .Post }}
+{{ $user := .User }}
+<div class="PostDiv">
+    <div class="discussion-post">
+        <div class="discussion-post-image-container">
+            <img src="{{ $post.Author.ImageURL}}" alt="">
+        </div>
+        <div class="discussion-post-data" data-post="{{$post.Id}}" id="{{ $post.Id }}">
+            <div>
+                <a href="/user/{{ $post.Author.Username }}" class="post-data-author">{{ $post.Author.Username }}</a>
+            </div>
+            <h1 class="post-data-title">{{ $post.Title }}</h1>
+            <textarea readonly class="post-data-message">{{ $post.Message }}</textarea>
+            <p class="post-data-date">Posted on <time datetime="{{ $post.CreatedAt }}"></time> </p>
+        </div>
+    </div>
+    <div class="RecDiv">
+        {{ range $index, $reaction := $post.Reactions }}
+        {{ if $user }}
+        {{ if eq $index 0 }}
+        {{ else }}
+        |
+        {{ end }}
+        <button class="reaction-button{{ if $reaction.DidReact }}-reacted{{ end }}" onclick="handleReaction(this)"
+            data-type="{{ $reaction.Type}}">{{ $reaction.Reaction }} {{ $reaction.Count }}</button>
+        {{ else }}
+        <button class="reaction-button-disabled" title="Login to react">{{ $reaction.Reaction }} {{
+            $reaction.Count}}</button>
+        {{ end }} <!-- if user end -->
+        {{ end }} <!-- reaction range end -->
+    </div>
+</div>
+{{ end }} <!-- end of discussionPost -->
+
+
+{{ define "discussionPostRange" }}
+{{ $comments := .Comments }}
+{{ $user := .User }}
+{{ range $index, $comment := $comments }}
+{{ $post := . }}
+<div class="discussion-comment">
+    <div class="discussion-post-image-container">
+        <img src="{{ $post.Author.ImageURL}}" alt="">
+    </div>
+    <div class="discussion-post-data" data-post="{{$post.Id}}" id="{{ $post.Id }}">
+        <div>
+            <a href="/user/{{ $post.Author.Username }}" class="post-data-author">{{ $post.Author.Username }}</a>
+            <p class="post-data-date">Posted on <time datetime="{{ $post.CreatedAt }}"></time> </p>
+        </div>
+        <h1 class="post-data-title">{{ $post.Title }}</h1>
+        <textarea readonly class="post-data-message">{{ $post.Message }}</textarea>
+        <div>
+            {{ range $index, $reaction := $post.Reactions }}
+            {{ if $user }}
+            {{ if eq $index 0 }}
+            {{ else }}
+            |
+            {{ end }}
+            <button class="reaction-button{{ if $reaction.DidReact }}-reacted{{ end }}" onclick="handleReaction(this)"
+                data-type="{{ $reaction.Type}}">{{ $reaction.Reaction }} {{ $reaction.Count }}</button>
+            {{ else }}
+            <button class="reaction-button-disabled" title="Login to react">{{ $reaction.Reaction }} {{
+                $reaction.Count}}</button>
+            {{ end }} <!-- if user end -->
+            {{ end }} <!-- reaction range end -->
+        </div>
+    </div>
+</div>
+{{ if ne $index (sub (len $comments) 1) }}
+<hr>
+{{ end }} <!-- hr if  end -->
+{{ end }} <!-- comment range end -->
+{{ end }} <!-- end of discussionPostRange -->

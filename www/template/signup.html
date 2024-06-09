@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The SandBox</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/register.css">
+</head>
+
+<body>
+    {{ template "navbar" . }}
+
+    <main>
+        <section class="form-container">
+            <img src="/static/imgs/logo.png" alt="The Sanbox logi">
+            <h1>Register in The Sandbox</h1>
+            <form action="/signup" method="post" onsubmit="formChecker(event)">
+                <div class="split-form-field">
+                    <div class="form-field">
+                        <label for="first_name">first name</label>
+                        <br>
+                        <input type="text" name="first_name" id="first_name" placeholder="John" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="last_name">last name</label>
+                        <br>
+                        <input type="text" name="last_name" id="lalast_namestname" placeholder="Doe" required>
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label for="email">email</label>
+                    <br>
+                    <input type="email" name="email" id="email" placeholder="e.g howard@gmail.com" required>
+                </div>
+                <div class="form-field">
+                    <label for="username">username</label>
+                    <br>
+                    <input type="text" name="username" id="username" placeholder="johnDoe" required>
+                </div>
+                <div class="form-field">
+                    <label for="password">password</label>
+                    <input type="password" name="password" id="password" placeholder="••••••••" pattern=".{8,}"
+                        required>
+                </div>
+                <button class="primary-button" type="submit">Register</button>
+            </form>
+        </section>
+    </main>
+
+    {{ template "footer" . }}
+</body>
+<script src="/static/js/shared.js"></script>
+<script src="/static/js/timeFormatter.js"></script>
+<script src="/static/js/register.js"></script>
+
+</html>

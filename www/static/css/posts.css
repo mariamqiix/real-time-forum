@@ -1,0 +1,30 @@
+.posts-container {
+    flex: 1 1 auto;
+}
+
+.posts-actions {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.author {
+    color: var(--secondary-text-color);
+    text-decoration: none;
+    font-weight: 700;
+}
+.author:hover {
+    color: var(--secondary-text-color-hover);
+    text-decoration: underline;
+}
+
+.post {
+    padding: 25px;
+    border-radius: 55px;
+    /* border: solid black; */
+    margin: 9px;
+}
+
+.post:hover {
+    background-color: #00000021;
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The SandBox</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/newPost.css">
+</head>
+
+<body>
+    {{ template "navbar" . }}
+    <main>
+        <div class="new-post-container">
+            <h1>Create a new post</h1>
+
+            {{ if eq .ParentId -1 }}
+            {{ if .Categories }}
+            <h3>Pick your Categories</h3>
+            {{ range $category := .Categories }}
+            <button class="secondary-button category-button" onclick="selectedCategory(this)">{{ $category.Name
+                }}</button>
+            {{ end }} <!-- category range end -->
+            {{ end }} <!-- category check end -->
+
+            {{ end }} <!-- parent id check end -->
+
+            {{ if eq .ParentId -1 }}
+            <form action="/post/add" method="post" onsubmit="processPostForm(event)">
+                {{ else }}
+                <form action="/post/{{ .ParentId }}/comment" method="post" onsubmit="processPostForm(event)">
+                    {{ end }} <!-- parent id check end -->
+                    <h3>Add your Title</h3>
+                    <input type="text" name="title" id="title" placeholder="a super nice title" required>
+
+                    <h3>Write your Post</h3>
+                    <textarea name="content" id="content" placeholder="write your post here" required></textarea>
+
+                    {{ if eq .ParentId -1 }}
+                    <h4>Optionally, Add an Image</h4>
+                    <input type="file" name="image" id="image" accept="image/*">
+                    {{ end }} <!-- parent id check end for upload photo -->
+
+                    <button class="primary-button post-button" type="submit">Create The Post</button>
+                </form>
+        </div>
+    </main>
+
+    {{ template "footer" . }}
+</body>
+<script src="/static/js/shared.js"></script>
+<script src="/static/js/newPost.js"></script>
+
+</html>

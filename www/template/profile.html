@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .UserProfile.Username }}'s profile</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/sidebar.css">
+    <link rel="stylesheet" href="/static/css/profile.css">
+</head>
+
+<body>
+    {{ template "navbar" . }}
+    <main>
+        <div class="profile-banner">
+            <div class="profiler-banner-content">
+                <div class="profile-image-container">
+                    <img src="{{ .UserProfile.ImageURL }}" alt="">
+                </div>
+                <div class="profile-details-container">
+                    <h1>{{ .UserProfile.Username }}</h1>
+                    <!-- TODO: WILL ADD LATER -->
+                    <!-- <a href=""><img src="/static/imgs/logo.png" title="github"></a>
+                    <a href=""><img src="/uploads/1" title="google"></a>
+                    <a href=""><img src="/static/imgs/logo.png" title="facebook"></a> -->
+                </div>
+            </div>
+        </div>
+
+        <section class="two-col-container">
+            <nav class="sidebar">
+                <ul class="Categories">
+                    <h1>Filter by</h1>
+                    <li class="CateItem"><a href="/user/{{ .UserProfile.Username}}">Posts</a></li>
+                    <li class="CateItem"><a href="/user/{{ .UserProfile.Username}}?q=comments">Comments</a></li>
+                    <li class="CateItem"><a href="/user/{{ .UserProfile.Username}}?q=likes">Likes</a></li>
+                    <li class="CateItem"><a href="/user/{{ .UserProfile.Username}}?q=dislikes">Dislikes</a></li>
+                </ul>
+            </nav>
+            <div class="profile-posts-container">
+                {{ if eq (len .Posts) 0 }}
+                <p>No posts found</p>
+                {{ else }}
+                {{ template "posts" . }}
+                {{ end }}
+            </div>
+
+            </div>
+        </section>
+    </main>
+
+    {{ template "footer" . }}
+</body>
+<script src="/static/js/shared.js"></script>
+
+</html>

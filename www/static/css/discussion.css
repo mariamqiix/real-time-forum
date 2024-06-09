@@ -1,0 +1,139 @@
+main {
+    margin-top: 0; /* Remove the margin-top */
+}
+
+.discussion-banner {
+    background-color: #ededed;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    height: 200px;
+    text-align: center;
+}
+
+.discussion-banner img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+
+.discussion-container {
+    max-width: 1000px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    overflow-wrap: anywhere;
+}
+
+.discussion-container .discussion-content {
+    flex-grow: 1; /* This makes the content take the remaining width */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 20px 0;
+    padding: 0 40px;
+}
+
+.discussion-container .discussion-actions {
+    flex: 0 0 auto; /* Allow actions to take the width of its content */
+}
+
+.discussion-content hr {
+    width: 80%;
+}
+
+.discussion-content hr:first-of-type {
+    width: 100%;
+
+    color: var(--primary-color-hover);
+}
+
+.discussion-post {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.discussion-comment {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin: 20px 0;
+    padding: 0 75px;
+}
+
+.discussion-comment:hover {
+    background-color: #00000021;
+}
+
+.discussion-post * {
+    margin: 0;
+} 
+
+.discussion-post-image-container {
+    flex: 0 0 auto;
+    background-color: palegoldenrod;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+    width: 44px;
+    height: 44px;
+    padding: 0px;
+    border: 2px solid white;
+    border-radius: 50px;
+    text-align: center;
+}
+
+.discussion-post-image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+
+
+.discussion-post-data {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-data-author {
+    color: var(--secondary-text-color);
+    text-decoration: none;
+    font-weight: 700;
+}
+.post-data-author:hover {
+    color: var(--secondary-text-color-hover);
+    text-decoration: underline;
+}
+
+.post-data-date {
+    color: var(--secondary-text-color);
+    font-size: 0.8rem;
+}
+
+.post-data-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.post-data-message {
+    resize: none;
+    border: none;
+}
+
+.RecDiv {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    color: #00000033;
+}
+
+.PostDiv {
+    display: flex;
+    gap: 10px;
+    /* margin: 10px 0; */
+    flex-direction: column;
+}
