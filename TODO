@@ -1,0 +1,20 @@
+front :
+* profile page 
+* post page
+* log in page : by mariam 
+* setting page 
+* edit post page 
+* signin/signout/login : by mariam 
+
+
+
+back :
+* search
+* notification 
+
+
+DATABASE : 
+- in user table , add gender 
+- messages table 
+- get function for the messages 
+- reactions : only like and dislike 

@@ -782,7 +782,7 @@ if r.Method == "GET" {
 	}
 
 	for i, catName := range Categories {
-		id := getCategoryIdFromArr(dbCategories, catName)
+		id := getCategoryIdFromArr(dbCategories, string(catName))
 		if id == -1 {
 			http.Error(w, "Invalid category", http.StatusBadRequest)
 			return
@@ -792,7 +792,7 @@ if r.Method == "GET" {
 
 	dbPostAdd := structs.Post{
 		UserId:        sessionUser.Id,
-		Title:         Title,
+		Title:         title,
 		Message:       Content,
 		ImageId:       -1,
 		Time:          time.Now().UTC(),

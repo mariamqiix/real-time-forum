@@ -227,6 +227,7 @@ function HomePageRequest() {
 }
 
 
+
 function displayPost(data) {
     console.log("Received data:", data); // Log the received data to check its structure
 
@@ -250,12 +251,13 @@ function displayPost(data) {
                 "style",
                 '--font-selector:R0Y7S3VsaW0gUGFyay1yZWd1bGFy;--framer-font-family:"Kulim Park";--framer-font-size:40px'
             );
-            titleElement.textContent = post.Title;
+            titleElement.textContent = post.title;
             postTitle.appendChild(titleElement);
 
             const postUserName = document.createElement("span");
             postUserName.classList.add("postUserName");
-            postUserName.textContent = post.Username;
+
+            postUserName.textContent = post.author.username;
             postTitle.appendChild(postUserName);
 
             const postContent = document.createElement("span");
@@ -264,7 +266,7 @@ function displayPost(data) {
                 "style",
                 '--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:"Kufam";--framer-font-size:15px;--framer-text-color:rgba(91, 91, 91, 1)'
             );
-            postContent.textContent = post.Message;
+            postContent.textContent = post.message;
             postTitle.appendChild(postContent);
             postBox.appendChild(postTitle);
             homeNavigationContent.appendChild(postBox);

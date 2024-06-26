@@ -430,6 +430,7 @@ ul.framer-text>li.framer-text:before {
     padding: 2%;
     float: left;
     clear: both;
+    margin-bottom: 1%;
 }
 
 .postUserPic {
@@ -498,18 +499,18 @@ ul.framer-text>li.framer-text:before {
 } */
 
 
-.profileBtn, 
+.profileBtn,
 .profileIcon {
     top: 376px;
 }
 
 .homeBtn,
-.homeIcon  {
+.homeIcon {
     top: 447px;
 }
 
 .notificationsBtn,
-.bellIcon  {
+.bellIcon {
     top: 518px;
 }
 
@@ -797,6 +798,26 @@ ul.framer-text>li.framer-text:before {
 .registration {
     height: 100%;
     width: 70%;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+/* Hide the scrollbar for a specific div */
+.home::-webkit-scrollbar {
+    width: 0.5em;
+    /* Set the width of the scrollbar (adjust as needed) */
+}
+
+/* Optional: Style the scrollbar track */
+.home::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    /* Change the background color as desired */
+}
+
+/* Optional: Style the scrollbar thumb */
+.home::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Change the thumb color as desired */
 }
 
 .error {
@@ -874,7 +895,7 @@ ul.framer-text>li.framer-text:before {
     text-align: center;
 }
 
-.notification-container{
+.notification-container {
     margin-top: 30px;
     padding-left: 6%;
     text-align: left;
