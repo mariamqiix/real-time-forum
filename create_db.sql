@@ -22,9 +22,10 @@ CREATE TABLE UploadedImage (
 CREATE TABLE User (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     type_id INTEGER NOT NULL,
-    username VARCHAR(10) NOT NULL,
+    username VARCHAR(10) NOT NULL,  
     first_name VARCHAR(16) NOT NULL,
     last_name VARCHAR(16) NOT NULL,
+    country VARCHAR(16) NOT NULL,
     date_of_birth DATE,
     email VARCHAR(30) NOT NULL,
     hashed_password CHAR(60) NOT NULL,

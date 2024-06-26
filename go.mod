@@ -1,4 +1,4 @@
-module sandbox
+module RealTimeForum
 
 go 1.22
 
