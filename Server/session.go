@@ -38,6 +38,31 @@ func LoggedOrNot(w http.ResponseWriter, r *http.Request) (*structs.Session, bool
 	return &session, true // return the session
 }
 
+
+
+// Get a user Struct from a request, if user us a Guest.
+func LoggedOrNot2(w http.ResponseWriter, r *http.Request) (*structs.Session, bool) {
+	cookies, err := r.Cookie("SessionToken")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			// If the cookie is not set, return an unauthorized status
+			return nil, false
+		}
+		// For any other type of error, return a bad request status
+		return nil, false
+	}
+	// Get cookie value
+	session, err := database.GetSession(cookies.Value)
+	if err != nil {
+		return nil, false
+	}
+
+	err1 := database.AddSession(session)
+	if err1 != nil {
+		return nil, false
+	}
+	return &session, true // return the session
+}
 // Create a new session and set the cookie
 // This function is used when a user logs in
 func CreateSessionAndSetCookie(token string, w http.ResponseWriter, user *structs.User) error {

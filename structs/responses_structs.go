@@ -70,3 +70,11 @@ type NotificationResponse struct {
 	Body  string `json:"body"`
 	Link  string `json:"link"` // link to be opened when the notification is clicked
 }
+
+type PromoteRequestResponse struct {
+	Id        int
+	UserId    int
+	Username  string
+	Reason    string
+	IsPending bool
+}

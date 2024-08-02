@@ -3,12 +3,12 @@ package Server
 import (
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
-	"fmt"
 )
 
 func uploadedContentServerHandler(w http.ResponseWriter, r *http.Request) {
@@ -192,7 +192,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func signupPostHandler(w http.ResponseWriter, r *http.Request) {
-			// Set CORS headers
+	// Set CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -202,9 +202,8 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 	lastName := r.FormValue("lastName")
 	email := r.FormValue("email")
 	username := r.FormValue("username")
-	dob ,_:= strconv.Atoi(r.FormValue("dob"))
+	dob, _ := strconv.Atoi(r.FormValue("dob"))
 	password := r.FormValue("password")
-
 
 	// check password length
 	if len(password) < 8 {
@@ -251,7 +250,7 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 	// 		}
 	// 	}
 	// }
-	
+
 	// structure
 	hashedPassword, hashErr := GetHash(password)
 	if hashErr != HasherErrorNone {
@@ -285,6 +284,7 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "something went wrong, please try again later", http.StatusInternalServerError)
 		return
 	}
+
 	fmt.Print("done")
 }
 
@@ -299,19 +299,15 @@ func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse the request body
-	var loginData structs.UserRequest
-	if !ParseBody(&loginData, r) {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
-		return
-	}
-
 	var user *structs.User
 	var err error
 
+	Username := r.FormValue("username")
+	fmt.Print(Username)
+	Password := r.FormValue("password")
 	// check if the email is valid and exists
-	if IsValidEmail(loginData.Username) {
-		exist, err := database.CheckExistance("User", "email", loginData.Username)
+	if IsValidEmail(Username) {
+		exist, err := database.CheckExistance("User", "email", Username)
 		if err != nil {
 			log.Printf("loginPostHandler: %s\n", err.Error())
 			http.Error(w, "something went wromg, plaese try again later", http.StatusInternalServerError)
@@ -321,14 +317,14 @@ func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		user, err = database.GetUserByEmail(loginData.Username)
+		user, err = database.GetUserByEmail(Username)
 		if err != nil {
 			http.Error(w, "something went wromg, plaese try again later", http.StatusInternalServerError)
 			return
 		}
 
 	} else {
-		user, err = database.GetUserByUsername(loginData.Username)
+		user, err = database.GetUserByUsername(Username)
 		if err != nil {
 			log.Printf("loginPostHandler: %s\n", err.Error())
 			http.Error(w, "something went wromg, plaese try again later", http.StatusInternalServerError)
@@ -341,7 +337,7 @@ func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := CompareHashAndPassword(user.HashedPassword, loginData.Password); err != HasherErrorNone {
+	if err := CompareHashAndPassword(user.HashedPassword, Password); err != HasherErrorNone {
 		http.Error(w, "Invalid password", http.StatusConflict)
 		return
 	}
@@ -364,27 +360,28 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Set CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	// Get the session token from the cookie
 	cookie, err := r.Cookie("session")
 	if err != nil {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
+		writeToJson(err, w)
 	}
 	// Get the session from the database
 	sessionToken := cookie.Value
 	session, err := database.GetSession(sessionToken)
 	if err != nil {
 		http.Error(w, "Something went wrong, contact server administrator", http.StatusInternalServerError)
-		return
+		writeToJson(err, w)
+
 	}
 
 	// Remove the session from the database
 	if err := database.RemoveSession(session.Id); err != nil {
 		http.Error(w, "Something went wrong, contact server administrator", http.StatusInternalServerError)
-		return
+		writeToJson(err, w)
+
 	}
 
 	// Clear the session cookie
@@ -392,10 +389,6 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 		Name:    "session",
 		Expires: time.Unix(0, 0),
 	})
-
-	// Redirect to the login page
-	http.Redirect(w, r, "/", http.StatusSeeOther)
-
 }
 
 func categoryPostsHandler(w http.ResponseWriter, r *http.Request) {
@@ -566,287 +559,278 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 	// Set CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-if r.Method == "GET" {sessionUser := GetUser(r)
-	limiterUsername := "[GUESTS]"
-	if sessionUser != nil {
-		limiterUsername = sessionUser.Username
-	}
-	if !userLimiter.Allow(limiterUsername) {
-		errorServer(w, r, http.StatusTooManyRequests)
-		return
-	}
+	if r.Method == "GET" {
+		sessionUser := GetUser(r)
+		limiterUsername := "[GUESTS]"
+		if sessionUser != nil {
+			limiterUsername = sessionUser.Username
+		}
+		if !userLimiter.Allow(limiterUsername) {
+			errorServer(w, r, http.StatusTooManyRequests)
+			return
+		}
 
-	if sessionUser == nil {
-		errorServer(w, r, http.StatusUnauthorized)
-		return
-	}
+		if sessionUser == nil {
+			errorServer(w, r, http.StatusUnauthorized)
+			return
+		}
 
-	postId, err := strconv.Atoi(r.PathValue("post_id"))
-	if err != nil {
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
-
-	post, err := database.GetPost(postId)
-	if err != nil || post == nil {
-		errorServer(w, r, http.StatusNotFound)
-		return
-	}
-
-	// fill the view data
-	addPostView := addPostView{
-		User: &structs.UserResponse{
-			Username:  sessionUser.Username,
-			FirstName: sessionUser.FirstName,
-			LastName:  sessionUser.LastName,
-			ImageURL:  imageIdToUrl(sessionUser.ImageId),
-			Type:      userTypeToResponse(sessionUser.Type),
-		},
-		Categories: nil,
-		ParentId:   -1,
-		OriginalId: post.Id,
-	}
-	if post.ParentId != nil {
-		addPostView.ParentId = *post.ParentId
-	}
-	writeToJson(addPostView, w)
-} else if r.Method == "POST" {
-sessionUser := GetUser(r)
-	limiterUsername := "[GUESTS]"
-	if sessionUser != nil {
-		limiterUsername = sessionUser.Username
-	}
-	if !userLimiter.Allow(limiterUsername) {
-		errorServer(w, r, http.StatusTooManyRequests)
-		return
-	}
-
-	if sessionUser == nil {
-		errorServer(w, r, http.StatusUnauthorized)
-		return
-	}
-
-	postId, err := strconv.Atoi(r.PathValue("post_id"))
-	if err != nil {
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
-
-	post, err := database.GetPost(postId)
-	if err != nil || post == nil {
-		errorServer(w, r, http.StatusNotFound)
-		return
-	}
-
-	var newPostInfo structs.AddPostRequest
-
-	if !parsePostForm(&newPostInfo, r) {
-		errorServer(w, r, http.StatusBadRequest)
-		http.Error(w, "Invalid form submitted", http.StatusBadRequest)
-		return
-	}
-
-	if newPostInfo.Title == "" || newPostInfo.Content == "" {
-		log.Println("addPostPostHandler: failed validation")
-		http.Error(w, "Empty fields are not allowed", http.StatusBadRequest)
-		return
-	}
-
-	// update the post
-	post.Title = newPostInfo.Title
-	post.Message = newPostInfo.Content
-
-	haveImage := newPostInfo.Image.Size != 0
-	if haveImage && newPostInfo.Image.Size > maxImageSize {
-		http.Error(w, "Image size too large", http.StatusBadRequest)
-		return
-	}
-
-	if haveImage {
-		file, err := newPostInfo.Image.Open()
+		postId, err := strconv.Atoi(r.PathValue("post_id"))
 		if err != nil {
-			log.Printf("editPostPostHandler: %s\n", err.Error())
-			http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+			errorServer(w, r, http.StatusBadRequest)
 			return
 		}
 
-		imageBuff, err := io.ReadAll(file)
+		post, err := database.GetPost(postId)
+		if err != nil || post == nil {
+			errorServer(w, r, http.StatusNotFound)
+			return
+		}
+
+		// fill the view data
+		addPostView := addPostView{
+			User: &structs.UserResponse{
+				Username:  sessionUser.Username,
+				FirstName: sessionUser.FirstName,
+				LastName:  sessionUser.LastName,
+				ImageURL:  imageIdToUrl(sessionUser.ImageId),
+				Type:      userTypeToResponse(sessionUser.Type),
+			},
+			Categories: nil,
+			ParentId:   -1,
+			OriginalId: post.Id,
+		}
+		if post.ParentId != nil {
+			addPostView.ParentId = *post.ParentId
+		}
+		writeToJson(addPostView, w)
+	} else if r.Method == "POST" {
+		sessionUser := GetUser(r)
+		limiterUsername := "[GUESTS]"
+		if sessionUser != nil {
+			limiterUsername = sessionUser.Username
+		}
+		if !userLimiter.Allow(limiterUsername) {
+			errorServer(w, r, http.StatusTooManyRequests)
+			return
+		}
+
+		if sessionUser == nil {
+			errorServer(w, r, http.StatusUnauthorized)
+			return
+		}
+
+		postId, err := strconv.Atoi(r.PathValue("post_id"))
 		if err != nil {
-			log.Printf("editPostPostHandler: %s\n", err.Error())
-			http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+			errorServer(w, r, http.StatusBadRequest)
 			return
 		}
 
-		isImage, _ := IsDataImage(imageBuff)
-		if !isImage {
-			errorServer(w, r, http.StatusUnsupportedMediaType)
-			http.Error(w, "file type not allowed", http.StatusUnsupportedMediaType)
+		post, err := database.GetPost(postId)
+		if err != nil || post == nil {
+			errorServer(w, r, http.StatusNotFound)
 			return
 		}
-		imageId, err := database.UploadImage(imageBuff)
-		if err != nil {
-			log.Printf("editPostPostHandler: %s\n", err.Error())
-			http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+
+		var newPostInfo structs.AddPostRequest
+
+		if !parsePostForm(&newPostInfo, r) {
+			errorServer(w, r, http.StatusBadRequest)
+			http.Error(w, "Invalid form submitted", http.StatusBadRequest)
 			return
 		}
-		post.ImageId = imageId
-	}
 
-	database.UpdatePostInfo(post)
+		if newPostInfo.Title == "" || newPostInfo.Content == "" {
+			log.Println("addPostPostHandler: failed validation")
+			http.Error(w, "Empty fields are not allowed", http.StatusBadRequest)
+			return
+		}
 
-	// redirect to the post
-	http.Redirect(w, r, "/post/"+strconv.Itoa(post.Id), http.StatusFound)
+		// update the post
+		post.Title = newPostInfo.Title
+		post.Message = newPostInfo.Content
+
+		haveImage := newPostInfo.Image.Size != 0
+		if haveImage && newPostInfo.Image.Size > maxImageSize {
+			http.Error(w, "Image size too large", http.StatusBadRequest)
+			return
+		}
+
+		if haveImage {
+			file, err := newPostInfo.Image.Open()
+			if err != nil {
+				log.Printf("editPostPostHandler: %s\n", err.Error())
+				http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+				return
+			}
+
+			imageBuff, err := io.ReadAll(file)
+			if err != nil {
+				log.Printf("editPostPostHandler: %s\n", err.Error())
+				http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+				return
+			}
+
+			isImage, _ := IsDataImage(imageBuff)
+			if !isImage {
+				errorServer(w, r, http.StatusUnsupportedMediaType)
+				http.Error(w, "file type not allowed", http.StatusUnsupportedMediaType)
+				return
+			}
+			imageId, err := database.UploadImage(imageBuff)
+			if err != nil {
+				log.Printf("editPostPostHandler: %s\n", err.Error())
+				http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+				return
+			}
+			post.ImageId = imageId
+		}
+
+		database.UpdatePostInfo(post)
+
+		// redirect to the post
+		http.Redirect(w, r, "/post/"+strconv.Itoa(post.Id), http.StatusFound)
 	}
 }
 
-
-
-func addPostHandler(w http.ResponseWriter, r *http.Request) {
-	// Set CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-if r.Method == "GET" {
-	sessionUser := GetUser(r)
-	limiterUsername := "[GUESTS]"
-	if sessionUser != nil {
-		limiterUsername = sessionUser.Username
-	}
-	if !userLimiter.Allow(limiterUsername) {
-		errorServer(w, r, http.StatusTooManyRequests)
-		return
-	}
-
-	if sessionUser == 	nil {
-		errorServer(w, r, http.StatusUnauthorized)
-		return
-	}
-
-	// fill the view data
-	addPostView := addPostView{
-		User: &structs.UserResponse{
-			Username:  sessionUser.Username,
-			FirstName: sessionUser.FirstName,
-			LastName:  sessionUser.LastName,
-			ImageURL:  imageIdToUrl(sessionUser.ImageId),
-			Type:      userTypeToResponse(sessionUser.Type),
-		},
-		Categories: nil,
-		ParentId:   -1,
-	}
-
-	categories, err := database.GetCategories()
-	if err != nil {
-		log.Printf("addPostGetHandler: %s\n", err.Error())
-		err = nil
-	} else {
-		addPostView.Categories = mapCategories(categories)
-	}
-
-	writeToJson(addPostView, w)
-} else if r.Method == "POST"  {
-
-	sessionUser := GetUser(r)
-	limiterUsername := "[GUESTS]"
-	if sessionUser != nil {
-		limiterUsername = sessionUser.Username
-	}
-
-	title := r.FormValue("title")
-	Content := r.FormValue("topic")
-	Categories := r.FormValue("selectedCategories")
-
-	if !userLimiter.Allow(limiterUsername) {
-		fmt.Print("hello")
-		errorServer(w, r, http.StatusTooManyRequests)
-		return
-	}
-
-	if sessionUser == nil {
-		
-		errorServer(w, r, http.StatusUnauthorized)
-		return
-	}
-
-	if title == "" || Content == "" || len(Categories) == 0 {
-		log.Println("addPostPostHandler: failed validation")
-		http.Error(w, "Empty fields are not allowed", http.StatusBadRequest)
-		return
-	}
-
-	categoriesIds := make([]int, len(Categories))
-	dbCategories, err := database.GetCategories()
-	if err != nil {
-		log.Printf("addPostPostHandler: %s\n", err.Error())
-		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
-		return
-	}
-
-	for i, catName := range Categories {
-		id := getCategoryIdFromArr(dbCategories, string(catName))
-		if id == -1 {
-			http.Error(w, "Invalid category", http.StatusBadRequest)
+func addPostHandlerGet(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		sessionUser := GetUser(r)
+		limiterUsername := "[GUESTS]"
+		if sessionUser != nil {
+			limiterUsername = sessionUser.Username
+		}
+		if !userLimiter.Allow(limiterUsername) {
+			errorServer(w, r, http.StatusTooManyRequests)
 			return
 		}
-		categoriesIds[i] = id
+
+		if sessionUser == nil {
+			errorServer(w, r, http.StatusUnauthorized)
+			return
+		}
+
+		// fill the view data
+		addPostView := addPostView{
+			User: &structs.UserResponse{
+				Username:  sessionUser.Username,
+				FirstName: sessionUser.FirstName,
+				LastName:  sessionUser.LastName,
+				ImageURL:  imageIdToUrl(sessionUser.ImageId),
+				Type:      userTypeToResponse(sessionUser.Type),
+			},
+			Categories: nil,
+			ParentId:   -1,
+		}
+
+		categories, err := database.GetCategories()
+		if err != nil {
+			log.Printf("addPostGetHandler: %s\n", err.Error())
+			err = nil
+		} else {
+			addPostView.Categories = mapCategories(categories)
+		}
+
+		writeToJson(addPostView, w)
 	}
-
-	dbPostAdd := structs.Post{
-		UserId:        sessionUser.Id,
-		Title:         title,
-		Message:       Content,
-		ImageId:       -1,
-		Time:          time.Now().UTC(),
-		CategoriesIDs: categoriesIds,
-		ParentId:      nil,
-	}
-
-	// haveImage := pstReq.Image.Size != 0
-	// if haveImage && pstReq.Image.Size > maxImageSize {
-	// 	http.Error(w, "Image size too large", http.StatusBadRequest)
-	// 	return
-	// }
-
-	// if haveImage {
-	// 	file, err := pstReq.Image.Open()
-	// 	if err != nil {
-	// 		log.Printf("addPostPostHandler: %s\n", err.Error())
-	// 		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
-	// 		return
-	// 	}
-
-	// 	imageBuff, err := io.ReadAll(file)
-	// 	if err != nil {
-	// 		log.Printf("addPostPostHandler: %s\n", err.Error())
-	// 		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
-	// 		return
-	// 	}
-
-	// 	isImage, _ := IsDataImage(imageBuff)
-	// 	if !isImage {
-	// 		errorServer(w, r, http.StatusUnsupportedMediaType)
-	// 		http.Error(w, "file type not allowed", http.StatusUnsupportedMediaType)
-	// 		return
-	// 	}
-	// 	imageId, err := database.UploadImage(imageBuff)
-	// 	if err != nil {
-	// 		log.Printf("addPostPostHandler: %s\n", err.Error())
-	// 		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
-	// 		return
-	// 	}
-	// 	log.Printf("addPostPostHandler: image uploaded with id %d\n", imageId)
-	// 	dbPostAdd.ImageId = imageId
-	// }
-
-	newPostId, err := database.AddPost(dbPostAdd)
-	if err != nil {
-		log.Printf("addPostPostHandler: %s\n", err.Error())
-		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
-		return
-	}
-	http.Redirect(w, r, "/post/"+strconv.Itoa(newPostId), http.StatusSeeOther)
-}
 }
 
+func addPostHandlerPost(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+
+		sessionUser := GetUser(r)
+		limiterUsername := "[GUESTS]"
+		if sessionUser != nil {
+			limiterUsername = sessionUser.Username
+		}
+
+		title := r.FormValue("title")
+		Content := r.FormValue("topic")
+		Categories := r.FormValue("selectedCategories")
+		fmt.Print(Categories)
+
+		if !userLimiter.Allow(limiterUsername) {
+			fmt.Print("hello")
+			errorServer(w, r, http.StatusTooManyRequests)
+			return
+		}
+
+		if sessionUser == nil {
+
+			errorServer(w, r, http.StatusUnauthorized)
+			return
+		}
+
+		if title == "" || Content == "" || len(Categories) == 0 {
+			log.Println("addPostPostHandler: failed validation")
+			http.Error(w, "Empty fields are not allowed", http.StatusBadRequest)
+			return
+		}
+
+		categoriesIds := make([]int, len(Categories))
+
+		for i, catName := range Categories {
+			intId, _ := strconv.Atoi(string(catName))
+			categoriesIds[i] = intId
+		}
+
+		dbPostAdd := structs.Post{
+			UserId:        sessionUser.Id,
+			Title:         title,
+			Message:       Content,
+			ImageId:       -1,
+			Time:          time.Now().UTC(),
+			CategoriesIDs: categoriesIds,
+			ParentId:      nil,
+		}
+
+		// haveImage := pstReq.Image.Size != 0
+		// if haveImage && pstReq.Image.Size > maxImageSize {
+		// 	http.Error(w, "Image size too large", http.StatusBadRequest)
+		// 	return
+		// }
+
+		// if haveImage {
+		// 	file, err := pstReq.Image.Open()
+		// 	if err != nil {
+		// 		log.Printf("addPostPostHandler: %s\n", err.Error())
+		// 		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+		// 		return
+		// 	}
+
+		// 	imageBuff, err := io.ReadAll(file)
+		// 	if err != nil {
+		// 		log.Printf("addPostPostHandler: %s\n", err.Error())
+		// 		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+		// 		return
+		// 	}
+
+		// 	isImage, _ := IsDataImage(imageBuff)
+		// 	if !isImage {
+		// 		errorServer(w, r, http.StatusUnsupportedMediaType)
+		// 		http.Error(w, "file type not allowed", http.StatusUnsupportedMediaType)
+		// 		return
+		// 	}
+		// 	imageId, err := database.UploadImage(imageBuff)
+		// 	if err != nil {
+		// 		log.Printf("addPostPostHandler: %s\n", err.Error())
+		// 		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+		// 		return
+		// 	}
+		// 	log.Printf("addPostPostHandler: image uploaded with id %d\n", imageId)
+		// 	dbPostAdd.ImageId = imageId
+		// }
+
+		_, err := database.AddPost(dbPostAdd)
+		if err != nil {
+			log.Printf("addPostPostHandler: %s\n", err.Error())
+			http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+			return
+		}
+	}
+	writeToJson(map[string]string{"message": "Operation performed successfully"}, w)
+
+}
 
 func reportUserHandler(w http.ResponseWriter, r *http.Request) {
 	// Set CORS headers
@@ -1243,18 +1227,444 @@ func addCommentGetHandler(w http.ResponseWriter, r *http.Request) {
 	writeToJson(addPostView, w)
 }
 
-
 func categoryGetHandler(w http.ResponseWriter, r *http.Request) {
-		// Set CORS headers
+	// Set CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-	categories , err :=  database.GetCategories()
+	categories, err := database.GetCategories()
 	if err != nil {
-			errorServer(w, r, http.StatusNotFound)
-			http.Error(w, "cannot get the categories", http.StatusNotFound)
-			return
+		errorServer(w, r, http.StatusNotFound)
+		http.Error(w, "cannot get the categories", http.StatusNotFound)
+		return
 	}
-	writeToJson(categories,w)
+	writeToJson(categories, w)
+}
+
+// homepageHandler handles the homepage route and serves the homepage template
+func searchPostHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+	limiterUsername := "[GUESTS]"
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+	}
+	if !userLimiter.Allow(limiterUsername) {
+		errorServer(w, r, http.StatusTooManyRequests)
+		return
+	}
+
+	view := homeView{
+		Posts:      nil,
+		User:       nil,
+		Categories: nil,
+	}
+
+	if sessionUser != nil {
+		view.User = &structs.UserResponse{
+			Username:  sessionUser.Username,
+			FirstName: sessionUser.FirstName,
+			LastName:  sessionUser.LastName,
+			ImageURL:  imageIdToUrl(sessionUser.ImageId),
+			Type:      userTypeToResponse(sessionUser.Type),
+		}
+	}
+	fmt.Print("hi")
+
+	content := r.FormValue("search")
+	fmt.Print(content)
+
+	dbPosts, err := database.SearchContent(content)
+	if err != nil {
+		log.Printf("homepageHandler: %s\n", err.Error())
+	}
+	fmt.Print(dbPosts)
+
+	dbCategories, err := database.GetCategories()
+	if err != nil {
+		log.Printf("homepageHandler: %s\n", err.Error())
+	}
+
+	if sessionUser == nil {
+		view.Posts = mapPosts(dbPosts, -1)
+	} else {
+		view.Posts = mapPosts(dbPosts, sessionUser.Id)
+	}
+
+	view.Categories = mapCategories(dbCategories)
+	view.SortOptions = []string{"latest", "most liked", "least liked", "oldest"}
+
+	writeToJson(view, w)
+
+}
+
+// homepageHandler handles the homepage route and serves the homepage template
+func LoggedUserHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+	limiterUsername := "[GUESTS]"
+	fmt.Print(sessionUser)
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+		fmt.Print(limiterUsername)
+		writeToJson(limiterUsername, w)
+
+	}
+	writeToJson(nil, w)
+
+}
+
+func UserTypeHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+	writeToJson(userTypeToResponse(sessionUser.Type), w)
+}
+
+func ModeratorHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+
+	limiterUsername := "[GUESTS]"
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+	}
+	if !userLimiter.Allow(limiterUsername) {
+		errorServer(w, r, http.StatusTooManyRequests)
+		return
+	}
+	Moderators, err := database.GetUsersByType(2)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	writeToJson(Moderators, w)
+}
+
+func RemoveModeratorHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+
+	limiterUsername := "[GUESTS]"
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+	}
+	if !userLimiter.Allow(limiterUsername) {
+		errorServer(w, r, http.StatusTooManyRequests)
+		return
+	}
+	user := r.FormValue("id")
+	intUser, _ := strconv.Atoi(user)
+	err := database.UpdateUserType(intUser, 1)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+}
+
+func PromotionRequestHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+
+	reason := r.FormValue("answer")
+
+	promotionRequest := structs.PromoteRequest{
+		Reason:    reason,
+		Time:      time.Now(),
+		IsPending: true,
+	}
+	// Add error handling for user not found
+	user, err := database.GetUserById(sessionUser.Id) // Dereference the pointer value
+	if err != nil || user == nil {
+		writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+
+	// Add error handling for post not found
+	promotionRequest.UserId = sessionUser.Id
+
+	err2 := database.AddPromoteRequest(promotionRequest)
+	if err2 != nil {
+		writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
+		errorServer(w, r, http.StatusInternalServerError)
+		return
+	}
+
+	err2 = writeToJson(promotionRequest, w)
+	if err2 != nil {
+		log.Printf("reportPostHandler: %s\n", err2.Error())
+		errorServer(w, r, http.StatusInternalServerError)
+		return
+	}
+}
+
+func changePasswordHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+
+	password := r.FormValue("password")
+	if len(password) < 8 {
+		http.Error(w, "Password must be at least 8 characters long", http.StatusBadRequest)
+		return
+	}
+
+	hashedPassword, hashErr := GetHash(password)
+	if hashErr != HasherErrorNone {
+		errorServer(w, r, http.StatusInternalServerError)
+		return
+	}
+
+	sessionUser.HashedPassword = hashedPassword
+	err := database.UpdateUserInfo(sessionUser)
+	if err != nil {
+		errorServer(w, r, http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func userMessageHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+}
+
+func PromotionRequestsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+
+	limiterUsername := "[GUESTS]"
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+	}
+	if !userLimiter.Allow(limiterUsername) {
+		errorServer(w, r, http.StatusTooManyRequests)
+		return
+	}
+	promotionRequests, err := database.GetPromoteRequests()
+	fmt.Print((promotionRequests))
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	PromoteRequestResponse, err := ConvertToPromoteRequestResponse(promotionRequests)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	writeToJson(PromoteRequestResponse, w)
+}
+
+func ShowUserPromotionHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+
+	limiterUsername := "[GUESTS]"
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+	}
+	if !userLimiter.Allow(limiterUsername) {
+		errorServer(w, r, http.StatusTooManyRequests)
+		return
+	}
+	id := r.FormValue("id")
+	IntId, _ := strconv.Atoi(id)
+	promotionRequests, err := database.GetPromoteRequestByid(IntId)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	user, err := database.GetUserById(promotionRequests.UserId)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	PromoteRequestResponse := structs.PromoteRequestResponse{
+		Id:        promotionRequests.Id,
+		UserId:    user.Id,
+		Username:  user.Username,
+		Reason:    promotionRequests.Reason,
+		IsPending: promotionRequests.IsPending,
+	}
+	writeToJson(PromoteRequestResponse, w)
+
+}
+
+func RejectPromotionHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+
+	limiterUsername := "[GUESTS]"
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+	}
+	if !userLimiter.Allow(limiterUsername) {
+		errorServer(w, r, http.StatusTooManyRequests)
+		return
+	}
+	id := r.FormValue("userId")
+	IntId, _ := strconv.Atoi(id)
+	err := database.ReomvePromoteRequest(IntId)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+}
+
+func ApprovePromotionHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+
+	limiterUsername := "[GUESTS]"
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+	}
+	if !userLimiter.Allow(limiterUsername) {
+		errorServer(w, r, http.StatusTooManyRequests)
+		return
+	}
+	id := r.FormValue("userId")
+	fmt.Println(id)
+	IntId, _ := strconv.Atoi(id)
+	err := database.UpdateUserType(IntId, 2)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	err = database.ReomvePromoteRequest(IntId)
+	fmt.Print("done")
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+}
+
+func removeCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+
+	limiterUsername := "[GUESTS]"
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+	}
+	if !userLimiter.Allow(limiterUsername) {
+		errorServer(w, r, http.StatusTooManyRequests)
+		return
+	}
+	categoryId := r.FormValue("id")
+	fmt.Print(categoryId)
+	IntId, _ := strconv.Atoi(categoryId)
+	err := database.RemoveCategory(IntId)
+	if err != nil {
+		fmt.Print(err)
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	err = database.RemovePostCategory(IntId)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+}
+func addCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+
+	limiterUsername := "[GUESTS]"
+	if sessionUser != nil {
+		limiterUsername = sessionUser.Username
+	}
+	if !userLimiter.Allow(limiterUsername) {
+		errorServer(w, r, http.StatusTooManyRequests)
+		return
+	}
+	categoryName := r.FormValue("name")
+	categoryDescription := r.FormValue("description")
+	fmt.Println(categoryName, "hello you\n\nhi")
+	fmt.Println(categoryDescription)
+
+	category := structs.Category{
+		Name:        categoryName,
+		Description: categoryDescription,
+		Color:       "#000000",
+	}
+	err := database.AddCategory(category)
+	fmt.Print(err)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+}
+
+func getUserInfoHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+
+	user, err := database.GetUserById(sessionUser.Id)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+
+	writeToJson(user, w)
 }

@@ -11,6 +11,8 @@ DROP TABLE IF EXISTS Category;
 DROP TABLE IF EXISTS UserNotification;
 DROP TABLE IF EXISTS UserSession;
 DROP TABLE IF EXISTS UploadedImage;
+DROP TABLE IF EXISTS Message;
+
 
 -- Create the Image table
 CREATE TABLE UploadedImage (
@@ -148,6 +150,16 @@ CREATE TABLE UserSession (
     creation_time INTEGER,
     FOREIGN KEY (user_id) REFERENCES User(id)
 );
+
+CREATE TABLE Message {
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    senderId INTEGER,
+    receiverId INTEGER,
+    Message VARCHAR(300),
+    Time DATE,
+    FOREIGN KEY (senderId) REFERENCES User(id),
+    FOREIGN KEY (receiverId) REFERENCES User(id),
+}
 
 -- Insert the default user roles
 INSERT INTO UserRole 

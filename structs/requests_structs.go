@@ -1,6 +1,8 @@
 package structs
 
-import "mime/multipart"
+import (
+	"mime/multipart"
+)
 
 type UserRequest struct {
 	Username     string `json:"username"`   // must for signup and login
@@ -13,6 +15,13 @@ type UserRequest struct {
 	GithubName   string `json:"github_name"`
 	LinkedinName string `json:"linkedin_name"`
 	TwitterName  string `json:"twitter_name"`
+}
+
+type MessageRequest struct {
+	SenderId    int    `json:"SenderId"`
+	RecipientId int    `json:"RecipientId"`
+	Message     string `json:"Message"`
+	Time        string `json:"Time"`
 }
 
 type CategoryRequest struct {

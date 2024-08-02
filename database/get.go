@@ -1,9 +1,9 @@
 package database
 
 import (
+	"RealTimeForum/structs"
 	"database/sql"
 	"fmt"
-	"RealTimeForum/structs"
 	"time"
 )
 
@@ -164,6 +164,71 @@ func GetUserById(userId int) (*structs.User, error) {
 	}
 
 	return &u, nil
+}
+
+// GetUsersByType retrieves all users from the database based on the provided user type and returns a slice of structs.User and an error
+func GetUsersByType(userType int) ([]structs.User, error) {
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Prepare the SQL statement with a placeholder
+	stmt, err := db.Prepare(`SELECT id, type_id, username, first_name, last_name, 
+        date_of_birth, email, hashed_password, image_id, banned_until,
+        github_name, linkedin_name, twitter_name FROM User WHERE type_id = ?`)
+
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	// Execute the SQL statement and retrieve the user information
+	rows, err := stmt.Query(userType)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []structs.User
+
+	for rows.Next() {
+		var u structs.User
+		var bannedUntil sql.NullTime
+
+		err := rows.Scan(
+			&u.Id,
+			&u.Type,
+			&u.Username,
+			&u.FirstName,
+			&u.LastName,
+			&u.DateOfBirth,
+			&u.Email,
+			&u.HashedPassword,
+			&u.ImageId,
+			&bannedUntil,
+			&u.GithubName,
+			&u.LinkedinName,
+			&u.TwitterName)
+
+		if err != nil {
+			return nil, err
+		}
+
+		// Assign the value from sql.NullTime to u.BannedUntil
+		if bannedUntil.Valid {
+			u.BannedUntil = bannedUntil.Time
+		} else {
+			u.BannedUntil = time.Time{} // Set a default value for u.BannedUntil (e.g., time.Time{})
+		}
+
+		users = append(users, u)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 // retrieves all the values from the category table and returns them as a slice of Category structs
@@ -939,4 +1004,98 @@ func GetUserNotifications(userId int) ([]structs.UserNotification, error) {
 
 	// Return the retrieved UserNotifications and no error
 	return notifications, nil
+}
+
+// GetMessages retrieves all messages from the database where the senderId and receiverId match the provided values
+func GetMessages(senderId int, receiverId int) ([]structs.Message, error) {
+	query := `
+        SELECT id, senderId, receiverId, Message, Time 
+        FROM Message 
+        WHERE senderId = ? AND receiverId = ?
+    `
+	rows, err := db.Query(query, senderId, receiverId)
+	if err != nil {
+		return nil, fmt.Errorf("GetMessages: %v", err)
+	}
+	defer rows.Close()
+
+	var messages []structs.Message
+	for rows.Next() {
+		var msg structs.Message
+		if err := rows.Scan(&msg.Id, &msg.SenderId, &msg.ReceiverId, &msg.Message, &msg.Time); err != nil {
+			return nil, fmt.Errorf("GetMessages: %v", err)
+		}
+		messages = append(messages, msg)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("GetMessages: %v", err)
+	}
+	return messages, nil
+}
+
+func GetPromoteRequests() ([]structs.PromoteRequest, error) {
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Prepare the SQL statement to retrieve all promote requests
+	stmt, err := db.Prepare("SELECT id, user_id, description, time, is_pending FROM PromoteRequest")
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	// Execute the SQL statement to retrieve the promote requests
+	rows, err := stmt.Query()
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Initialize a slice to store the promote requests
+	var requests []structs.PromoteRequest
+
+	// Iterate over the result set and scan each row into a PromoteRequest struct
+	for rows.Next() {
+		var request structs.PromoteRequest
+		err := rows.Scan(&request.Id, &request.UserId, &request.Reason, &request.Time, &request.IsPending)
+		if err != nil {
+			return nil, err
+		}
+		requests = append(requests, request)
+	}
+
+	return requests, nil
+}
+
+
+
+// GetPromoteRequestByid retrieves a promotion request from the PromoteRequest table based on the given requestId.
+func GetPromoteRequestByid(requestID int) (structs.PromoteRequest, error) {
+    // Lock the mutex before accessing the database
+    mutex.Lock()
+    defer mutex.Unlock()
+
+    var request structs.PromoteRequest
+
+    // Prepare the SQL statement
+    stmt, err := db.Prepare("SELECT id, user_id, description, time, is_pending FROM PromoteRequest WHERE id = ?")
+    if err != nil {
+        return request, err
+    }
+    defer stmt.Close()
+
+    // Execute the SQL statement to retrieve the request
+    err = stmt.QueryRow(requestID).Scan(
+        &request.Id,
+        &request.UserId,
+        &request.Reason,
+        &request.Time,
+        &request.IsPending)
+
+    if err != nil {
+        return request, err
+    }
+
+    return request, nil
 }

@@ -153,3 +153,52 @@ func RemoveNotification(notificationID int) error {
 	// Return no error if the deletion was successful
 	return nil
 }
+
+// ReomvePromoteRequest removes all promotion requests with the given userId from the PromoteRequest table.
+func ReomvePromoteRequest(userId int) error {
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	//Delete the notification
+	_, err := db.Exec("DELETE FROM PromoteRequest WHERE user_id = ?", userId)
+	if err != nil {
+		return err
+	}
+
+	// Return no error if the deletion was successful
+	return nil
+}
+
+
+// ReomvePromoteRequest removes all promotion requests with the given userId from the PromoteRequest table.
+func RemoveCategory(Id int) error {
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	//Delete the notification
+	_, err := db.Exec("DELETE FROM Category WHERE id = ?", Id)
+	if err != nil {
+		return err
+	}
+
+	// Return no error if the deletion was successful
+	return nil
+}
+
+// RemovePostCategory removes all entries from the PostCategory table with the given categoryId.
+func RemovePostCategory(categoryId int) error {
+
+    mutex.Lock()
+    defer mutex.Unlock()
+
+    // Delete the post categories associated with the category ID from the PostCategory table
+    _, err := db.Exec("DELETE FROM PostCategory WHERE category_id = ?", categoryId)
+    if err != nil {
+        return err
+    }
+
+    // Return no error if the deletion was successful
+    return nil
+}

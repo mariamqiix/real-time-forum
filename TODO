@@ -1,20 +1,44 @@
 front :
-* profile page 
-* post page
-* log in page : by mariam 
-* setting page 
-* edit post page 
-* signin/signout/login : by mariam 
 
-
+-   post page
+-   edit post page
+-   add comment section
+-   ~~log in page : by mariam~~
+-   ~~signin/signout/login : by mariam~~
+-   change User Information
+-   ~~Registration validation~~
+-   ~~Manage Categories~~
+-   ~~Promotion Requests : add accept button~~
+-   update the css
 
 back :
-* search
-* notification 
 
+-   ~~search~~
+-   profile
+-   notification
+-   ~~fix the dokerfile~~
+-   setting page :
+    1. ~~Change Password~~
+    2. ~~Request to be Moderator~~
+    3. ~~List of Moderators~~
+    4. ~~Promotion Requests~~
+    5. ~~Manage Categories~~
+-   ~~chnage the visibility of (edit post) - just the owner~~
 
-DATABASE : 
-- in user table , add gender 
-- messages table 
-- get function for the messages 
-- reactions : only like and dislike 
+DATABASE :
+
+-   in user table , add gender
+-   ~~messages table~~
+-   ~~get function for the messages~~
+-   ~~add the reaction to the messages~~
+-   reactions : only like and dislike
+
+Maryam:
+
+1. ~~ make create new post, profile, notifications and settings to be visible only to users~~
+2. ~~make List of moderators, Promotion Requests and Manage Categories to be visible to admin only!~~
+3. ~~ fix the search section (i already created for u new box to print the post), also if there is no result, print no result availabe~~
+4. ~~ make the edit button on post page to be visible only for owner of the post. ----- on it~~
+5. ~~make the input feild empty after taking the info (like regestration, log-in, new post ...etc) : Done exept to the login~~
+6. ~~chnage the validations conditions (i already did them) to match the server validation (username should be uniqe, contry stuff, number of characters .. etc)~~
+7. ~~make the request to be modertor to be visible to normal users only!~~

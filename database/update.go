@@ -1,8 +1,9 @@
 package database
 
 import (
-	"fmt"
 	"RealTimeForum/structs"
+	"errors"
+	"fmt"
 )
 
 func UpdateRepor(reportID int, atype, value string) error {
@@ -126,4 +127,52 @@ func MarkNotificationAsRead(notificationID int) error {
 	// Implement the logic to mark the notification as read in the database
 	_, err := db.Exec("UPDATE UserNotification SET read = 1 WHERE id = ?", notificationID)
 	return err
+}
+
+
+
+// UpdateUserType updates the type_id of a user in the User table.
+func UpdateUserType(userID int, newTypeID int) error {
+    // Lock the mutex before accessing the database
+    mutex.Lock()
+    defer mutex.Unlock()
+
+    // Prepare the SQL statement to update the user's type_id
+    stmt, err := db.Prepare(`UPDATE User SET type_id = ? WHERE id = ?`)
+    if err != nil {
+        return err
+    }
+    defer stmt.Close()
+
+    // Execute the SQL statement to update the user's type_id
+    _, err = stmt.Exec(newTypeID, userID)
+    if err != nil {
+        return err
+    }
+
+    return nil
+}
+
+// UpdateUserPassword updates the password for a given user.
+func UpdateUserPassword(userID int, newPasswordHash string) error {
+// Lock the mutex before accessing the database
+    mutex.Lock()
+    defer mutex.Unlock()
+
+    query := `UPDATE User SET hashed_password = ? WHERE id = ?`
+    result, err := db.Exec(query, newPasswordHash, userID)
+    if err != nil {
+        return err
+    }
+
+    rowsAffected, err := result.RowsAffected()
+    if err != nil {
+        return err
+    }
+
+    if rowsAffected == 0 {
+        return errors.New("no rows affected, user not found")
+    }
+
+    return nil
 }

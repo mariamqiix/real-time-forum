@@ -241,3 +241,27 @@ func mapCategoriesForPost(categoriesIDs []int) []structs.CategoryResponse {
 	}
 	return respCategories
 }
+
+
+
+func ConvertToPromoteRequestResponse(promotionRequests []structs.PromoteRequest) ([]structs.PromoteRequestResponse, error) {
+    var responses []structs.PromoteRequestResponse
+
+    for _, request := range promotionRequests {
+        user, err := database.GetUserById(request.UserId)
+        if err != nil {
+            return nil, err
+        }
+
+        response := structs.PromoteRequestResponse{
+            Id:        request.Id,
+            UserId:    request.UserId,
+            Username:  user.Username,
+            Reason:    request.Reason,
+            IsPending: request.IsPending,
+        }
+        responses = append(responses, response)
+    }
+
+    return responses, nil
+}

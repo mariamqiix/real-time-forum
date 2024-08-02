@@ -1,0 +1,456 @@
+<html>
+
+<head>
+    <title>Real Time Forum</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;700&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&amp;display=swap">
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="navigationBar">
+            <div class="navigationBarImage"></div>
+            <!-- <div class="userPic"></div>
+
+      <div class="userName">
+        <span
+          style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:&quot;Kufam&quot;;--framer-font-size:40px"
+          class="framer-text">username</span>
+      </div> -->
+
+            <div class="profileIcon navigationBarIcons" onclick="toggleVisibility('profile')"></div>
+            <div class="profileBtn navigationBarBtns" onclick="toggleVisibility('profile')">
+                <span class="framer-text">Profile</span>
+            </div>
+
+            <div class="homeIcon navigationBarIcons" onclick="toggleVisibility('home')"></div>
+            <div class="homeBtn navigationBarBtns" onclick="toggleVisibility('home')">
+                <span class="framer-text">Home</span>
+            </div>
+
+            <div class="bellIcon navigationBarIcons" id="bellIcon navigationBarIcons" onclick="toggleVisibility('notifications')"></div>
+            <div class="notificationsBtn navigationBarBtns" id="notificationsBtn navigationBarBtns" onclick="toggleVisibility('notifications')">
+                <span class="framer-text">Notifications</span>
+            </div>
+
+            <div class="searchIcon navigationBarIcons" onclick="toggleVisibility('search')"></div>
+            <div class="searchBarBtn navigationBarBtns" onclick="toggleVisibility('search')">
+                <span class="framer-text">Search</span>
+            </div>
+
+            <div class="settingIcon navigationBarIcons" onclick="settingsHandler()"></div>
+            <div class="settingBtn navigationBarBtns" onclick="settingsHandler()">
+                <span class="framer-text">Setting</span>
+            </div>
+
+            <div class="signOutIcon navigationBarIcons" onclick="toggleLogout('registration')"></div>
+            <div class="signOutBtn navigationBarBtns" onclick="toggleLogout('registration')">
+                <span class="framer-text" id="loginSpan">Sign up</span>
+            </div>
+
+            <!-- <div class="signOutIcon navigationBarIcons" onclick="toggleVisibility('login')"></div>
+      <div class="signOutBtn navigationBarBtns" onclick="toggleVisibility('login')">
+        <span class="framer-text">Sign out</span>
+      </div> -->
+
+        </div>
+
+        <div class="rightSide">
+            <div class="mainPage">
+                <div class="home navigationContent" id="home navigationContent">
+                    <div class="title">
+                        <h1>Home </h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    </div>
+                    <!-- <div class="modeIcon mainPageIcons"></div> -->
+                    <div class="sortIcon mainPageIcons" onclick="toggleDiv('sortFilter')"></div>
+                    <div class="categoryIcon mainPageIcons" onclick="toggleDiv('categoryFilter')"></div>
+
+
+                    <!-- <div class="postBox" >
+            <div class="postUserPic"></div>
+            <div class="postTitle" id="postTitle">
+              <span 
+                style="--font-selector:R0Y7S3VsaW0gUGFyay1yZWd1bGFy;--framer-font-family:&quot;Kulim Park&quot;;--framer-font-size:40px"
+                class="framer-text" id= "title">Title 2222</span> <span class="postUserName" id ="postUserName">username</span>
+
+              <span
+                style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:&quot;Kufam&quot;;--framer-font-size:15px;--framer-text-color:rgba(91, 91, 91, 1)"
+                class="framer-text" class="postContent" id = "postContent">Hello, this is my firt post!</span>
+              </div>
+          </div> -->
+
+                    <div class="penIcon mainPageIcons" onclick="toggleDiv('newPostForm')"></div>
+                </div>
+
+                <div class="profile navigationContent">
+                    <div class="userPic"></div>
+                    <h1 class="profileUsername">UserName</h1>
+                    <table>
+                        <tr>
+                            <th onclick="changeContent('Posts', event.target)">Posts</th>
+                            <th onclick="changeContent('Comments', event.target)">Comments</th>
+                            <th onclick="changeContent('Likes', event.target)">Likes</th>
+                            <th onclick="changeContent('Dislikes', event.target)">Dislikes</th>
+                        </tr>
+                    </table>
+
+                    <div id="profileContent">
+                        <p id="selectedColumn">Click on a column to change the content.</p>
+                    </div>
+
+                </div>
+
+                <div class="setting navigationContent">
+                    <div class="title">
+                        <h1>Settings</h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    </div>
+
+                    <div class="settingList">
+                        <ul id="settingList">
+                            <li onclick="ChangeUserInformation()"> <img src="./images/arrow.png" class="icon"> Change User Information</li>
+                            <li onclick="toggleDiv('change-password')"> <img src="./images/arrow.png" class="icon">Change Password</li>
+                            <li onclick="toggleDiv('request-moderator')"> <img src="./images/arrow.png" class="icon">Request to be Moderator</li>
+                            <li onclick="fetchAndAppendModerators()"> <img src="./images/arrow.png" class="icon">List of Moderators</li>
+                            <li onclick="PromotionRequests()"> <img src="./images/arrow.png" class="icon">Promotion Requests</li>
+                            <li onclick="ManageCategories()"> <img src="./images/arrow.png" class="icon">Manage Categories</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="notifications navigationContent">
+                    <div class="title">
+                        <h1>Notifications</h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    </div>
+
+                    <div class="notification-container">
+                        <ul class="notification-list">
+                            <li class="notification-item">Liked your post</li>
+                            <li class="notification-item">Commented on your post</li>
+                            <li class="notification-item">Mentioned you in a comment</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="search navigationContent">
+
+                    <div class="search-container">
+                        <input type="text" placeholder="Search..." id="search" name="search">
+                        <button onclick="Search()">Search</button>
+                        </form>
+                    </div>
+
+                    <div class="output-container">
+
+                        <div id="search-output">
+                            <div class="postResult" onclick="toggleVisibility('postPage')">
+                                <h2>Post title</h2>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="registration navigationContent">
+                    <div class="title">
+                        <h1>Registration</h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    </div>
+                    <div id="formReg">
+                        <table>
+                            <tr>
+                                <td class="formReg-label"><label for="firstName">First Name:</label></td>
+                                <td class="formReg-input"><input type="text" id="firstName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="error"><span id="firstNameError" class="error"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label"><label for="lastName">Last Name:</label></td>
+                                <td class="formReg-input"><input type="text" id="lastName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="error"><span id="lastNameError" class="error"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label"><label for="email">Email:</label></td>
+                                <td class="formReg-input"><input type="text" id="email" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="error"><span id="emailError" class="error"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label"><label for="username">Username:</label></td>
+                                <td class="formReg-input"><input type="text" id="username" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="error"><span id="usernameError" class="error"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label"><label for="dob">Date of Birth:</label></td>
+                                <td class="formReg-input"><input type="date" id="dob" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="error"><span id="dobError" class="error"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label"><label for="country">Country:</label></td>
+                                <td class="formReg-input"><input type="text" id="country" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="error"><span id="countryError" class="error"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label"><label for="password">Password:</label></td>
+                                <td class="formReg-input"><input type="password" id="password" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="error"><span id="passwordError" class="error"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label"><label for="confirmPassword">Re-enter Password:</label></td>
+                                <td class="formReg-input"><input type="password" id="confirmPassword" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)">
+                                </td>
+                                <td class="error"><span id="confirmPasswordError" class="error"></span></td>
+                            </tr>
+                        </table>
+
+                        <button disabled id="registerBtn" onclick="submitForm()">Submit</button>
+                        <span class="login-text" onclick="toggleVisibility('login')">Login</span>
+
+                    </div>
+                </div>
+
+                <div class="login navigationContent">
+                    <div class="title">
+                        <h1>login</h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    </div>
+                    <div id="formLog">
+                        <table>
+                            <tr>
+                                <td class="formLog-label"><label for="usernameLogin">Username or email:</label></td>
+                                <td class="formLog-input"><input type="text" id="usernameLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)"></td>
+                                <td class="error"><span id="usernameLoginError" class="error"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="formLog-label"><label for="passwordLogin">Password:</label></td>
+                                <td class="formLog-input"><input type="password" id="passwordLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)"></td>
+                                <td class="error"><span id="passwordLoginError" class="error"></span></td>
+                            </tr>
+                        </table>
+
+                        <button disabled id="loginBtn" onclick="submitLoginForm()">Login</button>
+                        <span class="login-text" onclick="toggleVisibility('registration')">sign up</span>
+                    </div>
+                </div>
+
+                <div class="postPage navigationContent">
+                    <div class="title">
+                        <h1>Post Title</h1>
+                        <button id="editPost-button" class="editPost-button" onclick="EditPost()">Edit</button>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="messagesBar" id="messagesBar">
+
+                <div class="messagesTitle">
+                    <span style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:'Kufam';--framer-font-size:30px;--framer-text-color:rgba(217, 211, 198, 1)" class="framer-text">Messages</span>
+                    <!-- <div class="mailIcon"></div> -->
+                </div>
+                <hr style="color: #0000002B;  height: 2px; width: 80%;">
+
+                <!-- new Mwssaew -->
+                <div class="plusIcon"></div>
+
+                <!-- Chats -->
+                <div class="messagesBox">
+                    <div class="messageBox">
+
+                        <div class="chatUserPic"></div>
+
+                        <div class="chatUserName">
+                            <span style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:'Kufam';--framer-font-size:25px" class="framer-text">username</span>
+                        </div>
+
+                        <div class="chatUserMessage">
+                            <span style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:'Kufam';--framer-font-size:20px;--framer-text-color:rgba(91, 91, 91, 1)" class="framer-text">Hi !... how are you?</span>
+                        </div>
+
+                        <div class="chatUserLastSeen">
+                            <!-- <span
+                style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:&quot;Kufam&quot;;--framer-font-size:15px;--framer-text-color:rgba(91, 91, 91, 1)"
+                class="framer-text">Active 30m ago</span> -->
+                        </div>
+                        <div class="newMessageIcon"> </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="logoDiv">
+            <h1 class="logoName" style="display: none;"> SANDBOX</h1>
+            <div class="logo"></div>
+        </div>
+
+    </div>
+
+</body>
+
+<div id="overlay"></div>
+
+<div id="categoryFilter" style="display: none;">
+    <div class="exitButton" onclick="toggleDiv('categoryFilter')"></div>
+    <h3>Select option(s):</h3>
+    <label><input type="checkbox" name="option1" value="option1"> Option 1</label><br>
+    <label><input type="checkbox" name="option2" value="option2"> Option 2</label><br>
+    <label><input type="checkbox" name="option3" value="option3"> Option 3</label><br>
+    <br />
+    <button onclick="submitSelection('categoryFilter')">Submit</button>
+</div>
+
+<div id="sortFilter" style="display: none;">
+    <div class="exitButton" onclick="toggleDiv('sortFilter')"></div>
+    <h3>Select filter option:</h3>
+    <select id="options">
+    <option value="option1">Option 1</option>
+    <option value="option2">Option 2</option>
+    <option value="option3">Option 3</option>
+  </select>
+    <br />
+    <button onclick="submitSelection('sortFilter')">Submit</button>
+</div>
+
+<div id="newPostForm" class="popup" style="display: none;">
+    <div class="exitButton" onclick="toggleDiv('newPostForm')"></div>
+    <h2>Create New Post</h2>
+    <table>
+        <tr>
+            <td><label for="newPostTitle">Title:</label></td>
+            <td><input type="text" id="newPostTitle" name="title"></td>
+        </tr>
+
+        <tr>
+            <td><label for="topic">Topic:</label></td>
+            <td><textarea type="text" id="topic" name="topic" rows="4" cols="50"></textarea></td>
+        </tr>
+
+        <tr>
+
+        </tr>
+
+        <tr>
+            <td> <label for="categories">Categories:</label></td>
+            <td>
+                <div class="categoriesList">
+                    <label><input type="checkbox" name="category1" value="category1" class="checkBoxCateg"> Category1</label><br>
+                    <label><input type="checkbox" name="category2" value="category2" class="checkBoxCateg"> Category2</label><br>
+                    <label><input type="checkbox" name="category3" value="category3" class="checkBoxCateg"> Category3</label><br>
+                    <label><input type="checkbox" name="category4" value="category4" class="checkBoxCateg"> Category4</label><br>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+    <button class="submitBtn disabled" id="submitBtn" onclick="submitSelection('newPostForm')">Post</button>
+</div>
+
+<div id="user-info" class="popup" style="display: none;">
+    <div class="exitButton" onclick="toggleDiv('user-info')"></div>
+    <h2>User Information</h2>
+    <label for="ChangeUserName"> Username?</label> <input type="text" id="ChangeUserName" name="ChangeUserName"><br>
+    <label for="ChangeFirstName"> First Name</label> <input type="text" id="ChangeFirstName" name="ChangeFirstName"><br>
+    <label for="ChangeLastName"> Last Name</label> <input type="text" id="ChangeLastName" name="ChangeLastName"><br>
+    <label for="ChangeEmail"> Email</label> <input type="text" id="ChangeEmail" name="ChangeEmail"><br>
+    <label for="ChangeDOB"> date of birth</label> <input type="date" id="ChangeDOB" name="ChangeDOB"><br>
+    <!-- <label for="ChangeCountry">Country</label> <input id="ChangeCountry" name="ChangeCountry"><br> -->
+    <br><br><br>
+    <button class="UpdateUserInformation-button">update</button>
+
+</div>
+
+<div id="change-password" class="popup" style="display: none;">
+    <h2>Change Password</h2>
+    <table>
+        <tr>
+            <td class="changePass"><label for="password">Password:</label></td>
+            <td class="changePass"><input type="password" id="password2"></td>
+            <td class="error"><span id="passwordError2" class="error"></span></td>
+        </tr>
+        <tr>
+            <td class="changePass"><label for="confirmPassword">Re-enter Password:</label></td>
+            <td class="changePass"><input type="password" id="confirmPassword2"></td>
+            <td class="error"><span id="confirmPasswordError2" class="error"></span></td>
+        </tr>
+    </table>
+
+    <button type="button" id="cancel-btn" onclick="toggleDiv('change-password')">Cancel</button>
+    <button type="button" id="save-btn" onclick="saveNewPassword()">Save</button>
+</div>
+
+<div id="request-moderator" class="popup" style="display: none;">
+    <h2>Request to be Moderator</h2>
+    <label for="answer">Why do you want to be a moderator?</label>
+    <br><br>
+    <textarea id="answer" name="answer" rows="5"></textarea>
+    <br>
+    <button type="button" id="cancel-btn" onclick="toggleDiv('request-moderator')">Cancel</button>
+    <button type="button" id="send-btn" onclick="sendPromotionRequest()">Send</button>
+</div>
+<div id="list-moderators" class="popup" style="display: none;">
+    <div class="exitButton" onclick="toggleDiv('list-moderators')"></div>
+    <h2>List of Moderators</h2>
+    <ul>
+        <li>Moderator 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
+        <li>Moderator 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
+    </ul>
+
+</div>
+
+<div id="promotion-requests" class="popup" style="display: none;">
+    <div class="exitButton" onclick="toggleDiv('promotion-requests')"></div>
+    <h2>Promotion Requests</h2>
+    <ul>
+        <li>Request 1 <button class="reject-button">Remove</button> <button class="show-button">show</button></li>
+        <li>Request 1 <button class="reject-button">Remove</button> <button class="show-button">show</button></li>
+    </ul>
+</div>
+<div id="ShowPromotionRequest" class="popup" style="display: none;">
+    <div class="exitButton" onclick="toggleDiv('ShowPromotionRequest')"></div>
+    <h2 id="ShowPromotionRequestUser">user</h2>
+    <p>Content for the show promotion request popup goes here.</p>
+    <button class="ShowPromotionRequestReject-button">Remove</button> <button class="ShowPromotionRequestApprove-button">approve</button>
+</div>
+
+<div id="manage-categories" class="popup" style="display: none;">
+    <div class="exitButton" onclick="toggleDiv('manage-categories')"></div>
+    <h2>Manage Categories</h2>
+    <ul>
+        <li>category 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
+        <li>category 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
+    </ul>
+    <button class="addCategory-button" onclick="toggleDiv('addCategory')">add category</button>
+</div>
+
+
+<div id="addCategory" class="popup" style="display: none;">
+    <div class="exitButton" onclick="toggleDiv('addCategory')"></div>
+    <h2>add Category</h2>
+    <label for="categoryName">categoryName?</label> <input id="categoryName" name="categoryName">
+    <br><br>
+
+    <label for="CategoryDescription">Category description</label>
+    <br><br>
+    <textarea id="CategoryDescription" name="CategoryDescription" rows="5"></textarea>
+    <br><br>
+
+    <button class="addCategory-button" onclick="addCategory()">add</button>
+</div>
+
+
+<script src="script.js"></script>
+<script src="responsive.js"></script>
+<script src="serverHandlers.js"></script>
+<script src="toggleDiv.js"></script>
+<script src="validation.js"></script>
+
+
+</html>

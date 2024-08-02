@@ -1,6 +1,8 @@
 package structs
 
-import "time"
+import (
+	"time"
+)
 
 type UserTypeId int
 type PostReactionType string
@@ -119,3 +121,13 @@ type UserNotification struct {
 	UserId         int
 	Read           bool // Add this line
 }
+
+
+type Message  struct {
+	Id         int
+	SenderId   int
+	ReceiverId int
+	Message    string
+	Time       string
+}
+

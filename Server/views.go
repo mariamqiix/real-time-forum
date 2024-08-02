@@ -1,15 +1,73 @@
 package Server
 
 import (
-	"RealTimeForum/structs"
 	"html/template"
+	"log"
+	"RealTimeForum/structs"
 )
-
 var (
-	templateRoot = "www/template/"
+	templateRoot = "static/"
 	templates    *template.Template
 )
-
+func init() {
+	// watcher, err := fsnotify.NewWatcher()
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return
+	// }
+	// go func() {
+	// 	for {
+	// 		select {
+	// 		case event, ok := <-watcher.Events:
+	// 			if !ok {
+	// 				return
+	// 			}
+	// 			if event.Has(fsnotify.Write) {
+	// 				log.Println("updating templates")
+	// 				updateTemplates()
+	// 			}
+	// 		case err, ok := <-watcher.Errors:
+	// 			if !ok {
+	// 				return
+	// 			}
+	// 			log.Println("error watching file:", err)
+	// 		}
+	// 	}
+	// }()
+	// if err := filepath.Walk(templateRoot, func(path string, info os.FileInfo, err error) error {
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	if !info.IsDir() {
+	// 		err = watcher.Add(path)
+	// 		if err != nil {
+	// 			log.Println("error watching file:", err)
+	// 		}
+	// 	}
+	// 	return nil
+	// }); err != nil {
+	// 	log.Println("error walking file:", err)
+	// }
+	updateTemplates()
+}
+func updateTemplates() {
+	tmpl := template.New("")
+	// Register custom functions
+	tmpl = tmpl.Funcs(template.FuncMap{
+		"sub": func(a, b int) int {
+			return a - b
+		},
+	})
+	// Parse template files
+	tmpl, err := tmpl.ParseFiles(
+		templateRoot+"My Framer Site.html",)
+	if err != nil {
+		log.Println("error updating templates:", err)
+		return
+	}
+	// Set the updated templates
+	templates = tmpl
+}
 
 // home view is the category page just the path is changed
 type homeView struct {
