@@ -31,10 +31,8 @@
                 <span class="framer-text">Home</span>
             </div>
 
-            <div class="bellIcon navigationBarIcons" id="bellIcon navigationBarIcons"
-                onclick="toggleVisibility('notifications')"></div>
-            <div class="notificationsBtn navigationBarBtns" id="notificationsBtn navigationBarBtns"
-                onclick="toggleVisibility('notifications')">
+            <div class="bellIcon navigationBarIcons" id="bellIcon navigationBarIcons" onclick="toggleVisibility('notifications')"></div>
+            <div class="notificationsBtn navigationBarBtns" id="notificationsBtn navigationBarBtns" onclick="toggleVisibility('notifications')">
                 <span class="framer-text">Notifications</span>
             </div>
 
@@ -114,18 +112,15 @@
 
                     <div class="settingList">
                         <ul id="settingList">
-                            <li onclick="ChangeUserInformation()"> <img src="./images/arrow.png" class="icon"> Change
-                                User Information</li>
-                            <li onclick="toggleDiv('change-password')"> <img src="./images/arrow.png"
-                                    class="icon">Change Password</li>
-                            <li onclick="toggleDiv('request-moderator')"> <img src="./images/arrow.png"
-                                    class="icon">Request to be Moderator</li>
-                            <li onclick="fetchAndAppendModerators()"> <img src="./images/arrow.png" class="icon">List of
-                                Moderators</li>
-                            <li onclick="PromotionRequests()"> <img src="./images/arrow.png" class="icon">Promotion
-                                Requests</li>
-                            <li onclick="ManageCategories()"> <img src="./images/arrow.png" class="icon">Manage
-                                Categories</li>
+                            <li onclick="ChangeUserInformation()"> <img src="./images/arrow.png" class="icon"> Change User Information</li>
+                            <li onclick="toggleDiv('change-password')"> <img src="./images/arrow.png" class="icon">Change Password</li>
+                            <li onclick="toggleDiv('request-moderator')"> <img src="./images/arrow.png" class="icon">Request to be Moderator</li>
+                            <li onclick="fetchAndAppendModerators()"> <img src="./images/arrow.png" class="icon">List of Moderators
+                            </li>
+                            <li onclick="PromotionRequests()"> <img src="./images/arrow.png" class="icon">Promotion Requests
+                            </li>
+                            <li onclick="ManageCategories()"> <img src="./images/arrow.png" class="icon">Manage Categories
+                            </li>
                         </ul>
                     </div>
 
@@ -175,53 +170,42 @@
                         <table>
                             <tr>
                                 <td class="formReg-label"><label for="firstName">First Name:</label></td>
-                                <td class="formReg-input"><input type="text" id="firstName"
-                                        onfocus="validateField(this)" onblur="validateField(this)"
-                                        oninput="validateField(this)"></td>
+                                <td class="formReg-input"><input type="text" id="firstName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
                                 <td class="error"><span id="firstNameError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="lastName">Last Name:</label></td>
-                                <td class="formReg-input"><input type="text" id="lastName" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="formReg-input"><input type="text" id="lastName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
                                 <td class="error"><span id="lastNameError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="email">Email:</label></td>
-                                <td class="formReg-input"><input type="text" id="email" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="formReg-input"><input type="text" id="email" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
                                 <td class="error"><span id="emailError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="username">Username:</label></td>
-                                <td class="formReg-input"><input type="text" id="username" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="formReg-input"><input type="text" id="username" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
                                 <td class="error"><span id="usernameError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="dob">Date of Birth:</label></td>
-                                <td class="formReg-input"><input type="date" id="dob" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="formReg-input"><input type="date" id="dob" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
                                 <td class="error"><span id="dobError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="country">Country:</label></td>
-                                <td class="formReg-input"><input type="text" id="country" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="formReg-input"><input type="text" id="country" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
                                 <td class="error"><span id="countryError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="password">Password:</label></td>
-                                <td class="formReg-input"><input type="password" id="password"
-                                        onfocus="validateField(this)" onblur="validateField(this)"
-                                        oninput="validateField(this)"></td>
+                                <td class="formReg-input"><input type="password" id="password" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)"></td>
                                 <td class="error"><span id="passwordError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="confirmPassword">Re-enter Password:</label></td>
-                                <td class="formReg-input"><input type="password" id="confirmPassword"
-                                        onfocus="validateField(this)" onblur="validateField(this)"
-                                        oninput="validateField(this)">
+                                <td class="formReg-input"><input type="password" id="confirmPassword" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)">
                                 </td>
                                 <td class="error"><span id="confirmPasswordError" class="error"></span></td>
                             </tr>
@@ -242,16 +226,12 @@
                         <table>
                             <tr>
                                 <td class="formLog-label"><label for="usernameLogin">Username or email:</label></td>
-                                <td class="formLog-input"><input type="text" id="usernameLogin"
-                                        onfocus="validateLogInField(this)" onblur="validateLogInField(this)"
-                                        oninput="validateLogInField(this)"></td>
+                                <td class="formLog-input"><input type="text" id="usernameLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)"></td>
                                 <td class="error"><span id="usernameLoginError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formLog-label"><label for="passwordLogin">Password:</label></td>
-                                <td class="formLog-input"><input type="password" id="passwordLogin"
-                                        onfocus="validateLogInField(this)" onblur="validateLogInField(this)"
-                                        oninput="validateLogInField(this)"></td>
+                                <td class="formLog-input"><input type="password" id="passwordLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)"></td>
                                 <td class="error"><span id="passwordLoginError" class="error"></span></td>
                             </tr>
                         </table>
@@ -274,9 +254,7 @@
             <div class="messagesBar" id="messagesBar">
 
                 <div class="messagesTitle">
-                    <span
-                        style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:'Kufam';--framer-font-size:30px;--framer-text-color:rgba(217, 211, 198, 1)"
-                        class="framer-text">Messages</span>
+                    <span style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:'Kufam';--framer-font-size:30px;--framer-text-color:rgba(217, 211, 198, 1)" class="framer-text">Messages</span>
                     <!-- <div class="mailIcon"></div> -->
                 </div>
                 <hr style="color: #0000002B;  height: 2px; width: 80%;">
@@ -290,7 +268,9 @@
 
                         <div class="chatUserPic"></div>
 
-                        <div class="chatUserName"><p>username</p></div>
+                        <div class="chatUserName">
+                            <p>username</p>
+                        </div>
 
                         <div class="newMessageIcon"> </div>
                     </div>
@@ -374,12 +354,9 @@
 <div id="user-info" class="popup" style="display: none;">
     <div class="exitButton" onclick="toggleDiv('user-info')"></div>
     <h2>User Information</h2>
-    <label for="ChangeUserName"> Username?</label> <input type="text" id="ChangeUserName" name="ChangeUserName"
-        required><br>
-    <label for="ChangeFirstName"> First Name</label> <input type="text" id="ChangeFirstName" name="ChangeFirstName"
-        required><br>
-    <label for="ChangeLastName"> Last Name</label> <input type="text" id="ChangeLastName" name="ChangeLastName"
-        required><br>
+    <label for="ChangeUserName"> Username?</label> <input type="text" id="ChangeUserName" name="ChangeUserName" required><br>
+    <label for="ChangeFirstName"> First Name</label> <input type="text" id="ChangeFirstName" name="ChangeFirstName" required><br>
+    <label for="ChangeLastName"> Last Name</label> <input type="text" id="ChangeLastName" name="ChangeLastName" required><br>
     <label for="ChangeEmail"> Email</label> <input type="text" id="ChangeEmail" name="ChangeEmail" required><br>
     <label for="ChangeDOB"> date of birth</label> <input type="date" id="ChangeDOB" name="ChangeDOB" required><br>
     <!-- <label for="ChangeCountry">Country</label> <input id="ChangeCountry" name="ChangeCountry"><br> -->
@@ -438,8 +415,7 @@
     <div class="exitButton" onclick="toggleDiv('ShowPromotionRequest')"></div>
     <h2 id="ShowPromotionRequestUser">user</h2>
     <p>Content for the show promotion request popup goes here.</p>
-    <button class="ShowPromotionRequestReject-button">Remove</button> <button
-        class="ShowPromotionRequestApprove-button">approve</button>
+    <button class="ShowPromotionRequestReject-button">Remove</button> <button class="ShowPromotionRequestApprove-button">approve</button>
 </div>
 
 <div id="manage-categories" class="popup" style="display: none;">
