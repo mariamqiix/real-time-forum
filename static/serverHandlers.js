@@ -836,3 +836,51 @@ function ChangeUserInformation() {
         });
     toggleDiv("user-info");
 }
+
+function UpdateUserInformation() {
+    const username = document.getElementById("ChangeUserName").value;
+    const firstName = document.getElementById("ChangeFirstName").value;
+    const lastName = document.getElementById("ChangeLastName").value;
+    const email = document.getElementById("ChangeEmail").value;
+    const dateOfBirth = document.getElementById("ChangeDOB").value;
+
+    if (
+        username.trim() === "" ||
+        firstName.trim() === "" ||
+        lastName.trim() === "" ||
+        email.trim() === "" ||
+        dateOfBirth.trim() === ""
+    ) {
+        alert("Please fill in all fields.");
+        return;
+    }
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("email", email);
+    formData.append("dateOfBirth", dateOfBirth);
+    if (confirm("Are you sure you want to proceed?")) {
+        fetch("http://localhost:8080/updateUserInfo", {
+                method: "POST",
+                body: formData,
+            })
+            .then((response) => {
+                if (response.ok) {
+                    alert("User information updated successfully");
+                    toggleDiv("user-info");
+                } else {
+                    return response.text().then((error) => {
+                        alert(error);
+                        console.error("User information update failed:", error);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    } else {
+        // User clicked "Cancel" or closed the dialog
+        console.log("Action canceled.");
+    }
+}

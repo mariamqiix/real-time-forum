@@ -356,14 +356,14 @@
 <div id="user-info" class="popup" style="display: none;">
     <div class="exitButton" onclick="toggleDiv('user-info')"></div>
     <h2>User Information</h2>
-    <label for="ChangeUserName"> Username?</label> <input type="text" id="ChangeUserName" name="ChangeUserName"><br>
-    <label for="ChangeFirstName"> First Name</label> <input type="text" id="ChangeFirstName" name="ChangeFirstName"><br>
-    <label for="ChangeLastName"> Last Name</label> <input type="text" id="ChangeLastName" name="ChangeLastName"><br>
-    <label for="ChangeEmail"> Email</label> <input type="text" id="ChangeEmail" name="ChangeEmail"><br>
-    <label for="ChangeDOB"> date of birth</label> <input type="date" id="ChangeDOB" name="ChangeDOB"><br>
+    <label for="ChangeUserName"> Username?</label> <input type="text" id="ChangeUserName" name="ChangeUserName" required><br>
+    <label for="ChangeFirstName"> First Name</label> <input type="text" id="ChangeFirstName" name="ChangeFirstName" required><br>
+    <label for="ChangeLastName"> Last Name</label> <input type="text" id="ChangeLastName" name="ChangeLastName" required><br>
+    <label for="ChangeEmail"> Email</label> <input type="text" id="ChangeEmail" name="ChangeEmail" required><br>
+    <label for="ChangeDOB"> date of birth</label> <input type="date" id="ChangeDOB" name="ChangeDOB" required><br>
     <!-- <label for="ChangeCountry">Country</label> <input id="ChangeCountry" name="ChangeCountry"><br> -->
     <br><br><br>
-    <button class="UpdateUserInformation-button">update</button>
+    <button class="UpdateUserInformation-button" onclick="UpdateUserInformation()">update</button>
 
 </div>
 

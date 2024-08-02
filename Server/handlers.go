@@ -1668,3 +1668,83 @@ func getUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 
 	writeToJson(user, w)
 }
+func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+
+	username := r.FormValue("username")
+	email := r.FormValue("email")
+	dateOfBirth := r.FormValue("dateOfBirth")
+	firstName := r.FormValue("firstName")
+	lastName := r.FormValue("lastName")
+	newUserName := sessionUser.Username
+
+	if username != sessionUser.Username {
+		// check if the username exists
+		exist, err := database.CheckExistance("User", "username", username)
+		if err != nil {
+			http.Error(w, "something went wrong, please try again later", http.StatusInternalServerError)
+			return
+		}
+
+		if exist {
+			http.Error(w, "Username already exists", http.StatusConflict)
+			return
+		}
+		newUserName = username
+	}
+
+	// check if the email is valid and exists
+	if !IsValidEmail(email) {
+		http.Error(w, "Invalid email", http.StatusBadRequest)
+		return
+	}
+
+	exist, err := database.CheckExistance("User", "email", email)
+	if err != nil {
+		http.Error(w, "something went wrong, please try again later", http.StatusInternalServerError)
+		return
+	}
+
+	if exist {
+		http.Error(w, "Email already exists", http.StatusConflict)
+		return
+	}
+
+	// Convert dateOfBirth from string to time.Time
+	dob, err := time.Parse("2006-01-02", dateOfBirth)
+	if err != nil {
+		http.Error(w, "Invalid date of birth format", http.StatusBadRequest)
+		return
+	}
+
+	newUser := structs.User{
+		Id:             sessionUser.Id,
+		Username:       newUserName,
+		Email:          email,
+		DateOfBirth:    dob,
+		FirstName:      firstName,
+		LastName:       lastName,
+		HashedPassword: sessionUser.HashedPassword,
+		ImageId:        sessionUser.ImageId,
+		Type:           sessionUser.Type,
+		BannedUntil:    sessionUser.BannedUntil,
+		GithubName:     "",
+		LinkedinName:   "",
+		TwitterName:    ""}
+
+	err = database.UpdateUserInfo(&newUser)
+	if err != nil {
+		errorServer(w, r, http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
