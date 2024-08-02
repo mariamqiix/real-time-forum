@@ -32,11 +32,14 @@ function checkSize(mediaQuery2) {
     } else {
         navigationBarBtns.forEach((btn) => {
             btn.style.display = "block";
+            GetUserLoggedIn();
         });
 
         logoName.style.display = "block";
+        GetUserLoggedIn();
         // navigationBar.classList.remove("center-content");
     }
+    GetUserLoggedIn();
 }
 
 mediaQuery2.addListener(checkSize); // Add listener for changes in screen width
