@@ -84,6 +84,7 @@ func GoLive(port string) {
 	http.HandleFunc("/ApprovePromotion", ApprovePromotionHandler)
 	http.HandleFunc("/removeCategory", removeCategoryHandler)
 	http.HandleFunc("/addCategory", addCategoryHandler)
+	http.HandleFunc("/ChatView", ChatViewHandler)
 	// http.HandleFunc("GET /notifications/", notificationsHandler)
 	// http.HandleFunc("POST /notifications/{notification_id}/read", markNotificationReadHandler)
 

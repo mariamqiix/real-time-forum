@@ -1099,3 +1099,70 @@ func GetPromoteRequestByid(requestID int) (structs.PromoteRequest, error) {
 
     return request, nil
 }
+
+
+
+// GetUsers retrieves all users from the database and returns a slice of structs.User and an error
+func GetUsers() ([]structs.User, error) {
+    // Lock the mutex before accessing the database
+    mutex.Lock()
+    defer mutex.Unlock()
+
+    // Prepare the SQL statement to select all users
+    stmt, err := db.Prepare(`SELECT id, type_id, username, first_name, last_name, 
+        date_of_birth, email, hashed_password, image_id, banned_until,
+        github_name, linkedin_name, twitter_name FROM User`)
+
+    if err != nil {
+        return nil, err
+    }
+    defer stmt.Close()
+
+    // Execute the SQL statement and retrieve the user information
+    rows, err := stmt.Query()
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    var users []structs.User
+
+    for rows.Next() {
+        var u structs.User
+        var bannedUntil sql.NullTime
+
+        err := rows.Scan(
+            &u.Id,
+            &u.Type,
+            &u.Username,
+            &u.FirstName,
+            &u.LastName,
+            &u.DateOfBirth,
+            &u.Email,
+            &u.HashedPassword,
+            &u.ImageId,
+            &bannedUntil,
+            &u.GithubName,
+            &u.LinkedinName,
+            &u.TwitterName)
+
+        if err != nil {
+            return nil, err
+        }
+
+        // Assign the value from sql.NullTime to u.BannedUntil
+        if bannedUntil.Valid {
+            u.BannedUntil = bannedUntil.Time
+        } else {
+            u.BannedUntil = time.Time{} // Set a default value for u.BannedUntil (e.g., time.Time{})
+        }
+
+        users = append(users, u)
+    }
+
+    if err = rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return users, nil
+}

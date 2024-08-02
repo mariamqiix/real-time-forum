@@ -1748,3 +1748,74 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		var chats []structs.Chats
+		users, err := database.GetUsers()
+		if err != nil {
+
+			errorServer(w, r, http.StatusNotFound)
+			return
+		}
+		for _, user := range users {
+			imageData, err := database.GetImage(user.ImageId)
+			if err != nil {
+				log.Printf("uploadedContentServerHandler: %s\n", err.Error())
+				errorServer(w, r, http.StatusInternalServerError)
+				return
+			}
+
+			if imageData == nil {
+				errorServer(w, r, http.StatusNotFound)
+				return
+			}
+
+			chat := structs.Chats{
+				UserId:   user.Id,
+				Username: user.Username,
+				Image:    imageData,
+				Online:   IsUserOnline(user.Id),
+			}
+			chats = append(chats, chat)
+
+		}
+		writeToJson(chats, w)
+	} else {
+		users, err := database.GetUsers()
+		if err != nil {
+			errorServer(w, r, http.StatusNotFound)
+			return
+		}
+		var chats []structs.Chats
+		for _, user := range users {
+			imageData, err := database.GetImage(user.ImageId)
+			if err != nil {
+				log.Printf("uploadedContentServerHandler: %s\n", err.Error())
+				errorServer(w, r, http.StatusInternalServerError)
+				return
+			}
+
+			if imageData == nil {
+				errorServer(w, r, http.StatusNotFound)
+				return
+			}
+
+			if user.Id != sessionUser.Id {
+				chat := structs.Chats{
+					UserId:   user.Id,
+					Username: user.Username,
+					Image:    imageData,
+					Online:   IsUserOnline(user.Id),
+				}
+				chats = append(chats, chat)
+			}
+		}
+
+		writeToJson(chats, w)
+	}
+}

@@ -12,7 +12,7 @@ import (
 	// "strconv"
 	// "strings"
 	"sync"
-
+"fmt"
 	"github.com/gorilla/websocket"
 )
 
@@ -31,6 +31,7 @@ var connections []Connection
 var mu sync.Mutex
 
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\n\nhellloooo\n\n")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -148,28 +149,24 @@ func GetConnectionByID(recipientID int) (*Connection, bool) {
 	return nil, false
 }
 
-
 func IsUserOnline(userID int) bool {
-    mu.Lock()
-    defer mu.Unlock()
-    _ , ok := GetConnectionByID(userID)
-    return ok
+	_, ok := GetConnectionByID(userID)
+	return ok
 }
 
-
 func checkUserOnlineHandler(w http.ResponseWriter, r *http.Request) {
-    userIDStr := r.URL.Query().Get("userID")
-    userID, err := strconv.Atoi(userIDStr)
-    if err != nil {
-        http.Error(w, "Invalid userID", http.StatusBadRequest)
-        return
-    }
+	userIDStr := r.URL.Query().Get("userID")
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil {
+		http.Error(w, "Invalid userID", http.StatusBadRequest)
+		return
+	}
 
-    if IsUserOnline(userID) {
-        w.WriteHeader(http.StatusOK)
-        w.Write([]byte("User is online"))
-    } else {
-        w.WriteHeader(http.StatusNotFound)
-        w.Write([]byte("User is offline"))
-    }
+	if IsUserOnline(userID) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("User is online"))
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("User is offline"))
+	}
 }

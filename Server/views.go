@@ -1,14 +1,16 @@
 package Server
 
 import (
+	"RealTimeForum/structs"
 	"html/template"
 	"log"
-	"RealTimeForum/structs"
 )
+
 var (
 	templateRoot = "static/"
 	templates    *template.Template
 )
+
 func init() {
 	// watcher, err := fsnotify.NewWatcher()
 	// if err != nil {
@@ -60,7 +62,7 @@ func updateTemplates() {
 	})
 	// Parse template files
 	tmpl, err := tmpl.ParseFiles(
-		templateRoot+"My Framer Site.html",)
+		templateRoot + "My Framer Site.html")
 	if err != nil {
 		log.Println("error updating templates:", err)
 		return

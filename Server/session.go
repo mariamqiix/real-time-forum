@@ -38,8 +38,6 @@ func LoggedOrNot(w http.ResponseWriter, r *http.Request) (*structs.Session, bool
 	return &session, true // return the session
 }
 
-
-
 // Get a user Struct from a request, if user us a Guest.
 func LoggedOrNot2(w http.ResponseWriter, r *http.Request) (*structs.Session, bool) {
 	cookies, err := r.Cookie("SessionToken")
@@ -63,6 +61,7 @@ func LoggedOrNot2(w http.ResponseWriter, r *http.Request) (*structs.Session, boo
 	}
 	return &session, true // return the session
 }
+
 // Create a new session and set the cookie
 // This function is used when a user logs in
 func CreateSessionAndSetCookie(token string, w http.ResponseWriter, user *structs.User) error {

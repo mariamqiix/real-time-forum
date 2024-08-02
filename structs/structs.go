@@ -122,8 +122,7 @@ type UserNotification struct {
 	Read           bool // Add this line
 }
 
-
-type Message  struct {
+type Message struct {
 	Id         int
 	SenderId   int
 	ReceiverId int
@@ -131,3 +130,9 @@ type Message  struct {
 	Time       string
 }
 
+type Chats struct {
+	UserId   int
+	Username string
+	Image    []byte
+	Online   bool
+}

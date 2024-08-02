@@ -408,8 +408,6 @@ async function GetUserLoggedIn() {
             console.error("Error:", error);
         });
 }
-
-window.onload(GetUserLoggedIn());
 GetUserLoggedIn();
 
 async function logout() {
@@ -832,15 +830,19 @@ function ChangeUserInformation() {
         })
         .then((response) => response.json())
         .then((data) => {
-            document.getElementById("ChangeUserName").value = data.Username;
-            document.getElementById("ChangeFirstName").value = data.FirstName;
-            document.getElementById("ChangeLastName").value = data.LastName;
-            document.getElementById("ChangeEmail").value = data.Email;
-            console.log(data.DateOfBirth);
-            // Parse and format the date to yyyy-MM-dd
-            const date = new Date(data.DateOfBirth);
-            const formattedDate = date.toISOString().split("T")[0];
-            document.getElementById("ChangeDOB").value = formattedDate;
+            if (data) {
+                document.getElementById("ChangeUserName").value = data.Username || "";
+                document.getElementById("ChangeFirstName").value = data.FirstName || "";
+                document.getElementById("ChangeLastName").value = data.LastName || "";
+                document.getElementById("ChangeEmail").value = data.Email || "";
+                console.log(data.DateOfBirth);
+                // Parse and format the date to yyyy-MM-dd
+                const date = new Date(data.DateOfBirth);
+                const formattedDate = date.toISOString().split("T")[0];
+                document.getElementById("ChangeDOB").value = formattedDate || "";
+            } else {
+                console.error("Data is undefined");
+            }
         })
         .catch((error) => {
             console.error("Error fetching user information:", error);
@@ -895,3 +897,53 @@ function UpdateUserInformation() {
         console.log("Action canceled.");
     }
 }
+
+function ChatView() {
+    fetch("http://localhost:8080/ChatView", {
+            method: "GET",
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            const usersList = document.getElementById("messagesBoxDiv");
+            usersList.innerHTML = "";
+
+            data.forEach((chat) => {
+                const messageBox = document.createElement("div");
+                messageBox.className = "messageBox";
+
+                const chatUserPic = document.createElement("div");
+                chatUserPic.className = "chatUserPic";
+                chatUserPic.style.backgroundImage = `url(data:image/jpeg;base64,${chat.Image})`;
+                // Set border color based on online status
+                if (chat.online) {
+                    chatUserPic.style.border = "2px solid green";
+                } else {
+                    chatUserPic.style.border = "2px solid red";
+                }
+
+                const chatUserName = document.createElement("div");
+                chatUserName.className = "chatUserName";
+                const userNameP = document.createElement("p");
+                userNameP.textContent = chat.Username;
+                chatUserName.appendChild(userNameP);
+
+                const newMessageIcon = document.createElement("div");
+                newMessageIcon.className = "newMessageIcon";
+
+                messageBox.appendChild(chatUserPic);
+                messageBox.appendChild(chatUserName);
+                messageBox.appendChild(newMessageIcon);
+
+                usersList.appendChild(messageBox);
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching:", error);
+        });
+}
+
+// Call ChatView initially
+ChatView();
+
+// Set an interval to refresh the chat view every 5 seconds
+setInterval(ChatView, 5000);
