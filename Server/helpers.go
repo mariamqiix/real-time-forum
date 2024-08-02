@@ -265,11 +265,10 @@ func ConvertToPromoteRequestResponse(promotionRequests []structs.PromoteRequest)
 	return responses, nil
 }
 
-
 // SortChatsByOnline sorts the chats slice so that online chats are at the top
 func SortChatsByOnline(chats []structs.Chats) []structs.Chats {
-    sort.SliceStable(chats, func(i, j int) bool {
-        return chats[i].Online && !chats[j].Online
-    })
-    return chats
+	sort.SliceStable(chats, func(i, j int) bool {
+		return chats[i].Online && !chats[j].Online
+	})
+	return chats
 }

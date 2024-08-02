@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -29,7 +28,6 @@ var upgrader = websocket.Upgrader{
 var connections []Connection
 
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Print("\n\n\n\n\n\n\nhelloWebSocket")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)

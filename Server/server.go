@@ -110,7 +110,7 @@ func GoLive(port string) {
 	// http.HandleFunc("GET /login/google/callback", authentication.HandleGoogleCallback)
 	// http.HandleFunc("GET /github-callback", authentication.HandleGitHubCallback)
 	// http.HandleFunc("GET /facebook-callback", authentication.HandleFacebookCallback)
-
+	fmt.Println("Server is running on http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 
 }

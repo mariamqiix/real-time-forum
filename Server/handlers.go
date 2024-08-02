@@ -3,7 +3,6 @@ package Server
 import (
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -284,8 +283,6 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "something went wrong, please try again later", http.StatusInternalServerError)
 		return
 	}
-
-	fmt.Print("done")
 }
 
 func loginPostHandler(w http.ResponseWriter, r *http.Request) {
@@ -303,7 +300,6 @@ func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 
 	Username := r.FormValue("username")
-	fmt.Print(Username)
 	Password := r.FormValue("password")
 	// check if the email is valid and exists
 	if IsValidEmail(Username) {
@@ -747,10 +743,8 @@ func addPostHandlerPost(w http.ResponseWriter, r *http.Request) {
 		title := r.FormValue("title")
 		Content := r.FormValue("topic")
 		Categories := r.FormValue("selectedCategories")
-		fmt.Print(Categories)
 
 		if !userLimiter.Allow(limiterUsername) {
-			fmt.Print("hello")
 			errorServer(w, r, http.StatusTooManyRequests)
 			return
 		}
@@ -1273,16 +1267,13 @@ func searchPostHandler(w http.ResponseWriter, r *http.Request) {
 			Type:      userTypeToResponse(sessionUser.Type),
 		}
 	}
-	fmt.Print("hi")
 
 	content := r.FormValue("search")
-	fmt.Print(content)
 
 	dbPosts, err := database.SearchContent(content)
 	if err != nil {
 		log.Printf("homepageHandler: %s\n", err.Error())
 	}
-	fmt.Print(dbPosts)
 
 	dbCategories, err := database.GetCategories()
 	if err != nil {
@@ -1310,10 +1301,8 @@ func LoggedUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	sessionUser := GetUser(r)
 	limiterUsername := "[GUESTS]"
-	fmt.Print(sessionUser)
 	if sessionUser != nil {
 		limiterUsername = sessionUser.Username
-		fmt.Print(limiterUsername)
 		writeToJson(limiterUsername, w)
 
 	}
@@ -1480,7 +1469,6 @@ func PromotionRequestsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	promotionRequests, err := database.GetPromoteRequests()
-	fmt.Print((promotionRequests))
 	if err != nil {
 		errorServer(w, r, http.StatusNotFound)
 		return
@@ -1571,7 +1559,6 @@ func ApprovePromotionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id := r.FormValue("userId")
-	fmt.Println(id)
 	IntId, _ := strconv.Atoi(id)
 	err := database.UpdateUserType(IntId, 2)
 	if err != nil {
@@ -1579,7 +1566,6 @@ func ApprovePromotionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	err = database.ReomvePromoteRequest(IntId)
-	fmt.Print("done")
 	if err != nil {
 		errorServer(w, r, http.StatusNotFound)
 		return
@@ -1602,11 +1588,9 @@ func removeCategoryHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	categoryId := r.FormValue("id")
-	fmt.Print(categoryId)
 	IntId, _ := strconv.Atoi(categoryId)
 	err := database.RemoveCategory(IntId)
 	if err != nil {
-		fmt.Print(err)
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}
@@ -1633,16 +1617,12 @@ func addCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	categoryName := r.FormValue("name")
 	categoryDescription := r.FormValue("description")
-	fmt.Println(categoryName, "hello you\n\nhi")
-	fmt.Println(categoryDescription)
-
 	category := structs.Category{
 		Name:        categoryName,
 		Description: categoryDescription,
 		Color:       "#000000",
 	}
 	err := database.AddCategory(category)
-	fmt.Print(err)
 	if err != nil {
 		errorServer(w, r, http.StatusNotFound)
 		return
