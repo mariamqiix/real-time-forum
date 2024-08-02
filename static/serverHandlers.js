@@ -468,6 +468,17 @@ function settingsHandler() {
                         li.style.display = "none";
                     }
                 });
+            } else {
+                document.querySelectorAll("#settingList li").forEach((li) => {
+                    if (
+                        li.innerHTML.includes("List of Moderators") ||
+                        li.innerHTML.includes("Promotion Requests") ||
+                        li.innerHTML.includes("Manage Categories") ||
+                        li.innerHTML.includes("Request to be Moderator")
+                    ) {
+                        li.style.display = "none";
+                    }
+                });
             }
         })
         .catch((error) => {
