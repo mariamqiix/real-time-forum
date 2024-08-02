@@ -456,7 +456,7 @@ function settingsHandler() {
                         li.style.display = "none";
                     }
                 });
-            } else if (data.name === "Moderator" || data.name === "Admin") {
+            } else if (data.name === "Admin") {
                 document.querySelectorAll("#settingList li").forEach((li) => {
                     if (
                         li.innerHTML.includes("List of Moderators") ||
