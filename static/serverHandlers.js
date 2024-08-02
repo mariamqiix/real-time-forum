@@ -899,6 +899,8 @@ function UpdateUserInformation() {
 }
 
 function ChatView() {
+    console.log("helloooo");
+
     fetch("http://localhost:8080/ChatView", {
             method: "GET",
         })
@@ -915,10 +917,11 @@ function ChatView() {
                 chatUserPic.className = "chatUserPic";
                 chatUserPic.style.backgroundImage = `url(data:image/jpeg;base64,${chat.Image})`;
                 // Set border color based on online status
-                if (chat.online) {
-                    chatUserPic.style.border = "2px solid green";
+                console.log(chat.Username + " : " + chat.Online);
+                if (chat.Online) {
+                    chatUserPic.style.border = " 3px solid rgb(74, 250, 58);";
                 } else {
-                    chatUserPic.style.border = "2px solid red";
+                    chatUserPic.style.border = " 3px solid red";
                 }
 
                 const chatUserName = document.createElement("div");

@@ -6,13 +6,13 @@ import (
 	"strconv"
 
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
 	// "strconv"
 	// "strings"
-	"sync"
-"fmt"
+
 	"github.com/gorilla/websocket"
 )
 
@@ -28,10 +28,8 @@ var upgrader = websocket.Upgrader{
 
 var connections []Connection
 
-var mu sync.Mutex
-
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\n\nhellloooo\n\n")
+	fmt.Print("\n\n\n\n\n\n\nhelloWebSocket")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -45,18 +43,13 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mu.Lock()
 	connection := Connection{
 		ID:         user.Id,
 		connection: conn,
 	}
 	connections = append(connections, connection)
-	mu.Unlock()
-
 	defer func() {
-		mu.Lock()
 		RemoveConnection(user.Id)
-		mu.Unlock()
 	}()
 
 	for {
@@ -125,8 +118,6 @@ func BodyToMessage(body []byte) *structs.MessageRequest {
 
 // RemoveConnection removes a connection by its ID
 func RemoveConnection(userID int) {
-	mu.Lock()
-	defer mu.Unlock()
 
 	for i, conn := range connections {
 		if conn.ID == userID {
@@ -138,8 +129,6 @@ func RemoveConnection(userID int) {
 
 // GetConnectionByID returns the connection where the ID matches the recipientID
 func GetConnectionByID(recipientID int) (*Connection, bool) {
-	mu.Lock()
-	defer mu.Unlock()
 
 	for _, conn := range connections {
 		if conn.ID == recipientID {

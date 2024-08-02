@@ -27,6 +27,7 @@ function sendMessage(recipientID, message) {
         recipientID: recipientID,
         message: message,
     };
+    console.log("Sending message:", messageObject);
     socket.send(JSON.stringify(messageObject));
 }
 

@@ -1784,7 +1784,8 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 			chats = append(chats, chat)
 
 		}
-		writeToJson(chats, w)
+		sortedChats := SortChatsByOnline(chats)
+		writeToJson(sortedChats, w)
 	} else {
 		users, err := database.GetUsers()
 		if err != nil {
@@ -1815,7 +1816,7 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 				chats = append(chats, chat)
 			}
 		}
-
-		writeToJson(chats, w)
+		sortedChats := SortChatsByOnline(chats)
+		writeToJson(sortedChats, w)
 	}
 }

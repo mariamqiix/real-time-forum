@@ -49,7 +49,9 @@ func GoLive(port string) {
 	http.HandleFunc("/serverHandlers.js", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/serverHandlers.js")
 	})
-
+	http.HandleFunc("/webSocket.js", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./static/webSocket.js")
+	})
 	http.HandleFunc("/", homepageHandler)
 	http.HandleFunc("/homePageDataHuncler", homePageDataHuncler)
 	http.HandleFunc("/static/", staticHandler)
