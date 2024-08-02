@@ -5,7 +5,7 @@ front :
 -   add comment section
 -   ~~log in page : by mariam~~
 -   ~~signin/signout/login : by mariam~~
--   change User Information
+-   ~~change User Information~~
 -   ~~Registration validation~~
 -   ~~Manage Categories~~
 -   ~~Promotion Requests : add accept button~~
@@ -23,6 +23,7 @@ back :
     3. ~~List of Moderators~~
     4. ~~Promotion Requests~~
     5. ~~Manage Categories~~
+    6. change User Information
 -   ~~chnage the visibility of (edit post) - just the owner~~
 
 DATABASE :
