@@ -1,15 +1,15 @@
 function toggleDiv(divName) {
     const contentDiv = document.getElementById(divName);
-    const overlayDiv = document.getElementById('overlay');
+    const overlayDiv = document.getElementById("overlay");
 
-    if (contentDiv.style.display === 'none') {
+    if (contentDiv.style.display === "none") {
         // Show the content div
-        overlayDiv.style.display = 'block';
-        contentDiv.style.display = 'block';
+        overlayDiv.style.display = "block";
+        contentDiv.style.display = "block";
     } else {
         // Hide the content div
-        contentDiv.style.display = 'none';
-        overlayDiv.style.display = 'none';
+        contentDiv.style.display = "none";
+        overlayDiv.style.display = "none";
     }
 }
 
@@ -46,5 +46,19 @@ function toggleVisibility(className) {
         } else {
             div.style.display = "none";
         }
+    }
+}
+
+function OpenMesages(username) {
+    const messagesBoxDiv = document.getElementById("messagesBoxDiv");
+    const msgDiv = document.getElementById("msgDiv");
+    if (messagesBoxDiv.style.display === "none") {
+        messagesBoxDiv.style.display = "block";
+        msgDiv.style.display = "none";
+    } else {
+        messagesBoxDiv.style.display = "none";
+        msgDiv.style.display = "block";
+        const msgDivUserName = document.querySelector("#msgDiv p");
+        msgDivUserName.innerHTML = username;
     }
 }

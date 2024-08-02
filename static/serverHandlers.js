@@ -900,51 +900,52 @@ function UpdateUserInformation() {
 
 function ChatView() {
     console.log("helloooo");
+    const messagesBoxDiv = document.getElementById("messagesBoxDiv");
+    if (messagesBoxDiv.style.display != "none") {
+        fetch("http://localhost:8080/ChatView", {
+                method: "GET",
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                const usersList = document.getElementById("messagesBoxDiv");
+                usersList.innerHTML = "";
 
-    fetch("http://localhost:8080/ChatView", {
-            method: "GET",
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            const usersList = document.getElementById("messagesBoxDiv");
-            usersList.innerHTML = "";
+                data.forEach((chat) => {
+                    const messageBox = document.createElement("div");
+                    messageBox.className = "messageBox";
 
-            data.forEach((chat) => {
-                const messageBox = document.createElement("div");
-                messageBox.className = "messageBox";
+                    const chatUserPic = document.createElement("div");
+                    chatUserPic.className = "chatUserPic";
+                    chatUserPic.style.backgroundImage = `url(data:image/jpeg;base64,${chat.Image})`;
+                    // Set border color based on online status
+                    console.log(chat.Username + " : " + chat.Online);
+                    if (chat.Online) {
+                        chatUserPic.style.border = " 3px solid rgb(74, 250, 58);";
+                    } else {
+                        chatUserPic.style.border = " 3px solid red";
+                    }
 
-                const chatUserPic = document.createElement("div");
-                chatUserPic.className = "chatUserPic";
-                chatUserPic.style.backgroundImage = `url(data:image/jpeg;base64,${chat.Image})`;
-                // Set border color based on online status
-                console.log(chat.Username + " : " + chat.Online);
-                if (chat.Online) {
-                    chatUserPic.style.border = " 3px solid rgb(74, 250, 58);";
-                } else {
-                    chatUserPic.style.border = " 3px solid red";
-                }
+                    const chatUserName = document.createElement("div");
+                    chatUserName.className = "chatUserName";
+                    const userNameP = document.createElement("p");
+                    userNameP.textContent = chat.Username;
+                    chatUserName.appendChild(userNameP);
 
-                const chatUserName = document.createElement("div");
-                chatUserName.className = "chatUserName";
-                const userNameP = document.createElement("p");
-                userNameP.textContent = chat.Username;
-                chatUserName.appendChild(userNameP);
+                    const newMessageIcon = document.createElement("div");
+                    newMessageIcon.className = "newMessageIcon";
 
-                const newMessageIcon = document.createElement("div");
-                newMessageIcon.className = "newMessageIcon";
-
-                messageBox.appendChild(chatUserPic);
-                messageBox.appendChild(chatUserName);
-                messageBox.appendChild(newMessageIcon);
-
-                usersList.appendChild(messageBox);
+                    messageBox.appendChild(chatUserPic);
+                    messageBox.appendChild(chatUserName);
+                    messageBox.appendChild(newMessageIcon);
+                    messageBox.setAttribute("onclick", `OpenMesages('${chat.Username}')`);
+                    usersList.appendChild(messageBox);
+                });
+            })
+            .catch((error) => {
+                console.error("Error fetching:", error);
             });
-        })
-        .catch((error) => {
-            console.error("Error fetching:", error);
-        });
+    }
 }
-
 // Call ChatView initially
 ChatView();
 
