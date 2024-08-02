@@ -1,1125 +1,1131 @@
-                body {
-                    margin: 0;
-                    padding: 0;
-                    height: 100%;
-                    width: 100%;
-                    box-sizing: border-box;
-                }
-                
-                 :root {
-                    -webkit-font-smoothing: antialiased;
-                    -moz-osx-font-smoothing: grayscale
-                }
-                
-                * {
-                    box-sizing: border-box;
-                    -webkit-font-smoothing: inherit
-                }
-                
-                body,
-                input,
-                textarea,
-                select,
-                button {
-                    font-size: 12px;
-                    font-family: 'Quicksand', sans-serif;
-                }
-                
-                #__framer-badge-container {
-                    position: fixed;
-                    bottom: 0;
-                    padding: 20px;
-                    width: 100%;
-                    display: flex;
-                    justify-content: right;
-                    pointer-events: none;
-                    z-index: 314159
-                }
-                
-                .__framer-badge {
-                    pointer-events: auto
-                }
-                
-                @font-face {
-                    font-family: Kufam;
-                    font-style: normal;
-                    font-weight: 400;
-                    font-display: swap;
-                    src: url(https://fonts.gstatic.com/s/kufam/v21/C8ct4cY7pG7w_q6FJj0.woff2) format("woff2");
-                    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
-                }
-                
-                @font-face {
-                    font-family: Kulim Park;
-                    font-style: normal;
-                    font-weight: 400;
-                    font-display: swap;
-                    src: url(https://fonts.gstatic.com/s/kulimpark/v14/fdN79secq3hflz1Uu3IwhFks5A.woff2) format("woff2");
-                    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
-                }
-                
-                @font-face {
-                    font-family: Kufam Placeholder;
-                    src: local("Arial");
-                    ascent-override: 82.18%;
-                    descent-override: 36.52%;
-                    line-gap-override: 0%;
-                    size-adjust: 109.51%
-                }
-                
-                @font-face {
-                    font-family: Kulim Park Placeholder;
-                    src: local("Arial");
-                    ascent-override: 90.81%;
-                    descent-override: 19.9%;
-                    line-gap-override: 0%;
-                    size-adjust: 102.52%
-                }
-                
-                p.framer-text,
-                div.framer-text,
-                h1.framer-text,
-                h2.framer-text,
-                h3.framer-text,
-                h4.framer-text,
-                h5.framer-text,
-                h6.framer-text,
-                li.framer-text,
-                ol.framer-text,
-                ul.framer-text,
-                span.framer-text:not([data-text-fill]) {
-                    font-family: var(--framer-font-family, Inter, Inter Placeholder, sans-serif);
-                    font-style: var(--framer-font-style, normal);
-                    font-weight: var(--framer-font-weight, 400);
-                    color: var(--framer-text-color, #000);
-                    font-size: calc(var(--framer-font-size, 16px) * var(--framer-font-size-scale, 1));
-                    letter-spacing: var(--framer-letter-spacing, 0);
-                    text-transform: var(--framer-text-transform, none);
-                    text-decoration: var(--framer-text-decoration, none);
-                    line-height: var(--framer-line-height, 1.2em);
-                    text-align: var(--framer-text-alignment, start)
-                }
-                
-                p.framer-text:not(:first-child),
-                div.framer-text:not(:first-child),
-                h1.framer-text:not(:first-child),
-                h2.framer-text:not(:first-child),
-                h3.framer-text:not(:first-child),
-                h4.framer-text:not(:first-child),
-                h5.framer-text:not(:first-child),
-                h6.framer-text:not(:first-child),
-                ol.framer-text:not(:first-child),
-                ul.framer-text:not(:first-child),
-                .framer-image.framer-text:not(:first-child) {
-                    margin-top: var(--framer-paragraph-spacing, 0)
-                }
-                
-                li.framer-text>ul.framer-text:nth-child(2),
-                li.framer-text>ol.framer-text:nth-child(2) {
-                    margin-top: 0
-                }
-                
-                .framer-text[data-text-fill] {
-                    display: inline-block;
-                    background-clip: text;
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    padding: max(0em, calc(calc(1.3em - var(--framer-line-height, 1.3em)) / 2));
-                    margin: min(0em, calc(calc(1.3em - var(--framer-line-height, 1.3em)) / -2))
-                }
-                
-                .framer-image.framer-text {
-                    display: block;
-                    max-width: 100%;
-                    height: auto
-                }
-                
-                .text-styles-preset-reset.framer-text {
-                    --framer-font-family: Inter, Inter Placeholder, sans-serif;
-                    --framer-font-style: normal;
-                    --framer-font-weight: 500;
-                    --framer-text-color: #000;
-                    --framer-font-size: 16px;
-                    --framer-letter-spacing: 0;
-                    --framer-text-transform: none;
-                    --framer-text-decoration: none;
-                    --framer-line-height: 1.2em;
-                    --framer-text-alignment: start
-                }
-                
-                ol.framer-text {
-                    --list-style-type: decimal
-                }
-                
-                ul.framer-text,
-                ol.framer-text {
-                    display: table;
-                    width: 100%
-                }
-                
-                li.framer-text {
-                    display: table-row;
-                    counter-increment: list-item;
-                    list-style: none
-                }
-                
-                ol.framer-text>li.framer-text:before {
-                    display: table-cell;
-                    width: 2.25ch;
-                    box-sizing: border-box;
-                    padding-inline-end: .75ch;
-                    content: counter(list-item, var(--list-style-type)) ".";
-                    white-space: nowrap
-                }
-                
-                ul.framer-text>li.framer-text:before {
-                    display: table-cell;
-                    width: 2.25ch;
-                    box-sizing: border-box;
-                    padding-inline-end: .75ch;
-                    content: "\2022"
-                }
-                
-                .framer-text-module[style*=aspect-ratio]>:first-child {
-                    width: 100%
-                }
-                
-                @supports not (aspect-ratio: 1) {
-                    .framer-text-module[style*=aspect-ratio] {
-                        position: relative
-                    }
-                }
-                
-                @supports not (aspect-ratio: 1) {
-                    .framer-text-module[style*=aspect-ratio]:before {
-                        content: "";
-                        display: block;
-                        padding-bottom: calc(100% / calc(var(--aspect-ratio)))
-                    }
-                }
-                
-                @supports not (aspect-ratio: 1) {
-                    .framer-text-module[style*=aspect-ratio]>:first-child {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        height: 100%
-                    }
-                }
-                
-                @supports (aspect-ratio: 1) {
-                    body {
-                        --framer-aspect-ratio-supported: auto
-                    }
-                }
-                
-                .container {
-                    -webkit-backdrop-filter: blur(2px);
-                    backdrop-filter: blur(2px);
-                    background-color: #fff;
-                    flex: none;
-                    height: 100%;
-                    width: 100%;
-                    margin: 0;
-                    overflow: hidden;
-                    position: absolute;
-                }
-                
-                .rightSide {
-                    background: linear-gradient(180.03936920356128deg, #465e8d 0%, rgba(158, 161, 169, 1) 19.70800757408142%);
-                    flex: none;
-                    height: 100%;
-                    position: absolute;
-                    top: 0;
-                    float: right;
-                    left: 15%;
-                    width: 85%;
-                    overflow: hidden;
-                }
-                
-                .navigationBar {
-                    background: linear-gradient(180.03936920356128deg, #465e8d 78%, rgba(158, 161, 169, 1) 100%);
-                    height: 100%;
-                    position: fixed;
-                    float: left;
-                    width: 15%;
-                }
-                
-                .navigationBarImage {
-                    height: 100%;
-                    width: 100%;
-                    background-image: url(./images/navBackground.png);
-                    background-repeat: no-repeat;
-                    background-size: 100% 100%;
-                }
-                
-                .messagesBar {
-                    background-color: #7c7a7a4d;
-                    flex: none;
-                    height: 100%;
-                    left: 70%;
-                    position: absolute;
-                    top: 0;
-                    width: 30%;
-                    min-width: 100px;
-                    overflow: hidden;
-                }
-                
-                .logoDiv {
-                    background: linear-gradient(90deg, rgba(226, 222, 222, 0) 0%, rgba(234, 220, 197, .35710206627845764) 25.51265060901642%, rgba(237, 219, 189, .4651417136192322) 60.515183210372925%, rgba(250, 217, 152, 1) 100%);
-                    height: 82px;
-                    position: fixed;
-                    top: 58px;
-                    width: 16%;
-                    overflow: hidden;
-                }
-                
-                .logoDiv h1 {
-                    float: right;
-                    font-family: "Kufam";
-                    font-size: 33px;
-                    fonT-weight: 600px;
-                    margin-right: 10%;
-                }
-                
-                .center-content {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    text-align: center;
-                }
-                
-                .logo {
-                    top: 77px;
-                    width: 80px;
-                    height: 50px;
-                    background-image: url(./images/logo.png);
-                    background-repeat: no-repeat;
-                    background-size: 100% 100%;
-                    margin: 4%;
-                    margin-left: 10%;
-                }
-                
-                .postBox {
-                    background-color: #dad3c7cc;
-                    border-radius: 40px;
-                    height: 220px;
-                    margin-left: 3%;
-                    width: 716px;
-                    padding: 2%;
-                    float: left;
-                    clear: both;
-                    margin-bottom: 1%;
-                    transition: transform 0.3s;
-                    /* Add smooth transition effect */
-                }
-                
-                .postUserPic {
-                    background: linear-gradient(180deg, #d9d3c6 0%, rgba(115, 112, 105, 1) 100%);
-                    border-radius: 100%;
-                    height: 55px;
-                    margin: 5%;
-                    width: 55px;
-                    float: left;
-                }
-                
-                .postTitle {
-                    white-space: pre-wrap;
-                    width: 421px;
-                    float: left;
-                    margin-top: 5%;
-                }
-                
-                .postUserName {
-                    font-size: 24px;
-                }
-                
-                .postContent {
-                    white-space: pre-wrap;
-                    word-break: break-word;
-                    word-wrap: break-word;
-                }
-                
-                .title {
-                    font-family: "Kufam";
-                    color: rgba(218, 211, 199, 1);
-                    font-size: 20px;
-                    height: 5%px;
-                    width: 80%;
-                    margin: 4%;
-                    word-break: break-word;
-                    word-wrap: break-word;
-                    white-space: pre-wrap;
-                    float: left;
-                    clear: both;
-                    margin-bottom: 0;
-                }
-                
-                .mainPageIcons {
-                    height: 48px;
-                    width: 48px;
-                    position: absolute;
-                    top: 83px;
-                    float: right;
-                    clear: both;
-                    transition: 0.3s;
-                }
-                
-                .mainPageIcons:hover {
-                    transform: scale(1.2);
-                }
-                
-                .categoryIcon {
-                    left: 875px;
-                    background-image: url(./images/categoryIcon.png);
-                }
-                
-                .sortIcon {
-                    left: 800px;
-                    background-image: url(./images/sortIcon.png);
-                }
-                
-                .penIcon {
-                    left: 950px;
-                    background-image: url(./images/penIcon.png);
-                }
-                /* .modeIcon {
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+:root {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-font-smoothing: inherit
+}
+
+body,
+input,
+textarea,
+select,
+button {
+    font-size: 12px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+#__framer-badge-container {
+    position: fixed;
+    bottom: 0;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    pointer-events: none;
+    z-index: 314159
+}
+
+.__framer-badge {
+    pointer-events: auto
+}
+
+@font-face {
+    font-family: Kufam;
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/kufam/v21/C8ct4cY7pG7w_q6FJj0.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
+}
+
+@font-face {
+    font-family: Kulim Park;
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/kulimpark/v14/fdN79secq3hflz1Uu3IwhFks5A.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
+}
+
+@font-face {
+    font-family: Kufam Placeholder;
+    src: local("Arial");
+    ascent-override: 82.18%;
+    descent-override: 36.52%;
+    line-gap-override: 0%;
+    size-adjust: 109.51%
+}
+
+@font-face {
+    font-family: Kulim Park Placeholder;
+    src: local("Arial");
+    ascent-override: 90.81%;
+    descent-override: 19.9%;
+    line-gap-override: 0%;
+    size-adjust: 102.52%
+}
+
+p.framer-text,
+div.framer-text,
+h1.framer-text,
+h2.framer-text,
+h3.framer-text,
+h4.framer-text,
+h5.framer-text,
+h6.framer-text,
+li.framer-text,
+ol.framer-text,
+ul.framer-text,
+span.framer-text:not([data-text-fill]) {
+    font-family: var(--framer-font-family, Inter, Inter Placeholder, sans-serif);
+    font-style: var(--framer-font-style, normal);
+    font-weight: var(--framer-font-weight, 400);
+    color: var(--framer-text-color, #000);
+    font-size: calc(var(--framer-font-size, 16px) * var(--framer-font-size-scale, 1));
+    letter-spacing: var(--framer-letter-spacing, 0);
+    text-transform: var(--framer-text-transform, none);
+    text-decoration: var(--framer-text-decoration, none);
+    line-height: var(--framer-line-height, 1.2em);
+    text-align: var(--framer-text-alignment, start)
+}
+
+p.framer-text:not(:first-child),
+div.framer-text:not(:first-child),
+h1.framer-text:not(:first-child),
+h2.framer-text:not(:first-child),
+h3.framer-text:not(:first-child),
+h4.framer-text:not(:first-child),
+h5.framer-text:not(:first-child),
+h6.framer-text:not(:first-child),
+ol.framer-text:not(:first-child),
+ul.framer-text:not(:first-child),
+.framer-image.framer-text:not(:first-child) {
+    margin-top: var(--framer-paragraph-spacing, 0)
+}
+
+li.framer-text>ul.framer-text:nth-child(2),
+li.framer-text>ol.framer-text:nth-child(2) {
+    margin-top: 0
+}
+
+.framer-text[data-text-fill] {
+    display: inline-block;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: max(0em, calc(calc(1.3em - var(--framer-line-height, 1.3em)) / 2));
+    margin: min(0em, calc(calc(1.3em - var(--framer-line-height, 1.3em)) / -2))
+}
+
+.framer-image.framer-text {
+    display: block;
+    max-width: 100%;
+    height: auto
+}
+
+.text-styles-preset-reset.framer-text {
+    --framer-font-family: Inter, Inter Placeholder, sans-serif;
+    --framer-font-style: normal;
+    --framer-font-weight: 500;
+    --framer-text-color: #000;
+    --framer-font-size: 16px;
+    --framer-letter-spacing: 0;
+    --framer-text-transform: none;
+    --framer-text-decoration: none;
+    --framer-line-height: 1.2em;
+    --framer-text-alignment: start
+}
+
+ol.framer-text {
+    --list-style-type: decimal
+}
+
+ul.framer-text,
+ol.framer-text {
+    display: table;
+    width: 100%
+}
+
+li.framer-text {
+    display: table-row;
+    counter-increment: list-item;
+    list-style: none
+}
+
+ol.framer-text>li.framer-text:before {
+    display: table-cell;
+    width: 2.25ch;
+    box-sizing: border-box;
+    padding-inline-end: .75ch;
+    content: counter(list-item, var(--list-style-type)) ".";
+    white-space: nowrap
+}
+
+ul.framer-text>li.framer-text:before {
+    display: table-cell;
+    width: 2.25ch;
+    box-sizing: border-box;
+    padding-inline-end: .75ch;
+    content: "\2022"
+}
+
+.framer-text-module[style*=aspect-ratio]>:first-child {
+    width: 100%
+}
+
+@supports not (aspect-ratio: 1) {
+    .framer-text-module[style*=aspect-ratio] {
+        position: relative
+    }
+}
+
+@supports not (aspect-ratio: 1) {
+    .framer-text-module[style*=aspect-ratio]:before {
+        content: "";
+        display: block;
+        padding-bottom: calc(100% / calc(var(--aspect-ratio)))
+    }
+}
+
+@supports not (aspect-ratio: 1) {
+    .framer-text-module[style*=aspect-ratio]>:first-child {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%
+    }
+}
+
+@supports (aspect-ratio: 1) {
+    body {
+        --framer-aspect-ratio-supported: auto
+    }
+}
+
+.container {
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    background-color: #fff;
+    flex: none;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+}
+
+.rightSide {
+    background: linear-gradient(180.03936920356128deg, #465e8d 0%, rgba(158, 161, 169, 1) 19.70800757408142%);
+    flex: none;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    float: right;
+    left: 15%;
+    width: 85%;
+    overflow: hidden;
+}
+
+.navigationBar {
+    background: linear-gradient(180.03936920356128deg, #465e8d 78%, rgba(158, 161, 169, 1) 100%);
+    height: 100%;
+    position: fixed;
+    float: left;
+    width: 15%;
+}
+
+.navigationBarImage {
+    height: 100%;
+    width: 100%;
+    background-image: url(./images/navBackground.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.messagesBar {
+    background-color: #7c7a7a4d;
+    flex: none;
+    height: 100%;
+    left: 70%;
+    position: absolute;
+    top: 0;
+    width: 30%;
+    min-width: 100px;
+    overflow: hidden;
+}
+
+.logoDiv {
+    background: linear-gradient(90deg, rgba(226, 222, 222, 0) 0%, rgba(234, 220, 197, .35710206627845764) 25.51265060901642%, rgba(237, 219, 189, .4651417136192322) 60.515183210372925%, rgba(250, 217, 152, 1) 100%);
+    height: 82px;
+    position: fixed;
+    top: 58px;
+    width: 16%;
+    overflow: hidden;
+}
+
+.logoDiv h1 {
+    float: right;
+    font-family: "Kufam";
+    font-size: 33px;
+    fonT-weight: 600px;
+    margin-right: 10%;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.logo {
+    top: 77px;
+    width: 80px;
+    height: 50px;
+    background-image: url(./images/logo.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    margin: 4%;
+    margin-left: 10%;
+}
+
+.postBox {
+    background-color: #dad3c7cc;
+    border-radius: 40px;
+    height: 220px;
+    margin-left: 3%;
+    width: 716px;
+    padding: 2%;
+    float: left;
+    clear: both;
+    margin-bottom: 1%;
+    transition: transform 0.3s;
+    /* Add smooth transition effect */
+}
+
+.postUserPic {
+    background: linear-gradient(180deg, #d9d3c6 0%, rgba(115, 112, 105, 1) 100%);
+    border-radius: 100%;
+    height: 55px;
+    margin: 5%;
+    width: 55px;
+    float: left;
+}
+
+.postTitle {
+    white-space: pre-wrap;
+    width: 421px;
+    float: left;
+    margin-top: 5%;
+}
+
+.postUserName {
+    font-size: 24px;
+}
+
+.postContent {
+    white-space: pre-wrap;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+
+.title {
+    font-family: "Kufam";
+    color: rgba(218, 211, 199, 1);
+    font-size: 20px;
+    height: 5%px;
+    width: 80%;
+    margin: 4%;
+    word-break: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    float: left;
+    clear: both;
+    margin-bottom: 0;
+}
+
+.mainPageIcons {
+    height: 48px;
+    width: 48px;
+    position: absolute;
+    top: 83px;
+    float: right;
+    clear: both;
+    transition: 0.3s;
+}
+
+.mainPageIcons:hover {
+    transform: scale(1.2);
+}
+
+.categoryIcon {
+    left: 875px;
+    background-image: url(./images/categoryIcon.png);
+}
+
+.sortIcon {
+    left: 800px;
+    background-image: url(./images/sortIcon.png);
+}
+
+.penIcon {
+    left: 950px;
+    background-image: url(./images/penIcon.png);
+}
+
+/* .modeIcon {
     left: 735px;
     background-image: url(./images/penIcon.png);
 } */
-                
-                .homeBtn,
-                .homeIcon {
-                    top: 356px;
-                }
-                
-                .searchBarBtn,
-                .searchIcon {
-                    top: 427px;
-                }
-                
-                .profileBtn,
-                .profileIcon {
-                    top: 498px;
-                }
-                
-                .notificationsBtn,
-                .bellIcon {
-                    top: 571px;
-                }
-                
-                .settingBtn,
-                .settingIcon {
-                    top: 640px;
-                }
-                
-                .signOutBtn,
-                .signOutIcon {
-                    top: 700px;
-                }
-                
-                .navigationBarBtns {
-                    height: 52px;
-                    left: 73px;
-                    width: 282px;
-                    white-space: pre-wrap;
-                    position: fixed;
-                    overflow-y: hidden;
-                }
-                
-                .userName {
-                    height: 52px;
-                    left: 45px;
-                    position: absolute;
-                    top: 353px;
-                    white-space: pre-wrap;
-                    width: 229px;
-                    word-break: break-word;
-                    word-wrap: break-word;
-                }
-                
-                .plusIcon {
-                    height: 48px;
-                    position: absolute;
-                    top: 35px;
-                    width: 48px;
-                    background-image: url(./images/plusIcon.png);
-                    left: 400px;
-                }
-                
-                .navigationBarIcons {
-                    height: 50px;
-                    width: 50px;
-                    left: 37px;
-                    position: absolute;
-                }
-                
-                .profileIcon {
-                    background-image: url(./images/profileIcon.png);
-                }
-                
-                .homeIcon {
-                    background-image: url(./images/homeIcon.png);
-                }
-                
-                .home {
-                    align-items: center;
-                }
-                
-                .bellIcon {
-                    background-image: url(./images/bellIcon.png);
-                }
-                
-                .searchIcon {
-                    background-image: url(./images/searchIcon.png);
-                }
-                
-                .signOutIcon {
-                    background-image: url(./images/signOutIcon.png);
-                }
-                
-                .settingIcon {
-                    background-image: url(./images/settingIcon.png);
-                }
-                
-                .newMessageIcon {
-                    height: 48px;
-                    position: absolute;
-                    width: 48px;
-                    background-image: url(./images/newMessageIcon.png);
-                }
-                
-                .mailIcon {
-                    height: 50px;
-                    width: 50px;
-                    position: absolute;
-                    float: left;
-                    background-image: url(./images/mailIcon.png);
-                }
-                
-                .messagesTitle {
-                    margin: 2%;
-                    margin-top: 5%;
-                    float: left;
-                    height: auto;
-                    width: auto;
-                    white-space: pre-wrap;
-                }
-                
-                .messagesBox {
-                    --border-bottom-width: 1px;
-                    --border-color: #9747ff;
-                    --border-left-width: 1px;
-                    --border-right-width: 1px;
-                    --border-style: dashed;
-                    --border-top-width: 1px;
-                    border-radius: 5px;
-                    flex: none;
-                    height: 389px;
-                    left: 1038px;
-                    overflow: hidden;
-                    top: 160px;
-                    width: 402px;
-                    will-change: var(--framer-will-change-override, transform)
-                }
-                
-                .messageBox {
-                    height: 102px;
-                    left: 20px;
-                    overflow: visible;
-                    position: relative;
-                    top: 20px;
-                    width: 382px
-                }
-                
-                .chatUserPic {
-                    background: linear-gradient(180deg, #d9d3c6 0%, rgba(115, 112, 105, 1) 100%);
-                    border-radius: 100%;
-                    height: 70px;
-                    left: 0;
-                    position: absolute;
-                    right: 312px;
-                    top: 6px;
-                    border: 5px solid rgb(74, 250, 58);
-                    float: left;
-                    clear: both;
-                }
-                
-                .chatUserName {
-                    white-space: pre-wrap;
-                    word-break: break-word;
-                    word-wrap: break-word;
-                    --framer-font-family: Kufam;
-                    --framer-text-color: rgba(217, 211, 198, 1);
-                    font-size: 25px;
-                    float: right;
-                    clear: both;
-                    margin-right: 45%;
-                }
-                
-                .chatUserMessage {
-                    inset: 50px 0 0 100px;
-                    position: absolute;
-                    word-break: break-word;
-                    word-wrap: break-word
-                }
-                
-                .mainPage {
-                    height: 100%;
-                    width: 100%;
-                }
-                
-                .sortIcon:hover,
-                .categoryIcon:hover,
-                .navigationBarBtns:hover,
-                .navigationBarIcons:hover,
-                .newPostBtn:hover,
-                .penIcon:hover,
-                .exitButton:hover {
-                    cursor: pointer;
-                }
-                
-                #overlay {
-                    display: none;
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    z-index: 9999;
-                }
-                
-                #categoryFilter,
-                #sortFilter {
-                    display: none;
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background-color: #f0f0f0;
-                    padding: 20px;
-                    border: 1px solid #ccc;
-                    z-index: 10000;
-                    font-size: 30px;
-                    width: 45%;
-                    height: 55%;
-                    border-radius: 30px;
-                }
-                
-                .exitButton {
-                    background-image: url(./images/xIcon.png);
-                    height: 50px;
-                    width: 50px;
-                    float: left;
-                }
-                
-                #newPostTitle {
-                    float: left;
-                    margin: 1%;
-                    height: 50px;
-                    width: 500px;
-                    border: none;
-                    border-radius: 20px;
-                    padding: 2%;
-                    font-size: 28px;
-                }
-                
-                .checkBoxCateg {
-                    height: 30px;
-                    width: 30px;
-                }
-                
-                .submitBtn {
-                    float: right;
-                    clear: rigth;
-                    margin-top: 10%;
-                    margin-right: 5%;
-                    width: 80px;
-                    height: 50px;
-                    font-size: 20px;
-                    border-radius: 30px;
-                }
-                
-                .disabled {
-                    opacity: 0.5;
-                    cursor: not-allowed;
-                }
-                
-                .navigationContent {
-                    height: 100%;
-                    width: 70%;
-                    /* overflow: scroll; */
-                    overflow-x: hidden;
-                    overflow-y: auto;
-                }
-                /* Hide the scrollbar for a specific div */
-                
-                .navigationContent::-webkit-scrollbar,
-                .popup::-webkit-scrollbar {
-                    width: 0.5em;
-                    border-radius: 30px;
-                    /* Set the width of the scrollbar (adjust as needed) */
-                }
-                /* Optional: Style the scrollbar track */
-                
-                .navigationContent::-webkit-scrollbar-track,
-                .popup::-webkit-scrollbar-track {
-                    background-color: #f1f1f1;
-                    border-radius: 30px;
-                    /* Change the background color as desired */
-                }
-                /* Optional: Style the scrollbar thumb */
-                
-                .navigationContent::-webkit-scrollbar-thumb,
-                .popup::-webkit-scrollbar-thumb {
-                    background-color: #888;
-                    border-radius: 30px;
-                    /* Change the thumb color as desired */
-                }
-                
-                .error {
-                    color: red;
-                }
-                
-                #formReg {
-                    float: left;
-                    clear: both;
-                    font-size: 30px;
-                    padding-left: 5%;
-                    width: 80%;
-                    height: 80%;
-                }
-                
-                #formReg label {
-                    margin: 1%;
-                }
-                
-                #formReg input {
-                    margin: 1%;
-                    padding: 2%;
-                    font-size: 20px;
-                    border-radius: 20px;
-                    border: none;
-                    opacity: 0.5;
-                    height: 60px;
-                    width: 350px;
-                    text-align: left;
-                }
-                
-                #formReg button {
-                    float: right;
-                    clear: both;
-                    font-size: 20px;
-                    border-radius: 20px;
-                    height: 50px;
-                    width: 100px;
-                }
-                
-                #formReg button[disabled]:hover {
-                    cursor: not-allowed;
-                    background-color: #9f9c9c4d;
-                }
-                
-                #formReg table {
-                    margin: 0 auto;
-                    font-size: 25px;
-                    color: rgba(217, 211, 198, 1);
-                    text-align: left;
-                    height: 80%;
-                    width: 100%;
-                    table-layout: fixed;
-                }
-                
-                .search-container {
-                    text-align: center;
-                    margin-top: 10%;
-                    width: 80%;
-                    margin-left: 10%;
-                }
-                
-                .search-container input[type=text] {
-                    padding: 10px;
-                    width: 600px;
-                    height: 80px;
-                    max-width: 100%;
-                    border-radius: 30px;
-                    border: none;
-                    font-size: 20px;
-                    opacity: 0.4;
-                }
-                
-                .postResult {
-                    background-color: #dad3c7cc;
-                    border-radius: 40px;
-                    height: 100px;
-                    width: 616px;
-                    padding: 2%;
-                    float: left;
-                    clear: both;
-                    margin-bottom: 1%;
-                    text-align: left;
-                    transition: transform 0.3s;
-                    /* Add smooth transition effect */
-                }
-                
-                .postResult:hover,
-                .postBox:hover {
-                    transform: scale(1.1);
-                    cursor: pointer;
-                }
-                
-                .output-container {
-                    margin-top: 30px;
-                    text-align: center;
-                    margin-top: 10%;
-                    width: 80%;
-                    margin-left: 10%;
-                }
-                
-                .notification-container {
-                    margin-top: 30px;
-                    padding-left: 6%;
-                    text-align: left;
-                    float: left;
-                    clear: both;
-                    font-size: 20px;
-                    width: 80%;
-                }
-                
-                .search-output {
-                    border-radius: 5px;
-                    width: 80%;
-                }
-                
-                .notification-list,
-                .search-list {
-                    list-style-type: none;
-                }
-                
-                .notification-item {
-                    margin-bottom: 20px;
-                    padding: 20px;
-                    background-color: #f2f2f2;
-                    border-radius: 10px;
-                    opacity: 0.5;
-                }
-                
-                .navigationBarBtns span:hover {
-                    color: #fbd998;
-                }
-                
-                .navigationBarBtns span {
-                    --framer-font-family: Kufam;
-                    --framer-font-size: 25px;
-                    --framer-text-color: rgba(217, 211, 198, 1);
-                }
-                
-                .userPic {
-                    background: linear-gradient(180deg, #935b5b 0%, rgba(45, 28, 28, 1) 100%);
-                    border-radius: 100%;
-                    flex: none;
-                    height: 123px;
-                    width: 123px;
-                    float: left;
-                    clear: left;
-                    margin-top: 10%;
-                    margin-left: 10%;
-                    margin-bottom: 5%;
-                }
-                
-                .profileUsername {
-                    float: left;
-                    margin-top: 13.5%;
-                    margin-left: 2%;
-                    font-size: 28px;
-                    color: #ccc;
-                }
-                
-                .profile table {
-                    border-collapse: collapse;
-                    width: 80%;
-                    margin-left: 10%;
-                    border-bottom: 2px solid rgb(253, 247, 247);
-                    color: white;
-                    float: left;
-                    clear: both;
-                    table-layout: fixed;
-                }
-                
-                .profil th,
-                .profile td {
-                    padding: 8px;
-                    text-align: center;
-                }
-                
-                .profile th:hover {
-                    color: #fbd998;
-                    cursor: pointer;
-                }
-                
-                #profileContent {
-                    margin-top: 20px;
-                    padding: 10px;
-                    width: 80%;
-                    margin-left: 10%;
-                    float: left;
-                    clear: both;
-                }
-                
-                .selected {
-                    border-bottom: 5px solid rgb(247, 245, 245);
-                }
-                
-                .popup {
-                    display: none;
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    width: 50%;
-                    padding: 20px;
-                    background-color: #f2f2f2;
-                    border: 1px solid #ccc;
-                    border-radius: 30px;
-                    text-align: center;
-                    z-index: 10000;
-                    font-size: 30px;
-                    height: 55%;
-                    /* overflow: scroll; */
-                    overflow-x: hidden;
-                    overflow-y: auto;
-                }
-                
-                .setting ul {
-                    list-style-type: none;
-                    padding: 0;
-                }
-                
-                .setting ul li {
-                    display: flex;
-                    align-items: center;
-                    margin-bottom: 10px;
-                }
-                
-                .setting li:hover {
-                    cursor: pointer;
-                    color: #fbd998;
-                }
-                
-                .icon {
-                    width: 40px;
-                    height: 40px;
-                    margin-right: 10px;
-                }
-                
-                .settingList {
-                    float: left;
-                    clear: both;
-                    font-size: 28px;
-                    color: #ccc;
-                    margin-left: 10%;
-                }
-                
-                .confirm-remove-moder {
-                    display: none;
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background-color: white;
-                    padding: 20px;
-                    border: 1px solid #ccc;
-                    z-index: 9999;
-                }
-                
-                .confirm-buttons {
-                    margin-top: 10px;
-                }
-                
-                .remove-button,
-                .editPost-button,
-                .accept-button {
-                    float: right;
-                    background-color: transparent;
-                    font-size: 16px;
-                    color: rgb(239, 103, 103);
-                }
-                
-                .remove-button:hover,
-                .editPost-button:hover {
-                    cursor: pointer;
-                    color: #ccc;
-                    background-color: transparent;
-                }
-                
-                #list-moderators ul {
-                    list-style-type: none;
-                    padding: 0;
-                    float: left;
-                    text-align: left;
-                    width: 80%;
-                    margin-left: 10%;
-                    margin-right: 10%;
-                }
-                
-                #list-moderators li {
-                    margin: 1%;
-                    border-bottom: 1px solid rgb(143, 135, 135);
-                }
-                
-                #request-moderator textarea,
-                #topic {
-                    width: 80%;
-                    height: 40%;
-                    min-width: 80%;
-                    min-height: 40%;
-                    max-width: 80%;
-                    max-height: 40%;
-                    background-color: #f2f2f2;
-                    border-radius: 5px;
-                    border: 1px solid #ccc;
-                    padding: 5px;
-                    font-size: 20px;
-                    overflow: hidden;
-                    margin-bottom: 2%;
-                }
-                
-                #newPostForm table {
-                    width: 90%;
-                    height: 90%;
-                    font-size: 20px;
-                    margin-left: 5%;
-                }
-                
-                #newPostForm tr,
-                td {
-                    height: auto;
-                    width: auto;
-                }
-                
-                button {
-                    font-size: 20px;
-                    background-color: #9f9c9c4d;
-                    border: none;
-                    border-radius: 30px;
-                    width: 100px;
-                    height: 50px;
-                    cursor: pointer;
-                    padding: 10px 20px;
-                    transition: background-color 0.3s ease;
-                }
-                
-                button:hover {
-                    background-color: #7c7a7a4d;
-                }
-                
-                .popup h2 {
-                    color: #7c7a7a4d;
-                }
-                
-                #change-password table {
-                    font-size: 20px;
-                    table-layout: fixed;
-                }
-                
-                .login-text {
-                    font-size: 20px;
-                    color: #5d5e65;
-                    padding: 10px 3px;
-                    cursor: pointer;
-                    position: relative;
-                    top: 10px;
-                }
-                
-                #formLog {
-                    float: left;
-                    clear: both;
-                    font-size: 30px;
-                    padding-left: 5%;
-                    width: 80%;
-                    height: 80%;
-                }
-                
-                #formLog label {
-                    margin: 1%;
-                }
-                
-                #formLog input {
-                    margin: 1%;
-                    padding: 2%;
-                    font-size: 20px;
-                    border-radius: 20px;
-                    border: none;
-                    opacity: 0.5;
-                    height: 60px;
-                    width: 350px;
-                    text-align: left;
-                }
-                
-                #formLog button {
-                    float: right;
-                    clear: both;
-                    font-size: 20px;
-                    border-radius: 20px;
-                    height: 50px;
-                    width: 100px;
-                }
-                
-                #formLog button[disabled]:hover {
-                    cursor: not-allowed;
-                    background-color: #9f9c9c4d;
-                }
-                
-                #formLog table {
-                    margin: 0 auto;
-                    font-size: 25px;
-                    color: rgba(217, 211, 198, 1);
-                    text-align: left;
-                    height: 80%;
-                    width: 100%;
-                    table-layout: fixed;
-                }
-                
-                #messagesBoxDiv {
-                    display: flex;
-                    flex-direction: column;
-                    height: 1000px;
-                    overflow-y: auto;
-                    /* Enable vertical scrolling */
-                    overflow-x: hidden;
-                    /* Hide horizontal scrolling */
-                    gap: 10px;
-                    width: 490px;
-                    /* Add space between each messageBox */
-                }
-                /* Customize the scrollbar for #messagesBoxDiv */
-                
-                #messagesBoxDiv::-webkit-scrollbar {
-                    width: 8px;
-                    /* Set the width of the scrollbar */
-                }
-                
-                #messagesBoxDiv::-webkit-scrollbar-track {
-                    background: #f1f1f1;
-                    /* Set the background of the scrollbar track */
-                }
-                
-                #messagesBoxDiv::-webkit-scrollbar-thumb {
-                    background: #888;
-                    /* Set the color of the scrollbar thumb */
-                    border-radius: 4px;
-                    /* Optional: Add rounded corners to the scrollbar thumb */
-                }
-                
-                #messagesBoxDiv::-webkit-scrollbar-thumb:hover {
-                    background: #555;
-                    /* Change the color of the scrollbar thumb on hover */
-                }
-                
-                .messageBox {
-                    margin-bottom: 10px;
-                    /* Add space below each messageBox */
-                    padding: 10px;
-                }
+
+.homeBtn,
+.homeIcon {
+    top: 356px;
+}
+
+.searchBarBtn,
+.searchIcon {
+    top: 427px;
+}
+
+.profileBtn,
+.profileIcon {
+    top: 498px;
+}
+
+.notificationsBtn,
+.bellIcon {
+    top: 571px;
+}
+
+.settingBtn,
+.settingIcon {
+    top: 640px;
+}
+
+.signOutBtn,
+.signOutIcon {
+    top: 700px;
+}
+
+.navigationBarBtns {
+    height: 52px;
+    left: 73px;
+    width: 282px;
+    white-space: pre-wrap;
+    position: fixed;
+    overflow-y: hidden;
+}
+
+.userName {
+    height: 52px;
+    left: 45px;
+    position: absolute;
+    top: 353px;
+    white-space: pre-wrap;
+    width: 229px;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+
+.plusIcon {
+    height: 48px;
+    position: absolute;
+    top: 35px;
+    width: 48px;
+    background-image: url(./images/plusIcon.png);
+    left: 400px;
+}
+
+.navigationBarIcons {
+    height: 50px;
+    width: 50px;
+    left: 37px;
+    position: absolute;
+}
+
+.profileIcon {
+    background-image: url(./images/profileIcon.png);
+}
+
+.homeIcon {
+    background-image: url(./images/homeIcon.png);
+}
+
+.home {
+    align-items: center;
+}
+
+.bellIcon {
+    background-image: url(./images/bellIcon.png);
+}
+
+.searchIcon {
+    background-image: url(./images/searchIcon.png);
+}
+
+.signOutIcon {
+    background-image: url(./images/signOutIcon.png);
+}
+
+.settingIcon {
+    background-image: url(./images/settingIcon.png);
+}
+
+.newMessageIcon {
+    height: 48px;
+    position: absolute;
+    width: 48px;
+    background-image: url(./images/newMessageIcon.png);
+}
+
+.mailIcon {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    float: left;
+    background-image: url(./images/mailIcon.png);
+}
+
+.messagesTitle {
+    margin: 2%;
+    margin-top: 5%;
+    float: left;
+    height: auto;
+    width: auto;
+    white-space: pre-wrap;
+}
+
+.messagesBox
+.msgUser {
+    --border-bottom-width: 1px;
+    --border-color: #9747ff;
+    --border-left-width: 1px;
+    --border-right-width: 1px;
+    --border-style: dashed;
+    --border-top-width: 1px;
+    border-radius: 5px;
+    flex: none;
+    height: 389px;
+    left: 1038px;
+    overflow: hidden;
+    top: 160px;
+    width: 402px;
+    will-change: var(--framer-will-change-override, transform)
+}
+
+.messageBox {
+    height: 102px;
+    left: 20px;
+    overflow: visible;
+    position: relative;
+    top: 20px;
+    width: 382px
+}
+
+.messageBox:hover{
+    cursor: pointer;
+}
+
+
+
+.chatUserPic {
+    background: linear-gradient(180deg, #d9d3c6 0%, rgba(115, 112, 105, 1) 100%);
+    border-radius: 100%;
+    height: 70px;
+    width: 70px;
+    float: left;
+    clear: both;
+    margin: 3%;
+    border: 5px solid rgb(74, 250, 58);
+}
+
+.chatUserName {
+    --framer-font-family: Kufam;
+    --framer-text-color: rgba(217, 211, 198, 1);
+    font-size: 25px;
+    float: left;
+}
+
+.chatUserMessage {
+    inset: 50px 0 0 100px;
+    position: absolute;
+    word-break: break-word;
+    word-wrap: break-word
+}
+
+.mainPage {
+    height: 100%;
+    width: 100%;
+}
+
+.sortIcon:hover,
+.categoryIcon:hover,
+.navigationBarBtns:hover,
+.navigationBarIcons:hover,
+.newPostBtn:hover,
+.penIcon:hover,
+.exitButton:hover {
+    cursor: pointer;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+#categoryFilter,
+#sortFilter {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f0f0f0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    z-index: 10000;
+    font-size: 30px;
+    width: 45%;
+    height: 55%;
+    border-radius: 30px;
+}
+
+.exitButton {
+    background-image: url(./images/xIcon.png);
+    height: 50px;
+    width: 50px;
+    float: left;
+}
+
+#newPostTitle {
+    float: left;
+    margin: 1%;
+    height: 50px;
+    width: 500px;
+    border: none;
+    border-radius: 20px;
+    padding: 2%;
+    font-size: 28px;
+}
+
+.checkBoxCateg {
+    height: 30px;
+    width: 30px;
+}
+
+.submitBtn {
+    float: right;
+    clear: rigth;
+    margin-top: 10%;
+    margin-right: 5%;
+    width: 80px;
+    height: 50px;
+    font-size: 20px;
+    border-radius: 30px;
+}
+
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.navigationContent {
+    height: 100%;
+    width: 70%;
+    /* overflow: scroll; */
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Hide the scrollbar for a specific div */
+
+.navigationContent::-webkit-scrollbar,
+.popup::-webkit-scrollbar {
+    width: 0.5em;
+    border-radius: 30px;
+    /* Set the width of the scrollbar (adjust as needed) */
+}
+
+/* Optional: Style the scrollbar track */
+
+.navigationContent::-webkit-scrollbar-track,
+.popup::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 30px;
+    /* Change the background color as desired */
+}
+
+/* Optional: Style the scrollbar thumb */
+
+.navigationContent::-webkit-scrollbar-thumb,
+.popup::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 30px;
+    /* Change the thumb color as desired */
+}
+
+.error {
+    color: red;
+}
+
+#formReg {
+    float: left;
+    clear: both;
+    font-size: 30px;
+    padding-left: 5%;
+    width: 80%;
+    height: 80%;
+}
+
+#formReg label {
+    margin: 1%;
+}
+
+#formReg input {
+    margin: 1%;
+    padding: 2%;
+    font-size: 20px;
+    border-radius: 20px;
+    border: none;
+    opacity: 0.5;
+    height: 60px;
+    width: 350px;
+    text-align: left;
+}
+
+#formReg button {
+    float: right;
+    clear: both;
+    font-size: 20px;
+    border-radius: 20px;
+    height: 50px;
+    width: 100px;
+}
+
+#formReg button[disabled]:hover {
+    cursor: not-allowed;
+    background-color: #9f9c9c4d;
+}
+
+#formReg table {
+    margin: 0 auto;
+    font-size: 25px;
+    color: rgba(217, 211, 198, 1);
+    text-align: left;
+    height: 80%;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.search-container {
+    text-align: center;
+    margin-top: 10%;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.search-container input[type=text] {
+    padding: 10px;
+    width: 600px;
+    height: 80px;
+    max-width: 100%;
+    border-radius: 30px;
+    border: none;
+    font-size: 20px;
+    opacity: 0.4;
+}
+
+.postResult {
+    background-color: #dad3c7cc;
+    border-radius: 40px;
+    height: 100px;
+    width: 616px;
+    padding: 2%;
+    float: left;
+    clear: both;
+    margin-bottom: 1%;
+    text-align: left;
+    transition: transform 0.3s;
+    /* Add smooth transition effect */
+}
+
+.postResult:hover,
+.postBox:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.output-container {
+    margin-top: 30px;
+    text-align: center;
+    margin-top: 10%;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.notification-container {
+    margin-top: 30px;
+    padding-left: 6%;
+    text-align: left;
+    float: left;
+    clear: both;
+    font-size: 20px;
+    width: 80%;
+}
+
+.search-output {
+    border-radius: 5px;
+    width: 80%;
+}
+
+.notification-list,
+.search-list {
+    list-style-type: none;
+}
+
+.notification-item {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    opacity: 0.5;
+}
+
+.navigationBarBtns span:hover {
+    color: #fbd998;
+}
+
+.navigationBarBtns span {
+    --framer-font-family: Kufam;
+    --framer-font-size: 25px;
+    --framer-text-color: rgba(217, 211, 198, 1);
+}
+
+.userPic {
+    background: linear-gradient(180deg, #935b5b 0%, rgba(45, 28, 28, 1) 100%);
+    border-radius: 100%;
+    flex: none;
+    height: 123px;
+    width: 123px;
+    float: left;
+    clear: left;
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-bottom: 5%;
+}
+
+.profileUsername {
+    float: left;
+    margin-top: 13.5%;
+    margin-left: 2%;
+    font-size: 28px;
+    color: #ccc;
+}
+
+.profile table {
+    border-collapse: collapse;
+    width: 80%;
+    margin-left: 10%;
+    border-bottom: 2px solid rgb(253, 247, 247);
+    color: white;
+    float: left;
+    clear: both;
+    table-layout: fixed;
+}
+
+.profil th,
+.profile td {
+    padding: 8px;
+    text-align: center;
+}
+
+.profile th:hover {
+    color: #fbd998;
+    cursor: pointer;
+}
+
+#profileContent {
+    margin-top: 20px;
+    padding: 10px;
+    width: 80%;
+    margin-left: 10%;
+    float: left;
+    clear: both;
+}
+
+.selected {
+    border-bottom: 5px solid rgb(247, 245, 245);
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    text-align: center;
+    z-index: 10000;
+    font-size: 30px;
+    height: 55%;
+    /* overflow: scroll; */
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.setting ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.setting ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.setting li:hover {
+    cursor: pointer;
+    color: #fbd998;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.settingList {
+    float: left;
+    clear: both;
+    font-size: 28px;
+    color: #ccc;
+    margin-left: 10%;
+}
+
+.confirm-remove-moder {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    z-index: 9999;
+}
+
+.confirm-buttons {
+    margin-top: 10px;
+}
+
+.remove-button,
+.editPost-button,
+.accept-button {
+    float: right;
+    background-color: transparent;
+    font-size: 16px;
+    color: rgb(239, 103, 103);
+}
+
+.remove-button:hover,
+.editPost-button:hover {
+    cursor: pointer;
+    color: #ccc;
+    background-color: transparent;
+}
+
+#list-moderators ul {
+    list-style-type: none;
+    padding: 0;
+    float: left;
+    text-align: left;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#list-moderators li {
+    margin: 1%;
+    border-bottom: 1px solid rgb(143, 135, 135);
+}
+
+#request-moderator textarea,
+#topic {
+    width: 80%;
+    height: 40%;
+    min-width: 80%;
+    min-height: 40%;
+    max-width: 80%;
+    max-height: 40%;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 20px;
+    overflow: hidden;
+    margin-bottom: 2%;
+}
+
+#newPostForm table {
+    width: 90%;
+    height: 90%;
+    font-size: 20px;
+    margin-left: 5%;
+}
+
+#newPostForm tr,
+td {
+    height: auto;
+    width: auto;
+}
+
+button {
+    font-size: 20px;
+    background-color: #9f9c9c4d;
+    border: none;
+    border-radius: 30px;
+    width: 100px;
+    height: 50px;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #7c7a7a4d;
+}
+
+.popup h2 {
+    color: #7c7a7a4d;
+}
+
+#change-password table {
+    font-size: 20px;
+    table-layout: fixed;
+}
+
+.login-text {
+    font-size: 20px;
+    color: #5d5e65;
+    padding: 10px 3px;
+    cursor: pointer;
+    position: relative;
+    top: 10px;
+}
+
+#formLog {
+    float: left;
+    clear: both;
+    font-size: 30px;
+    padding-left: 5%;
+    width: 80%;
+    height: 80%;
+}
+
+#formLog label {
+    margin: 1%;
+}
+
+#formLog input {
+    margin: 1%;
+    padding: 2%;
+    font-size: 20px;
+    border-radius: 20px;
+    border: none;
+    opacity: 0.5;
+    height: 60px;
+    width: 350px;
+    text-align: left;
+}
+
+#formLog button {
+    float: right;
+    clear: both;
+    font-size: 20px;
+    border-radius: 20px;
+    height: 50px;
+    width: 100px;
+}
+
+#formLog button[disabled]:hover {
+    cursor: not-allowed;
+    background-color: #9f9c9c4d;
+}
+
+#formLog table {
+    margin: 0 auto;
+    font-size: 25px;
+    color: rgba(217, 211, 198, 1);
+    text-align: left;
+    height: 80%;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#messagesBoxDiv,
+#msgDiv {
+    display: flex;
+    flex-direction: column;
+    height: 1000px;
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    overflow-x: hidden;
+    /* Hide horizontal scrolling */
+    gap: 10px;
+    width: 490px;
+    /* Add space between each messageBox */
+}
+
+/* Customize the scrollbar for #messagesBoxDiv */
+
+#messagesBoxDiv::-webkit-scrollbar {
+    width: 8px;
+    /* Set the width of the scrollbar */
+}
+
+#messagesBoxDiv::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Set the background of the scrollbar track */
+}
+
+#messagesBoxDiv::-webkit-scrollbar-thumb {
+    background: #888;
+    /* Set the color of the scrollbar thumb */
+    border-radius: 4px;
+    /* Optional: Add rounded corners to the scrollbar thumb */
+}
+
+#messagesBoxDiv::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    /* Change the color of the scrollbar thumb on hover */
+}
+
+.messageBox {
+    margin-bottom: 10px;
+    /* Add space below each messageBox */
+    padding: 10px;
+}
