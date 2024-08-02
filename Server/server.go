@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	//     "crypto/sha256"
 	// "fmt"
 	// "io/ioutil"
@@ -28,8 +29,13 @@ func GoLive(port string) {
 
 	userLimiter = NewUserRateLimiter()
 
+	// http.HandleFunc("/images", func(w http.ResponseWriter, r *http.Request) {
+	// 	http.ServeFile(w, r, "./static/images/")
+	// })
 	http.HandleFunc("/images", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./static/images/")
+		imageName := strings.TrimPrefix(r.URL.Path, "/images/")
+		fmt.Print(imageName)
+		http.ServeFile(w, r, "./static/images/"+imageName)
 	})
 	http.HandleFunc("/style.css", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/style.css")
