@@ -110,7 +110,7 @@ span.framer-text:not([data-text-fill]) {
 .navigationBarImage {
     height: 100%;
     width: 100%;
-    background-image: url(./images/navBackground.png);
+    background-image: url(/images/navBackground.png);
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
@@ -156,7 +156,7 @@ span.framer-text:not([data-text-fill]) {
     top: 77px;
     width: 80px;
     height: 50px;
-    background-image: url(./images/logo.png);
+    background-image: url(/images/logo.png);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     margin: 4%;
@@ -234,22 +234,22 @@ span.framer-text:not([data-text-fill]) {
 
 .categoryIcon {
     left: 875px;
-    background-image: url(./images/categoryIcon.png);
+    background-image: url(/images/categoryIcon.png);
 }
 
 .sortIcon {
     left: 800px;
-    background-image: url(./images/sortIcon.png);
+    background-image: url(/images/sortIcon.png);
 }
 
 .penIcon {
     left: 950px;
-    background-image: url(./images/penIcon.png);
+    background-image: url(/images/penIcon.png);
 }
 
 /* .modeIcon {
     left: 735px;
-    background-image: url(./images/penIcon.png);
+    background-image: url(/images/penIcon.png);
 } */
 
 .homeBtn,
@@ -307,7 +307,7 @@ span.framer-text:not([data-text-fill]) {
     position: absolute;
     top: 35px;
     width: 48px;
-    background-image: url(./images/plusIcon.png);
+    background-image: url(/images/plusIcon.png);
     left: 400px;
 }
 
@@ -319,11 +319,11 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .profileIcon {
-    background-image: url(./images/profileIcon.png);
+    background-image: url(/images/profileIcon.png);
 }
 
 .homeIcon {
-    background-image: url(./images/homeIcon.png);
+    background-image: url(/images/homeIcon.png);
 }
 
 .home {
@@ -331,26 +331,26 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .bellIcon {
-    background-image: url(./images/bellIcon.png);
+    background-image: url(/images/bellIcon.png);
 }
 
 .searchIcon {
-    background-image: url(./images/searchIcon.png);
+    background-image: url(/images/searchIcon.png);
 }
 
 .signOutIcon {
-    background-image: url(./images/signOutIcon.png);
+    background-image: url(/images/signOutIcon.png);
 }
 
 .settingIcon {
-    background-image: url(./images/settingIcon.png);
+    background-image: url(/images/settingIcon.png);
 }
 
 .newMessageIcon {
     height: 48px;
     position: absolute;
     width: 48px;
-    background-image: url(./images/newMessageIcon.png);
+    background-image: url(/images/newMessageIcon.png);
 }
 
 .mailIcon {
@@ -358,7 +358,7 @@ span.framer-text:not([data-text-fill]) {
     width: 50px;
     position: absolute;
     float: left;
-    background-image: url(./images/mailIcon.png);
+    background-image: url(/images/mailIcon.png);
 }
 
 .messagesTitle {
@@ -472,7 +472,7 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .exitButton {
-    background-image: url(./images/xIcon.png);
+    background-image: url(/images/xIcon.png);
     height: 50px;
     width: 50px;
     float: left;
