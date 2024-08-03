@@ -1,27 +1,25 @@
-var textField = document.getElementById('newPostTitle');
-var submitButton = document.getElementById('submitBtn');
+var textField = document.getElementById("newPostTitle");
+var submitButton = document.getElementById("submitBtn");
 
-textField.addEventListener('input', function() {
+textField.addEventListener("input", function() {
     if (textField.value.trim() !== "") {
-        submitButton.style.cursor = 'pointer';
+        submitButton.style.cursor = "pointer";
     } else {
-        submitButton.style.cursor = 'not-allowed';
+        submitButton.style.cursor = "not-allowed";
     }
 });
 
-textField.addEventListener('keyup', function() {
+textField.addEventListener("keyup", function() {
     if (textField.value.trim() !== "") {
-        submitButton.style.cursor = 'pointer';
-        submitButton.style.opacity = '1';
+        submitButton.style.cursor = "pointer";
+        submitButton.style.opacity = "1";
     } else {
-        submitButton.style.cursor = 'not-allowed';
-        submitButton.style.opacity = '0.5';
-
+        submitButton.style.cursor = "not-allowed";
+        submitButton.style.opacity = "0.5";
     }
 });
 
-
-//Registration validation 
+//Registration validation
 
 // // Update button state and styles
 // function updateButtonState() {
@@ -93,7 +91,7 @@ function validateField(input, type = 0) {
 
     // Validate first name
     if (fieldName === "firstName") {
-        if (value === "") {
+        if (value === "" || value.length < 4 || value.length > 20) {
             errorElement.textContent = "First name is required.";
         } else {
             errorElement.textContent = "";
@@ -101,7 +99,7 @@ function validateField(input, type = 0) {
     }
 
     // Validate last name
-    if (fieldName === "lastName") {
+    if (fieldName === "lastName" || value.length < 4 || value.length > 20) {
         if (value === "") {
             errorElement.textContent = "Last name is required.";
         } else {
@@ -121,7 +119,7 @@ function validateField(input, type = 0) {
     }
 
     // Validate username
-    if (fieldName === "username") {
+    if (fieldName === "username" || value.length < 4 || value.length > 20) {
         if (value === "") {
             errorElement.textContent = "Username is required.";
         } else {
@@ -139,7 +137,7 @@ function validateField(input, type = 0) {
     }
 
     // Validate country
-    if (fieldName === "country") {
+    if (fieldName === "country" || value.length < 4 || value.length > 20) {
         if (value === "") {
             errorElement.textContent = "Country is required.";
         } else {
@@ -152,7 +150,6 @@ function validateField(input, type = 0) {
         if (value === "") {
             errorElement.textContent = "Password is required.";
             console.log("Password is required.");
-
         } else if (value.length < 8) {
             errorElement.textContent = "Password must be at least 8 characters long.";
             console.log("Password must be at least 8 characters long.");
@@ -160,7 +157,8 @@ function validateField(input, type = 0) {
             errorElement.textContent = "";
             const password2 = document.getElementById("confirmPassword").value.trim();
             if (password2 !== "" && value != password2) {
-                document.getElementById("confirmPasswordError").textContent = "Passwords do not match.";
+                document.getElementById("confirmPasswordError").textContent =
+                    "Passwords do not match.";
             }
         }
     }
@@ -196,7 +194,6 @@ function checkFormValidity() {
         input.addEventListener("input", checkFormValidity);
     });
 
-
     // Check if all input fields are filled
     inputFields.forEach(function(input) {
         if (input.value.trim() === "") {
@@ -212,18 +209,17 @@ function checkFormValidity() {
         }
     });
 
-    var registerBtn = document.getElementById('registerBtn');
-    var isValid = (allFieldsFilled && allErrorsEmpty);
+    var registerBtn = document.getElementById("registerBtn");
+    var isValid = allFieldsFilled && allErrorsEmpty;
 
     if (isValid) {
-        registerBtn.removeAttribute('disabled');
-        registerBtn.classList.remove('disabled');
+        registerBtn.removeAttribute("disabled");
+        registerBtn.classList.remove("disabled");
     } else {
-        registerBtn.setAttribute('disabled', 'disabled');
-        registerBtn.classList.add('disabled');
+        registerBtn.setAttribute("disabled", "disabled");
+        registerBtn.classList.add("disabled");
     }
 }
-
 
 function checkLogFormValidity() {
     let allFieldsFilled = true;
