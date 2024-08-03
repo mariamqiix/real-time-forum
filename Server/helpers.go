@@ -31,7 +31,7 @@ func ParseBody(data any, r *http.Request) bool {
 }
 
 func imageIdToUrl(imageId int) string {
-	return "/uploads/" + strconv.Itoa(imageId)
+	return "/images/" + strconv.Itoa(imageId)+".png"
 }
 
 func userTypeToResponse(userType structs.UserTypeId) structs.UserTypeResponse {

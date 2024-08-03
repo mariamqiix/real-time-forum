@@ -1,16 +1,19 @@
 front (Ruqaya) :
+
 -   post page : add a section for the post and another for the comments
 -   edit post page : to edit only the title and the content
 -   add comments exampole for the profile page
 -   add the like and dislike to the post
 -   correct the chat bar size (the height)
+-   replay section for the posts , in the post page add something to create a reply or a comment
 
 back (Maryam) :
 
 -   profile
 -   notification
--   if user not authenticated prvent him from clicking on the users to message them 
+-   if user not authenticated prvent him from clicking on the users to message them
 
 DATABASE (Ruqaya) :
+
 -   in user table , add gender
 -   reactions : only like and dislike

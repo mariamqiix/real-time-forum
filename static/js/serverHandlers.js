@@ -916,7 +916,7 @@ function ChatView() {
 
                     const chatUserPic = document.createElement("div");
                     chatUserPic.className = "chatUserPic";
-                    chatUserPic.style.backgroundImage = `url(data:image/jpeg;base64,${chat.Image})`;
+                    chatUserPic.style.backgroundImage = `url(${chat.Image})`;
                     // Set border color based on online status
                     console.log(chat.Username + " : " + chat.Online);
                     if (chat.Online) {
@@ -951,3 +951,98 @@ ChatView();
 
 // Set an interval to refresh the chat view every 5 seconds
 setInterval(ChatView, 5000);
+
+function profile(userId, caseString) {
+    const url = new URL("http://localhost:8080/userProfile");
+    url.searchParams.append("user_id", userId);
+    url.searchParams.append("case", caseString);
+
+    fetch(url, {
+            method: "GET",
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data.UserProfile.image_url); // Change imageURL to ImageURL            const profileUsername = document.getElementById("profileUsername");
+            profileUsername.innerHTML = data.UserProfile.username;
+            // const profileName = document.getElementById("profileName");
+            // profileName.innerHTML = data.UserProfile.FirstName + " " + data.UserProfile.LastName;
+            const userPic = document.getElementById("userPic");
+            userPic.style.backgroundImage = `url(${data.UserProfile.image_url})`;
+        })
+        .catch((error) => {
+            console.error("Error fetching profile:", error);
+        });
+    toggleVisibility("profile");
+}
+
+function posts(userId, caseString, column, element) {
+    const url = new URL("http://localhost:8080/userProfile");
+    url.searchParams.append("user_id", userId);
+    url.searchParams.append("case", caseString);
+    changeContent(column, element);
+
+    fetch(url, {
+            method: "GET",
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log(caseString);
+            if (data && data.Posts) {
+                displayPostOnProfile(data.Posts);
+            } else {
+                console.error("Invalid data format. Expected profileView with Posts.");
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching profile:", error);
+        });
+}
+
+function displayPostOnProfile(Posts) {
+    if (Array.isArray(Posts)) {
+        const homeNavigationContent = document.getElementById("profileContent");
+        homeNavigationContent.innerHTML = "";
+        Posts.forEach((post) => {
+            const postBox = document.createElement("div");
+            postBox.classList.add("postBox");
+            postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(post)})`);
+            postBox.setAttribute("id", `${post.Id}`);
+
+            const postUserPic = document.createElement("div");
+            postUserPic.classList.add("postUserPic");
+            postBox.appendChild(postUserPic);
+
+            const postTitle = document.createElement("div");
+            postTitle.classList.add("postTitle");
+
+            const titleElement = document.createElement("span");
+            titleElement.classList.add("title");
+            titleElement.textContent = post.title;
+
+            const postUserName = document.createElement("span");
+            postUserName.classList.add("postUserName");
+
+            postUserName.textContent = post.author.username;
+
+            const postContent = document.createElement("span");
+            postContent.classList.add("postContent");
+
+            postContent.textContent = post.message;
+
+            postTitle.appendChild(titleElement);
+            postTitle.appendChild(postUserName);
+            postTitle.appendChild(postContent);
+
+            postBox.appendChild(postTitle);
+
+            homeNavigationContent.appendChild(postBox);
+        });
+    } else {
+        console.error("Invalid data format. Expected an array of posts.");
+    }
+}

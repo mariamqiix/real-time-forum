@@ -44,7 +44,7 @@ func GoLive(port string) {
 	// http.HandleFunc("/static/", staticHandler)
 	http.HandleFunc("/uploads/{image_id}", uploadedContentServerHandler)
 	http.HandleFunc("/uploads/add", uploadHandler)
-	http.HandleFunc("/user/{user_id}", profileHandler)
+	http.HandleFunc("/userProfile", profileHandler)
 	http.HandleFunc("/user", LoggedUserHandler)
 	http.HandleFunc("/userType", UserTypeHandler)
 	http.HandleFunc("/Moderator", ModeratorHandler)

@@ -133,6 +133,6 @@ type Message struct {
 type Chats struct {
 	UserId   int
 	Username string
-	Image    []byte
+	Image    string
 	Online   bool
 }

@@ -126,19 +126,25 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusTooManyRequests)
 		return
 	}
+	userId, _ := strconv.Atoi(r.FormValue("user_id"))
+	var dbUser *structs.User
+	if userId != -1 {
+		dbUser, err := database.GetUserById(userId)
+		if err != nil {
+			log.Printf("profileHandler: %s\n", err.Error())
+			errorServer(w, r, http.StatusInternalServerError)
+			return
+		}
 
+		if dbUser == nil {
+			errorServer(w, r, http.StatusNotFound)
+			return
+		}
+
+	} else {
+		dbUser = sessionUser
+	}
 	// Fetch the user from the database
-	dbUser, err := database.GetUserByUsername(r.PathValue("user_id"))
-	if err != nil {
-		log.Printf("profileHandler: %s\n", err.Error())
-		errorServer(w, r, http.StatusInternalServerError)
-		return
-	}
-
-	if dbUser == nil {
-		errorServer(w, r, http.StatusNotFound)
-		return
-	}
 
 	// Prepare the view data
 	view := profileView{}
@@ -161,9 +167,9 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		sessionUser = &structs.User{Id: -1}
 	}
-
+	casees := r.FormValue("case")
 	// Fetch the posts based on the query parameter
-	switch r.URL.Query().Get("q") {
+	switch casees {
 	case "comments":
 		posts, err := database.GetPostsByUser(dbUser.Id, -1, 0, true)
 		if err == nil {
@@ -1083,7 +1089,6 @@ func deletePostReactionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// fmt.Printf("PostId: %d, UserId: %d, ReactionId: %d\n", PostStructForRec.Id, GetUser(r).Id, reactionId)
 	err3 := database.RemoveReactionFromPost(PostStructForRec.Id, reactionId, UsersPost.Id)
 	if err3 != nil {
 		log.Printf("deletePostReactionHandler: %s\n", err3.Error())
@@ -1743,22 +1748,10 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		for _, user := range users {
-			imageData, err := database.GetImage(user.ImageId)
-			if err != nil {
-				log.Printf("uploadedContentServerHandler: %s\n", err.Error())
-				errorServer(w, r, http.StatusInternalServerError)
-				return
-			}
-
-			if imageData == nil {
-				errorServer(w, r, http.StatusNotFound)
-				return
-			}
-
 			chat := structs.Chats{
 				UserId:   user.Id,
 				Username: user.Username,
-				Image:    imageData,
+				Image:    imageIdToUrl(user.ImageId),
 				Online:   IsUserOnline(user.Id),
 			}
 			chats = append(chats, chat)
@@ -1774,23 +1767,11 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		var chats []structs.Chats
 		for _, user := range users {
-			imageData, err := database.GetImage(user.ImageId)
-			if err != nil {
-				log.Printf("uploadedContentServerHandler: %s\n", err.Error())
-				errorServer(w, r, http.StatusInternalServerError)
-				return
-			}
-
-			if imageData == nil {
-				errorServer(w, r, http.StatusNotFound)
-				return
-			}
-
 			if user.Id != sessionUser.Id {
 				chat := structs.Chats{
 					UserId:   user.Id,
 					Username: user.Username,
-					Image:    imageData,
+					Image:    imageIdToUrl(user.ImageId),
 					Online:   IsUserOnline(user.Id),
 				}
 				chats = append(chats, chat)

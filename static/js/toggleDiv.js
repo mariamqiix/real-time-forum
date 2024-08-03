@@ -53,12 +53,12 @@ function OpenMesages(username) {
     const messagesBoxDiv = document.getElementById("messagesBoxDiv");
     const msgDiv = document.getElementById("msgDiv");
     if (messagesBoxDiv.style.display === "none") {
+        document.getElementById("messagesTitle").innerHTML = "Messages";
         messagesBoxDiv.style.display = "block";
         msgDiv.style.display = "none";
     } else {
         messagesBoxDiv.style.display = "none";
         msgDiv.style.display = "block";
-        const msgDivUserName = document.querySelector("#msgDiv p");
-        msgDivUserName.innerHTML = username;
+        document.getElementById("messagesTitle").innerHTML = username;
     }
 }

@@ -14,8 +14,8 @@
         <div class="navigationBar">
             <div class="navigationBarImage"></div>
 
-            <div class="profileIcon navigationBarIcons" onclick="toggleVisibility('profile')"></div>
-            <div class="profileBtn navigationBarBtns" onclick="toggleVisibility('profile')">
+            <div class="profileIcon navigationBarIcons" onclick="profile(-1,'comments')"></div>
+            <div class="profileBtn navigationBarBtns" onclick="profile(-1,'comments')">
                 <span class="framer-text">Profile</span>
             </div>
 
@@ -54,7 +54,9 @@
         <div class="rightSide">
             <div class="mainPage">
                 <div class="home navigationContent" id="home navigationContent">
-                    <div class="title"><h1>Home</h1><hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
+                    <div class="title">
+                        <h1>Home</h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
                     </div>
                     <!-- <div class="modeIcon mainPageIcons"></div> -->
                     <div class="sortIcon mainPageIcons" onclick="toggleDiv('sortFilter')"></div>
@@ -66,14 +68,14 @@
                 </div>
 
                 <div class="profile navigationContent">
-                    <div class="userPic"></div>
-                    <h1 class="profileUsername">UserName</h1>
+                    <div class="userPic" id="userPic"></div>
+                    <h1 class="profileUsername" id="profileUsername">UserName</h1>
                     <table>
                         <tr>
-                            <th onclick="changeContent('Posts', event.target)">Posts</th>
-                            <th onclick="changeContent('Comments', event.target)">Comments</th>
-                            <th onclick="changeContent('Likes', event.target)">Likes</th>
-                            <th onclick="changeContent('Dislikes', event.target)">Dislikes</th>
+                            <th onclick="posts(-1,'Posts','Posts', event.target)">Posts</th>
+                            <th onclick="posts(-1,'comments','comments', event.target)">Comments</th>
+                            <th onclick="posts(-1,'likes','likes', event.target)">Likes</th>
+                            <th onclick="posts(-1,'dislikes','dislikes', event.target)">Dislikes</th>
                         </tr>
                     </table>
 
@@ -84,7 +86,10 @@
                 </div>
 
                 <div class="setting navigationContent">
-                    <div class="title"><h1>Settings</h1><hr style="color: #0000002B;  height: 2px; width: 80%; float: left; "></div>
+                    <div class="title">
+                        <h1>Settings</h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
+                    </div>
 
                     <div class="settingList">
                         <ul id="settingList">
@@ -100,7 +105,10 @@
                 </div>
 
                 <div class="notifications navigationContent">
-                    <div class="title"><h1>Notifications</h1><hr style="color: #0000002B;  height: 2px; width: 80%; float: left; "></div>
+                    <div class="title">
+                        <h1>Notifications</h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
+                    </div>
 
                     <div class="notification-container">
                         <ul class="notification-list">
@@ -130,7 +138,9 @@
                 </div>
 
                 <div class="registration navigationContent">
-                    <div class="title"><h1>Registration</h1><hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
+                    <div class="title">
+                        <h1>Registration</h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
                     </div>
                     <div id="formReg">
                         <table>
@@ -185,7 +195,9 @@
                 </div>
 
                 <div class="login navigationContent">
-                    <div class="title"><h1>login</h1><hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    <div class="title">
+                        <h1>login</h1>
+                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
                     </div>
                     <div id="formLog">
                         <table>
@@ -220,7 +232,7 @@
             <div class="messagesBar" id="messagesBar">
 
                 <div class="messagesTitle">
-                    <span style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:'Kufam';--framer-font-size:30px;--framer-text-color:rgba(217, 211, 198, 1)" class="framer-text">Messages</span>
+                    <span style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:'Kufam';--framer-font-size:30px;--framer-text-color:rgba(217, 211, 198, 1)" class="framer-text" id="messagesTitle">Messages</span>
                     <!-- <div class="mailIcon"></div> -->
                 </div>
                 <hr style="color: #0000002B;  height: 2px; width: 80%;">
@@ -232,7 +244,9 @@
                 <div class="messagesBox" id="messagesBoxDiv" style="display: block;">
                     <div class="messageBox">
                         <div class="chatUserPic"></div>
-                        <div class="chatUserName"><p>username</p></div>
+                        <div class="chatUserName">
+                            <p>username</p>
+                        </div>
                         <div class="newMessageIcon"> </div>
                     </div>
                 </div>
@@ -252,7 +266,7 @@
         </div>
 
         <div class="logoDiv">
-            <h1 class="logoName" style="display: none;"> SANDBOX</h1>
+            <h1 class="logoName" style="display: block;"> SANDBOX</h1>
             <div class="logo"></div>
         </div>
 

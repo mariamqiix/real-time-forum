@@ -1,16 +1,11 @@
 function changeContent(column, element) {
-    var selectedColumn = document.getElementById("selectedColumn");
-
     // Remove the 'selected' class from all the columns
     var columns = document.getElementsByTagName("th");
     for (var i = 0; i < columns.length; i++) {
         columns[i].classList.remove("selected");
     }
-
     // Add the 'selected' class to the clicked column
     element.classList.add("selected");
-
-    selectedColumn.innerHTML = "You clicked on the <strong>" + column + "</strong> column.";
 }
 
 function confirmAction() {
