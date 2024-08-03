@@ -1,8 +1,10 @@
 package Server
 
 import (
+	// "RealTimeForum/database"
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
+	"fmt"
 	"strconv"
 
 	"encoding/json"
@@ -53,36 +55,57 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	for {
 		_, p, err := conn.ReadMessage()
 		if err != nil {
-			println(err)
+			log.Println("Error reading message:", err)
 			return
 		}
 		MessageRequest := BodyToMessage(p)
 		if MessageRequest == nil {
-			panic("Message is nil.")
+			log.Println("Message is nil or invalid.")
+			continue
+		}
+		fmt.Print(MessageRequest)
+
+		SenderId, err := database.GetUserByUsername(MessageRequest.SenderId)
+		if err != nil {
+			log.Println("Error getting user by username:", err)
+			return
+		}
+		if SenderId == nil {
+			log.Println("Sender not found")
+			continue
+		}
+
+		ReceiverId, err := database.GetUserByUsername(MessageRequest.RecipientId)
+		if err != nil {
+			log.Println("Error getting user by username:", err)
+			return
+		}
+		if ReceiverId == nil {
+			log.Println("Receiver not found")
+			continue
 		}
 
 		message := structs.Message{
-			SenderId:   MessageRequest.SenderId,
-			ReceiverId: MessageRequest.RecipientId,
+			SenderId:   SenderId.Id,
+			ReceiverId: ReceiverId.Id,
 			Message:    MessageRequest.Message,
 			Time:       MessageRequest.Time,
 		}
 
-		err = database.AddMessage(message)
-		if err != nil {
-			errorServer(w, r, http.StatusInternalServerError)
+		reciverConnections, ok := GetConnectionByID(message.ReceiverId)
+		if !ok {
+			log.Println("No connection found for the user with id:", message.ReceiverId)
 			continue
 		}
-
-		reciverConnections, ok := GetConnectionByID(message.ReceiverId)
-		if ok {
-			SendMessage(*reciverConnections, &message)
-		} else {
-			log.Println("No connection found for the user with id: ", message.ReceiverId)
-		}
-
+		SendMessage(*reciverConnections, &message)
 	}
 }
+
+// err = database.AddMessage(message)
+// if err != nil {
+// 	errorServer(w, r, http.StatusInternalServerError)
+// 	continue
+// }
 
 func SendMessage(conn Connection, message *structs.Message) {
 	b, err := json.Marshal(message)
@@ -107,10 +130,9 @@ func BodyToMessage(body []byte) *structs.MessageRequest {
 	var message structs.MessageRequest
 	err := json.Unmarshal(body, &message)
 	if err != nil {
-		println("Error: ", err.Error())
+		fmt.Println("Error:", err.Error())
 		return nil
 	}
-
 	return &message
 }
 

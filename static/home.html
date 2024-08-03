@@ -2,15 +2,14 @@
 
 <head>
     <title>Real Time Forum</title>
-    <link rel="stylesheet" type="text/css" href="./style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;700&amp;display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&amp;display=swap">
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;700&amp;display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&amp;display=swap" />
 </head>
 
 <body>
     <div class="container">
-
         <div class="navigationBar">
             <div class="navigationBarImage"></div>
 
@@ -24,10 +23,8 @@
                 <span class="framer-text">Home</span>
             </div>
 
-            <div class="bellIcon navigationBarIcons" id="bellIcon navigationBarIcons"
-                onclick="toggleVisibility('notifications')"></div>
-            <div class="notificationsBtn navigationBarBtns" id="notificationsBtn navigationBarBtns"
-                onclick="toggleVisibility('notifications')">
+            <div class="bellIcon navigationBarIcons" id="bellIcon navigationBarIcons" onclick="toggleVisibility('notifications')"></div>
+            <div class="notificationsBtn navigationBarBtns" id="notificationsBtn navigationBarBtns" onclick="toggleVisibility('notifications')">
                 <span class="framer-text">Notifications</span>
             </div>
 
@@ -50,7 +47,6 @@
       <div class="signOutBtn navigationBarBtns" onclick="toggleVisibility('login')">
         <span class="framer-text">Sign out</span>
       </div> -->
-
         </div>
 
         <div class="rightSide">
@@ -58,15 +54,13 @@
                 <div class="home navigationContent" id="home navigationContent">
                     <div class="title">
                         <h1>Home</h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
+                        <hr style="color: #0000002b; height: 2px; width: 80%; float: left" />
                     </div>
                     <!-- <div class="modeIcon mainPageIcons"></div> -->
                     <div class="sortIcon mainPageIcons" onclick="toggleDiv('sortFilter')"></div>
                     <div class="categoryIcon mainPageIcons" onclick="toggleDiv('categoryFilter')"></div>
                     <div class="penIcon mainPageIcons" onclick="toggleDiv('newPostForm')"></div>
-                    <div class="homeContent">
-
-                    </div>
+                    <div class="homeContent"></div>
                 </div>
 
                 <div class="profile navigationContent">
@@ -75,47 +69,55 @@
                     <table>
                         <tr>
                             <th onclick="posts(-1,'Posts','Posts', event.target)">Posts</th>
-                            <th onclick="posts(-1,'comments','comments', event.target)">Comments</th>
+                            <th onclick="posts(-1,'comments','comments', event.target)">
+                                Comments
+                            </th>
                             <th onclick="posts(-1,'likes','likes', event.target)">Likes</th>
-                            <th onclick="posts(-1,'dislikes','dislikes', event.target)">Dislikes</th>
+                            <th onclick="posts(-1,'dislikes','dislikes', event.target)">
+                                Dislikes
+                            </th>
                         </tr>
                     </table>
 
                     <div id="profileContent">
                         <p id="selectedColumn">Click on a column to change the content.</p>
                     </div>
-
                 </div>
 
                 <div class="setting navigationContent">
                     <div class="title">
                         <h1>Settings</h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
+                        <hr style="color: #0000002b; height: 2px; width: 80%; float: left" />
                     </div>
 
                     <div class="settingList">
                         <ul id="settingList">
-                            <li onclick="ChangeUserInformation()"> <img src="/images/arrow.png" class="icon"> Change
-                                User Information</li>
-                            <li onclick="toggleDiv('change-password')"> <img src="/images/arrow.png" class="icon">Change
-                                Password</li>
-                            <li onclick="toggleDiv('request-moderator')"> <img src="/images/arrow.png"
-                                    class="icon">Request to be Moderator</li>
-                            <li onclick="fetchAndAppendModerators()"> <img src="/images/arrow.png" class="icon">List of
-                                Moderators</li>
-                            <li onclick="PromotionRequests()"> <img src="/images/arrow.png" class="icon">Promotion
-                                Requests</li>
-                            <li onclick="ManageCategories()"> <img src="/images/arrow.png" class="icon">Manage
-                                Categories</li>
+                            <li onclick="ChangeUserInformation()">
+                                <img src="/images/arrow.png" class="icon" /> Change User Information
+                            </li>
+                            <li onclick="toggleDiv('change-password')">
+                                <img src="/images/arrow.png" class="icon" />Change Password
+                            </li>
+                            <li onclick="toggleDiv('request-moderator')">
+                                <img src="/images/arrow.png" class="icon" />Request to be Moderator
+                            </li>
+                            <li onclick="fetchAndAppendModerators()">
+                                <img src="/images/arrow.png" class="icon" />List of Moderators
+                            </li>
+                            <li onclick="PromotionRequests()">
+                                <img src="/images/arrow.png" class="icon" />Promotion Requests
+                            </li>
+                            <li onclick="ManageCategories()">
+                                <img src="/images/arrow.png" class="icon" />Manage Categories
+                            </li>
                         </ul>
                     </div>
-
                 </div>
 
                 <div class="notifications navigationContent">
                     <div class="title">
                         <h1>Notifications</h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
+                        <hr style="color: #0000002b; height: 2px; width: 80%; float: left" />
                     </div>
 
                     <div class="notification-container">
@@ -125,341 +127,430 @@
                             <li class="notification-item">Mentioned you in a comment</li>
                         </ul>
                     </div>
-
                 </div>
 
                 <div class="search navigationContent">
-
                     <div class="search-container">
-                        <input type="text" placeholder="Search..." id="search" name="search">
+                        <input type="text" placeholder="Search..." id="search" name="search" />
                         <button onclick="Search()">Search</button>
                     </div>
 
                     <div class="output-container">
-
-                        <div id="search-output">
-
-                        </div>
-
+                        <div id="search-output"></div>
                     </div>
                 </div>
 
                 <div class="registration navigationContent">
                     <div class="title">
                         <h1>Registration</h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
+                        <hr style="color: #0000002b; height: 2px; width: 80%; float: left" />
                     </div>
                     <div id="formReg">
                         <table>
                             <tr>
-                                <td class="formReg-label"><label for="firstName">First Name:</label></td>
-                                <td class="formReg-input"><input type="text" id="firstName"
-                                        onfocus="validateField(this)" onblur="validateField(this)"
-                                        oninput="validateField(this)"></td>
-                                <td class="error"><span id="firstNameError" class="error"></span></td>
+                                <td class="formReg-label">
+                                    <label for="firstName">First Name:</label>
+                                </td>
+                                <td class="formReg-input">
+                                    <input type="text" id="firstName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                </td>
+                                <td class="error">
+                                    <span id="firstNameError" class="error"></span>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="formReg-label"><label for="lastName">Last Name:</label></td>
-                                <td class="formReg-input"><input type="text" id="lastName" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
-                                <td class="error"><span id="lastNameError" class="error"></span></td>
+                                <td class="formReg-label">
+                                    <label for="lastName">Last Name:</label>
+                                </td>
+                                <td class="formReg-input">
+                                    <input type="text" id="lastName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                </td>
+                                <td class="error">
+                                    <span id="lastNameError" class="error"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="email">Email:</label></td>
-                                <td class="formReg-input"><input type="text" id="email" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
-                                <td class="error"><span id="emailError" class="error"></span></td>
+                                <td class="formReg-input">
+                                    <input type="text" id="email" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                </td>
+                                <td class="error">
+                                    <span id="emailError" class="error"></span>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="formReg-label"><label for="username">Username:</label></td>
-                                <td class="formReg-input"><input type="text" id="username" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
-                                <td class="error"><span id="usernameError" class="error"></span></td>
+                                <td class="formReg-label">
+                                    <label for="username">Username:</label>
+                                </td>
+                                <td class="formReg-input">
+                                    <input type="text" id="username" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                </td>
+                                <td class="error">
+                                    <span id="usernameError" class="error"></span>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="formReg-label"><label for="dob">Date of Birth:</label></td>
-                                <td class="formReg-input"><input type="date" id="dob" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
+                                <td class="formReg-label">
+                                    <label for="dob">Date of Birth:</label>
+                                </td>
+                                <td class="formReg-input">
+                                    <input type="date" id="dob" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                </td>
                                 <td class="error"><span id="dobError" class="error"></span></td>
                             </tr>
                             <tr>
-                                <td class="formReg-label"><label for="country">Country:</label></td>
-                                <td class="formReg-input"><input type="text" id="country" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)"></td>
-                                <td class="error"><span id="countryError" class="error"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="formReg-label"><label for="password">Password:</label></td>
-                                <td class="formReg-input"><input type="password" id="password"
-                                        onfocus="validateField(this)" onblur="validateField(this)"
-                                        oninput="validateField(this)"></td>
-                                <td class="error"><span id="passwordError" class="error"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="formReg-label"><label for="confirmPassword">Re-enter Password:</label></td>
-                                <td class="formReg-input"><input type="password" id="confirmPassword"
-                                        onfocus="validateField(this)" onblur="validateField(this)"
-                                        oninput="validateField(this)">
+                                <td class="formReg-label">
+                                    <label for="country">Country:</label>
                                 </td>
-                                <td class="error"><span id="confirmPasswordError" class="error"></span></td>
+                                <td class="formReg-input">
+                                    <input type="text" id="country" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                </td>
+                                <td class="error">
+                                    <span id="countryError" class="error"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label">
+                                    <label for="password">Password:</label>
+                                </td>
+                                <td class="formReg-input">
+                                    <input type="password" id="password" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                </td>
+                                <td class="error">
+                                    <span id="passwordError" class="error"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label">
+                                    <label for="confirmPassword">Re-enter Password:</label>
+                                </td>
+                                <td class="formReg-input">
+                                    <input type="password" id="confirmPassword" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                </td>
+                                <td class="error">
+                                    <span id="confirmPasswordError" class="error"></span>
+                                </td>
                             </tr>
                         </table>
 
-                        <button class="RegChange" onclick="toggleVisibility('login')">Login</button>
+                        <button class="RegChange" onclick="toggleVisibility('login')">
+                                Login
+                            </button>
 
                         <button disabled id="registerBtn" onclick="submitForm()">Submit</button>
-
                     </div>
                 </div>
 
                 <div class="login navigationContent">
                     <div class="title">
                         <h1>login</h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                        <hr style="color: #0000002b; height: 2px; width: 80%" />
                     </div>
                     <div id="formLog">
                         <table>
                             <tr>
-                                <td class="formLog-label"><label for="usernameLogin">Username or email:</label></td>
-                                <td class="formLog-input"><input type="text" id="usernameLogin"
-                                        onfocus="validateLogInField(this)" onblur="validateLogInField(this)"
-                                        oninput="validateLogInField(this)"></td>
-                                <td class="error"><span id="usernameLoginError" class="error"></span></td>
+                                <td class="formLog-label">
+                                    <label for="usernameLogin">Username or email:</label>
+                                </td>
+                                <td class="formLog-input">
+                                    <input type="text" id="usernameLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
+                                </td>
+                                <td class="error">
+                                    <span id="usernameLoginError" class="error"></span>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="formLog-label"><label for="passwordLogin">Password:</label></td>
-                                <td class="formLog-input"><input type="password" id="passwordLogin"
-                                        onfocus="validateLogInField(this)" onblur="validateLogInField(this)"
-                                        oninput="validateLogInField(this)"></td>
-                                <td class="error"><span id="passwordLoginError" class="error"></span></td>
+                                <td class="formLog-label">
+                                    <label for="passwordLogin">Password:</label>
+                                </td>
+                                <td class="formLog-input">
+                                    <input type="password" id="passwordLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
+                                </td>
+                                <td class="error">
+                                    <span id="passwordLoginError" class="error"></span>
+                                </td>
                             </tr>
                         </table>
 
-                        <button class="RegChange" onclick="toggleVisibility('registration')">Sign up</button>
+                        <button class="RegChange" onclick="toggleVisibility('registration')">
+                                Sign up
+                            </button>
 
-                        <button disabled id="loginBtn" onclick="submitLoginForm()">Login</button>
+                        <button id="loginBtn" onclick="submitLoginForm()">Login</button>
                     </div>
                 </div>
 
                 <div class="postPage navigationContent">
                     <div class="title">
                         <h1>Post Title</h1>
-                        <button id="editPost-button" class="editPost-button" onclick="EditPost()">Edit</button>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                        <button id="editPost-button" class="editPost-button" onclick="EditPost()">
+                                Edit
+                            </button>
+                        <hr style="color: #0000002b; height: 2px; width: 80%" />
                     </div>
                 </div>
-
             </div>
 
             <div class="messagesBar" id="messagesBar">
-
                 <div class="messagesTitle">
-                    <span
-                        style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:'Kufam';--framer-font-size:30px;--framer-text-color:rgba(217, 211, 198, 1)"
-                        class="framer-text" id="messagesTitle">Messages</span>
-                    <!-- <div class="mailIcon"></div> -->
-                </div>
-                <hr style="color: #0000002B;  height: 2px; width: 80%;">
+                    <span style="
+                                --font-selector: R0Y7S3VmYW0tcmVndWxhcg==;
+                                --framer-font-family: 'Kufam';
+                                --framer-font-size: 30px;
+                                --framer-text-color: rgba(217, 211, 198, 1);
+                            " class="framer-text" id="messagesTitle">Messages</span
+                        >
+                        <!-- <div class="mailIcon"></div> -->
+                    </div>
+                    <hr style="color: #0000002b; height: 2px; width: 80%" />
 
-                <!-- new Mwssaew -->
-                <div class="plusIcon"></div>
+                    <!-- new Mwssaew -->
+                    <div class="plusIcon"></div>
 
-                <!-- Chats -->
-                <div class="messagesBox" id="messagesBoxDiv" style="display: block;">
-                    <div class="messageBox">
-                        <div class="chatUserPic"></div>
-                        <div class="chatUserName">
-                            <p>username</p>
+                    <!-- Chats -->
+                    <div class="messagesBox" id="messagesBoxDiv" style="display: block">
+                        <div class="messageBox">
+                            <div class="chatUserPic"></div>
+                            <div class="chatUserName">
+                                <p>username</p>
+                            </div>
+                            <div class="newMessageIcon"></div>
                         </div>
-                        <div class="newMessageIcon"> </div>
+                    </div>
+                    <div class="msgUser chat" id="msgDiv" style="display: none">
+                        <div class="chat" id="UserChat">
+                            <div class="fullMessage" id="fullMessage">
+                                <div class="msg">Hello, How r u?</div>
+                                <div class="msgTime">12:00pm</div>
+                            </div>
+                        </div>
+                        <div class="msgTypingBar">
+                            <input
+                                type="text"
+                                placeholder="Typing..."
+                                id="msgType"
+                                name="msgType"
+                            />
+                            <button id="sendMessage" onclick="sendMessage()">Send</button>
+                        </div>
                     </div>
                 </div>
-                <div class="msgUser chat" id="msgDiv" style="display: block;">
-                    <div class="chat">
-                        <div class="msg">
-                            Hello, How r u?
-                        </div> <div class="msgTime">12:00pm</div>
-                    </div>
-                    <div class="msgTypingBar"> 
-                        <input type="text" placeholder="Typing..." id="msgType" name="msgType">
-                        <button onclick="SendMesgae()">Send</button>
-                    </div>
-                </div>
-
-
             </div>
 
+            <div class="logoDiv">
+                <h1 class="logoName" style="display: block">SANDBOX</h1>
+                <div class="logo"></div>
+            </div>
         </div>
+    </body>
 
-        <div class="logoDiv">
-            <h1 class="logoName" style="display: block;"> SANDBOX</h1>
-            <div class="logo"></div>
-        </div>
+    <div id="overlay"></div>
 
+    <div id="categoryFilter" style="display: none">
+        <div class="exitButton" onclick="toggleDiv('categoryFilter')"></div>
+        <h3>Select option(s):</h3>
+        <label><input type="checkbox" name="option1" value="option1" /> Option 1</label><br />
+        <label><input type="checkbox" name="option2" value="option2" /> Option 2</label><br />
+        <label><input type="checkbox" name="option3" value="option3" /> Option 3</label><br />
+        <br />
+        <button onclick="submitSelection('categoryFilter')">Submit</button>
     </div>
 
-</body>
+    <div id="sortFilter" style="display: none">
+        <div class="exitButton" onclick="toggleDiv('sortFilter')"></div>
+        <h3>Select filter option:</h3>
+        <select id="options">
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+        </select>
+        <br />
+        <button onclick="submitSelection('sortFilter')">Submit</button>
+    </div>
 
-<div id="overlay"></div>
+    <div id="newPostForm" class="popup" style="display: none">
+        <div class="exitButton" onclick="toggleDiv('newPostForm')"></div>
+        <h2>Create New Post</h2>
+        <table>
+            <tr>
+                <td><label for="newPostTitle">Title:</label></td>
+                <td><input type="text" id="newPostTitle" name="title" /></td>
+            </tr>
 
-<div id="categoryFilter" style="display: none;">
-    <div class="exitButton" onclick="toggleDiv('categoryFilter')"></div>
-    <h3>Select option(s):</h3>
-    <label><input type="checkbox" name="option1" value="option1"> Option 1</label><br>
-    <label><input type="checkbox" name="option2" value="option2"> Option 2</label><br>
-    <label><input type="checkbox" name="option3" value="option3"> Option 3</label><br>
-    <br />
-    <button onclick="submitSelection('categoryFilter')">Submit</button>
-</div>
+            <tr>
+                <td><label for="topic">Topic:</label></td>
+                <td>
+                    <textarea type="text" id="topic" name="topic" rows="4" cols="50"></textarea>
+                </td>
+            </tr>
 
-<div id="sortFilter" style="display: none;">
-    <div class="exitButton" onclick="toggleDiv('sortFilter')"></div>
-    <h3>Select filter option:</h3>
-    <select id="options">
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-        <option value="option3">Option 3</option>
-    </select>
-    <br />
-    <button onclick="submitSelection('sortFilter')">Submit</button>
-</div>
+            <tr>
+                <td><label for="categories">Categories:</label></td>
+                <td>
+                    <div class="categoriesList">
+                        <label
+                            ><input
+                                type="checkbox"
+                                name="category1"
+                                value="category1"
+                                class="checkBoxCateg"
+                            />
+                            Category1</label
+                        ><br />
+                        <label
+                            ><input
+                                type="checkbox"
+                                name="category2"
+                                value="category2"
+                                class="checkBoxCateg"
+                            />
+                            Category2</label
+                        ><br />
+                        <label
+                            ><input
+                                type="checkbox"
+                                name="category3"
+                                value="category3"
+                                class="checkBoxCateg"
+                            />
+                            Category3</label
+                        ><br />
+                        <label
+                            ><input
+                                type="checkbox"
+                                name="category4"
+                                value="category4"
+                                class="checkBoxCateg"
+                            />
+                            Category4</label
+                        ><br />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <button class="submitBtn disabled" id="submitBtn" onclick="submitSelection('newPostForm')">
+            Post
+        </button>
+    </div>
 
-<div id="newPostForm" class="popup" style="display: none;">
-    <div class="exitButton" onclick="toggleDiv('newPostForm')"></div>
-    <h2>Create New Post</h2>
-    <table>
-        <tr>
-            <td><label for="newPostTitle">Title:</label></td>
-            <td><input type="text" id="newPostTitle" name="title"></td>
-        </tr>
+    <div id="user-info" class="popup" style="display: none">
+        <div class="exitButton" onclick="toggleDiv('user-info')"></div>
+        <h2>User Information</h2>
+        <label for="ChangeUserName"> Username?</label>
+        <input type="text" id="ChangeUserName" name="ChangeUserName" required /><br />
+        <label for="ChangeFirstName"> First Name</label>
+        <input type="text" id="ChangeFirstName" name="ChangeFirstName" required /><br />
+        <label for="ChangeLastName"> Last Name</label>
+        <input type="text" id="ChangeLastName" name="ChangeLastName" required /><br />
+        <label for="ChangeEmail"> Email</label>
+        <input type="text" id="ChangeEmail" name="ChangeEmail" required /><br />
+        <label for="ChangeDOB"> date of birth</label>
+        <input type="date" id="ChangeDOB" name="ChangeDOB" required /><br />
+        <!-- <label for="ChangeCountry">Country</label> <input id="ChangeCountry" name="ChangeCountry"><br> -->
+        <br /><br /><br />
+        <button class="UpdateUserInformation-button" onclick="UpdateUserInformation()">
+            update
+        </button>
+    </div>
 
-        <tr>
-            <td><label for="topic">Topic:</label></td>
-            <td><textarea type="text" id="topic" name="topic" rows="4" cols="50"></textarea></td>
-        </tr>
+    <div id="change-password" class="popup" style="display: none">
+        <h2>Change Password</h2>
+        <table>
+            <tr>
+                <td class="changePass"><label for="password">Password:</label></td>
+                <td class="changePass"><input type="password" id="password2" /></td>
+                <td class="error"><span id="passwordError2" class="error"></span></td>
+                    </tr>
+                    <tr>
+                        <td class="changePass"><label for="confirmPassword">Re-enter Password:</label></td>
+                        <td class="changePass"><input type="password" id="confirmPassword2" /></td>
+                        <td class="error"><span id="confirmPasswordError2" class="error"></span></td>
+                    </tr>
+                    </table>
 
-        <tr>
-            <td> <label for="categories">Categories:</label></td>
-            <td>
-                <div class="categoriesList">
-                    <label><input type="checkbox" name="category1" value="category1" class="checkBoxCateg">
-                        Category1</label><br>
-                    <label><input type="checkbox" name="category2" value="category2" class="checkBoxCateg">
-                        Category2</label><br>
-                    <label><input type="checkbox" name="category3" value="category3" class="checkBoxCateg">
-                        Category3</label><br>
-                    <label><input type="checkbox" name="category4" value="category4" class="checkBoxCateg">
-                        Category4</label><br>
+                    <button type="button" id="cancel-btn" onclick="toggleDiv('change-password')">Cancel</button>
+                    <button type="button" id="save-btn" onclick="saveNewPassword()">Save</button>
                 </div>
-            </td>
-        </tr>
 
-    </table>
-    <button class="submitBtn disabled" id="submitBtn" onclick="submitSelection('newPostForm')">Post</button>
-</div>
+                <div id="request-moderator" class="popup" style="display: none">
+                    <h2>Request to be Moderator</h2>
+                    <label for="answer">Why do you want to be a moderator?</label>
+                    <br /><br />
+                    <textarea id="answer" name="answer" rows="5"></textarea>
+                    <br />
+                    <button type="button" id="cancel-btn" onclick="toggleDiv('request-moderator')">
+            Cancel
+        </button>
+                    <button type="button" id="send-btn" onclick="sendPromotionRequest()">Send</button>
+                </div>
+                <div id="list-moderators" class="popup" style="display: none">
+                    <div class="exitButton" onclick="toggleDiv('list-moderators')"></div>
+                    <h2>List of Moderators</h2>
+                    <ul>
+                        <li>
+                            Moderator 1 <button class="remove-button" onclick="confirmAction()">Remove</button>
+                        </li>
+                        <li>
+                            Moderator 1 <button class="remove-button" onclick="confirmAction()">Remove</button>
+                        </li>
+                    </ul>
+                </div>
 
-<div id="user-info" class="popup" style="display: none;">
-    <div class="exitButton" onclick="toggleDiv('user-info')"></div>
-    <h2>User Information</h2>
-    <label for="ChangeUserName"> Username?</label> <input type="text" id="ChangeUserName" name="ChangeUserName"
-        required><br>
-    <label for="ChangeFirstName"> First Name</label> <input type="text" id="ChangeFirstName" name="ChangeFirstName"
-        required><br>
-    <label for="ChangeLastName"> Last Name</label> <input type="text" id="ChangeLastName" name="ChangeLastName"
-        required><br>
-    <label for="ChangeEmail"> Email</label> <input type="text" id="ChangeEmail" name="ChangeEmail" required><br>
-    <label for="ChangeDOB"> date of birth</label> <input type="date" id="ChangeDOB" name="ChangeDOB" required><br>
-    <!-- <label for="ChangeCountry">Country</label> <input id="ChangeCountry" name="ChangeCountry"><br> -->
-    <br><br><br>
-    <button class="UpdateUserInformation-button" onclick="UpdateUserInformation()">update</button>
+                <div id="promotion-requests" class="popup" style="display: none">
+                    <div class="exitButton" onclick="toggleDiv('promotion-requests')"></div>
+                    <h2>Promotion Requests</h2>
+                    <ul>
+                        <li>
+                            Request 1 <button class="reject-button">Remove</button>
+                            <button class="show-button">show</button>
+                        </li>
+                        <li>
+                            Request 1 <button class="reject-button">Remove</button>
+                            <button class="show-button">show</button>
+                        </li>
+                    </ul>
+                </div>
+                <div id="ShowPromotionRequest" class="popup" style="display: none">
+                    <div class="exitButton" onclick="toggleDiv('ShowPromotionRequest')"></div>
+                    <h2 id="ShowPromotionRequestUser">user</h2>
+                    <p>Content for the show promotion request popup goes here.</p>
+                    <button class="ShowPromotionRequestReject-button">Remove</button>
+                    <button class="ShowPromotionRequestApprove-button">approve</button>
+                </div>
 
-</div>
+                <div id="manage-categories" class="popup" style="display: none">
+                    <div class="exitButton" onclick="toggleDiv('manage-categories')"></div>
+                    <h2>Manage Categories</h2>
+                    <ul>
+                        <li>
+                            category 1 <button class="remove-button" onclick="confirmAction()">Remove</button>
+                        </li>
+                        <li>
+                            category 1 <button class="remove-button" onclick="confirmAction()">Remove</button>
+                        </li>
+                    </ul>
+                    <button class="addCategory-button" onclick="toggleDiv('addCategory')">add category</button>
+                </div>
 
-<div id="change-password" class="popup" style="display: none;">
-    <h2>Change Password</h2>
-    <table>
-        <tr>
-            <td class="changePass"><label for="password">Password:</label></td>
-            <td class="changePass"><input type="password" id="password2"></td>
-            <td class="error"><span id="passwordError2" class="error"></span></td>
-        </tr>
-        <tr>
-            <td class="changePass"><label for="confirmPassword">Re-enter Password:</label></td>
-            <td class="changePass"><input type="password" id="confirmPassword2"></td>
-            <td class="error"><span id="confirmPasswordError2" class="error"></span></td>
-        </tr>
-    </table>
+                <div id="addCategory" class="popup" style="display: none">
+                    <div class="exitButton" onclick="toggleDiv('addCategory')"></div>
+                    <h2>add Category</h2>
+                    <label for="categoryName">categoryName?</label>
+                    <input id="categoryName" name="categoryName" /> <br /><br />
 
-    <button type="button" id="cancel-btn" onclick="toggleDiv('change-password')">Cancel</button>
-    <button type="button" id="save-btn" onclick="saveNewPassword()">Save</button>
-</div>
+                    <label for="CategoryDescription">Category description</label>
+                    <br /><br />
+                    <textarea id="CategoryDescription" name="CategoryDescription" rows="5"></textarea>
+                    <br /><br />
 
-<div id="request-moderator" class="popup" style="display: none;">
-    <h2>Request to be Moderator</h2>
-    <label for="answer">Why do you want to be a moderator?</label>
-    <br><br>
-    <textarea id="answer" name="answer" rows="5"></textarea>
-    <br>
-    <button type="button" id="cancel-btn" onclick="toggleDiv('request-moderator')">Cancel</button>
-    <button type="button" id="send-btn" onclick="sendPromotionRequest()">Send</button>
-</div>
-<div id="list-moderators" class="popup" style="display: none;">
-    <div class="exitButton" onclick="toggleDiv('list-moderators')"></div>
-    <h2>List of Moderators</h2>
-    <ul>
-        <li>Moderator 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
-        <li>Moderator 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
-    </ul>
+                    <button class="addCategory-button" onclick="addCategory()">add</button>
+                </div>
 
-</div>
-
-<div id="promotion-requests" class="popup" style="display: none;">
-    <div class="exitButton" onclick="toggleDiv('promotion-requests')"></div>
-    <h2>Promotion Requests</h2>
-    <ul>
-        <li>Request 1 <button class="reject-button">Remove</button> <button class="show-button">show</button></li>
-        <li>Request 1 <button class="reject-button">Remove</button> <button class="show-button">show</button></li>
-    </ul>
-</div>
-<div id="ShowPromotionRequest" class="popup" style="display: none;">
-    <div class="exitButton" onclick="toggleDiv('ShowPromotionRequest')"></div>
-    <h2 id="ShowPromotionRequestUser">user</h2>
-    <p>Content for the show promotion request popup goes here.</p>
-    <button class="ShowPromotionRequestReject-button">Remove</button> <button
-        class="ShowPromotionRequestApprove-button">approve</button>
-</div>
-
-<div id="manage-categories" class="popup" style="display: none;">
-    <div class="exitButton" onclick="toggleDiv('manage-categories')"></div>
-    <h2>Manage Categories</h2>
-    <ul>
-        <li>category 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
-        <li>category 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
-    </ul>
-    <button class="addCategory-button" onclick="toggleDiv('addCategory')">add category</button>
-</div>
-
-
-<div id="addCategory" class="popup" style="display: none;">
-    <div class="exitButton" onclick="toggleDiv('addCategory')"></div>
-    <h2>add Category</h2>
-    <label for="categoryName">categoryName?</label> <input id="categoryName" name="categoryName">
-    <br><br>
-
-    <label for="CategoryDescription">Category description</label>
-    <br><br>
-    <textarea id="CategoryDescription" name="CategoryDescription" rows="5"></textarea>
-    <br><br>
-
-    <button class="addCategory-button" onclick="addCategory()">add</button>
-</div>
-
-
-<script src="/js/serverHandlers.js"></script>
-<script src="/js/responsive.js"></script>
-<script src="/js/script.js"></script>
-<script src="/js/toggleDiv.js"></script>
-<script src="/js/validation.js"></script>
-<script src="/js/webSocket.js"></script>
+                <script src="/js/serverHandlers.js"></script>
+                <script src="/js/responsive.js"></script>
+                <script src="/js/script.js"></script>
+                <script src="/js/toggleDiv.js"></script>
+                <script src="/js/validation.js"></script>
+                <script src="/js/webSocket.js"></script>
 
 </html>

@@ -1781,3 +1781,4 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 		writeToJson(sortedChats, w)
 	}
 }
+

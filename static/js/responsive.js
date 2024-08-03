@@ -21,25 +21,34 @@ function checkSize(mediaQuery2) {
     const navigationBar = document.querySelector(".navigationBar");
     const navigationBarBtns = document.querySelectorAll(".navigationBarBtns");
     const logoName = document.querySelectorAll(".logoName")[0];
-
+    const messagesBar = document.getElementById("messagesBar");
+    const navigationContent = document.querySelectorAll(".navigationContent");
     if (!mediaQuery2.matches) {
         navigationBarBtns.forEach((btn) => {
             btn.style.display = "none";
         });
+        navigationContent.forEach((content) => {
+            content.style.width = "100%";
+        });
 
         logoName.style.display = "none";
+        messagesBar.style.display = "none";
         // navigationBar.classList.add("center-content");
     } else {
         navigationBarBtns.forEach((btn) => {
             btn.style.display = "block";
             GetUserLoggedIn();
         });
+        navigationContent.forEach((content) => {
+            content.style.width = "70%";
+        });
 
         logoName.style.display = "block";
         GetUserLoggedIn();
+        messagesBar.style.display = "block";
+
         // navigationBar.classList.remove("center-content");
     }
-    GetUserLoggedIn();
 }
 
 mediaQuery2.addListener(checkSize); // Add listener for changes in screen width

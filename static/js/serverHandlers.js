@@ -911,7 +911,7 @@ function ChatView() {
                 data.forEach((chat) => {
                     const messageBox = document.createElement("div");
                     messageBox.className = "messageBox";
-
+                    messageBox.id = chat.UserId;
                     const chatUserPic = document.createElement("div");
                     chatUserPic.className = "chatUserPic";
                     chatUserPic.style.backgroundImage = `url(${chat.Image})`;

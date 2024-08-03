@@ -80,7 +80,7 @@ function validateLogInField(input) {
         }
     }
 
-    checkLogFormValidity();
+    // checkLogFormValidity();
 }
 
 function validateField(input, type = 0) {
