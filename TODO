@@ -12,6 +12,8 @@ back (Maryam) :
 -   profile
 -   notification
 -   if user not authenticated prvent him from clicking on the users to message them
+-   if user change the size of the screen and mesg bar disppear, the right side of the screen should be maxmuized
+- the green dot should be shown only if there is a new message 
 
 DATABASE (Ruqaya) :
 
