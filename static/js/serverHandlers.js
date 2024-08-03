@@ -67,8 +67,6 @@ function HomePageRequest() {
 HomePageRequest();
 
 function displayPost(data) {
-    console.log("Received data:", data); // Log the received data to check its structure
-
     if (Array.isArray(data.Posts)) {
         const homeNavigationContent = document.getElementById("home navigationContent");
 
@@ -386,7 +384,6 @@ async function GetUserLoggedIn() {
                 penIcon.style.display = "none";
                 profileIcon.style.display = "none";
                 profileBtn.style.display = "none";
-                console.log("User not logged in");
                 const loginSpan = document.getElementById("loginSpan");
                 loginSpan.innerHTML = "sign up";
                 return;
@@ -400,8 +397,7 @@ async function GetUserLoggedIn() {
                 profileBtn.style.display = "block";
                 const loginSpan = document.getElementById("loginSpan");
                 loginSpan.innerHTML = "logout";
-                console.log("User is logged in");
-                return data;
+                return text;
             }
         })
         .catch((error) => {
@@ -902,7 +898,6 @@ function UpdateUserInformation() {
 }
 
 function ChatView() {
-    console.log("helloooo");
     const messagesBoxDiv = document.getElementById("messagesBoxDiv");
     if (messagesBoxDiv.style.display != "none") {
         fetch("http://localhost:8080/ChatView", {
@@ -921,7 +916,6 @@ function ChatView() {
                     chatUserPic.className = "chatUserPic";
                     chatUserPic.style.backgroundImage = `url(${chat.Image})`;
                     // Set border color based on online status
-                    console.log(chat.Username + " : " + chat.Online);
                     if (chat.Online) {
                         chatUserPic.style.border = " 3px solid rgb(74, 250, 58);";
                     } else {
@@ -1049,9 +1043,6 @@ function displayPostOnProfile(Posts) {
         console.error("Invalid data format. Expected an array of posts.");
     }
 }
-
-
-
 
 function validateUserInfoForm() {
     const username = document.getElementById("ChangeUserName").value.trim();
