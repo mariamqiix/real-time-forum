@@ -29,7 +29,6 @@ func GoLive(port string) {
 	userLimiter = NewUserRateLimiter()
 
 	http.HandleFunc("/images/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println(r.URL.Path)
 		http.ServeFile(w, r, "./static"+r.URL.Path)
 	})
 	http.HandleFunc("/style.css", func(w http.ResponseWriter, r *http.Request) {
