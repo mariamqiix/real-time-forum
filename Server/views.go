@@ -62,7 +62,7 @@ func updateTemplates() {
 	})
 	// Parse template files
 	tmpl, err := tmpl.ParseFiles(
-		templateRoot + "My Framer Site.html")
+		templateRoot + "home.html")
 	if err != nil {
 		log.Println("error updating templates:", err)
 		return

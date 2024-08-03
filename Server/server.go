@@ -9,7 +9,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 	//     "crypto/sha256"
 	// "fmt"
 	// "io/ioutil"
@@ -29,35 +28,20 @@ func GoLive(port string) {
 
 	userLimiter = NewUserRateLimiter()
 
-	http.HandleFunc("/images", func(w http.ResponseWriter, r *http.Request) {
-		imageName := strings.TrimPrefix(r.URL.Path, "/images/")
-		fmt.Println("hi", r.URL.Path)
-		http.ServeFile(w, r, "./static/images/"+imageName)
+	http.HandleFunc("/images/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.URL.Path)
+		http.ServeFile(w, r, "./static"+r.URL.Path)
 	})
 	http.HandleFunc("/style.css", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/style.css")
 	})
-	http.HandleFunc("/toggleDiv.js", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./static/toggleDiv.js")
+	http.HandleFunc("/js/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./static"+r.URL.Path)
 	})
-	http.HandleFunc("/script.js", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./static/script.js")
-	})
-	http.HandleFunc("/responsive.js", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./static/responsive.js")
-	})
-	http.HandleFunc("/validation.js", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./static/validation.js")
-	})
-	http.HandleFunc("/serverHandlers.js", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./static/serverHandlers.js")
-	})
-	http.HandleFunc("/webSocket.js", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./static/webSocket.js")
-	})
+
 	http.HandleFunc("/", homepageHandler)
 	http.HandleFunc("/homePageDataHuncler", homePageDataHuncler)
-	http.HandleFunc("/static/", staticHandler)
+	// http.HandleFunc("/static/", staticHandler)
 	http.HandleFunc("/uploads/{image_id}", uploadedContentServerHandler)
 	http.HandleFunc("/uploads/add", uploadHandler)
 	http.HandleFunc("/user/{user_id}", profileHandler)
@@ -114,7 +98,7 @@ func GoLive(port string) {
 
 // homepageHandler handles the homepage route and serves the homepage template
 func homepageHandler(w http.ResponseWriter, r *http.Request) {
-	filePath := "static/My Framer Site.html"
+	filePath := "static/home.html"
 	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		http.Error(w, "Error reading file", http.StatusInternalServerError)

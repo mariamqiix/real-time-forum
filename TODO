@@ -1,5 +1,4 @@
 front (Ruqaya) :
-
 -   post page : add a section for the post and another for the comments
 -   edit post page : to edit only the title and the content
 -   add comments exampole for the profile page
@@ -10,8 +9,8 @@ back (Maryam) :
 
 -   profile
 -   notification
+-   if user not authenticated prvent him from clicking on the users to message them 
 
 DATABASE (Ruqaya) :
-
 -   in user table , add gender
 -   reactions : only like and dislike

@@ -13,13 +13,6 @@
 
         <div class="navigationBar">
             <div class="navigationBarImage"></div>
-            <!-- <div class="userPic"></div>
-
-      <div class="userName">
-        <span
-          style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:&quot;Kufam&quot;;--framer-font-size:40px"
-          class="framer-text">username</span>
-      </div> -->
 
             <div class="profileIcon navigationBarIcons" onclick="toggleVisibility('profile')"></div>
             <div class="profileBtn navigationBarBtns" onclick="toggleVisibility('profile')">
@@ -61,29 +54,15 @@
         <div class="rightSide">
             <div class="mainPage">
                 <div class="home navigationContent" id="home navigationContent">
-                    <div class="title">
-                        <h1>Home </h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    <div class="title"><h1>Home</h1><hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
                     </div>
                     <!-- <div class="modeIcon mainPageIcons"></div> -->
                     <div class="sortIcon mainPageIcons" onclick="toggleDiv('sortFilter')"></div>
                     <div class="categoryIcon mainPageIcons" onclick="toggleDiv('categoryFilter')"></div>
-
-
-                    <!-- <div class="postBox" >
-            <div class="postUserPic"></div>
-            <div class="postTitle" id="postTitle">
-              <span 
-                style="--font-selector:R0Y7S3VsaW0gUGFyay1yZWd1bGFy;--framer-font-family:&quot;Kulim Park&quot;;--framer-font-size:40px"
-                class="framer-text" id= "title">Title 2222</span> <span class="postUserName" id ="postUserName">username</span>
-
-              <span
-                style="--font-selector:R0Y7S3VmYW0tcmVndWxhcg==;--framer-font-family:&quot;Kufam&quot;;--framer-font-size:15px;--framer-text-color:rgba(91, 91, 91, 1)"
-                class="framer-text" class="postContent" id = "postContent">Hello, this is my firt post!</span>
-              </div>
-          </div> -->
-
                     <div class="penIcon mainPageIcons" onclick="toggleDiv('newPostForm')"></div>
+                    <div class="homeContent">
+
+                    </div>
                 </div>
 
                 <div class="profile navigationContent">
@@ -105,32 +84,23 @@
                 </div>
 
                 <div class="setting navigationContent">
-                    <div class="title">
-                        <h1>Settings</h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
-                    </div>
+                    <div class="title"><h1>Settings</h1><hr style="color: #0000002B;  height: 2px; width: 80%; float: left; "></div>
 
                     <div class="settingList">
                         <ul id="settingList">
-                            <li onclick="ChangeUserInformation()"> <img src="./images/arrow.png" class="icon"> Change User Information</li>
-                            <li onclick="toggleDiv('change-password')"> <img src="./images/arrow.png" class="icon">Change Password</li>
-                            <li onclick="toggleDiv('request-moderator')"> <img src="./images/arrow.png" class="icon">Request to be Moderator</li>
-                            <li onclick="fetchAndAppendModerators()"> <img src="./images/arrow.png" class="icon">List of Moderators
-                            </li>
-                            <li onclick="PromotionRequests()"> <img src="./images/arrow.png" class="icon">Promotion Requests
-                            </li>
-                            <li onclick="ManageCategories()"> <img src="./images/arrow.png" class="icon">Manage Categories
-                            </li>
+                            <li onclick="ChangeUserInformation()"> <img src="/images/arrow.png" class="icon"> Change User Information</li>
+                            <li onclick="toggleDiv('change-password')"> <img src="/images/arrow.png" class="icon">Change Password</li>
+                            <li onclick="toggleDiv('request-moderator')"> <img src="/images/arrow.png" class="icon">Request to be Moderator</li>
+                            <li onclick="fetchAndAppendModerators()"> <img src="/images/arrow.png" class="icon">List of Moderators</li>
+                            <li onclick="PromotionRequests()"> <img src="/images/arrow.png" class="icon">Promotion Requests</li>
+                            <li onclick="ManageCategories()"> <img src="/images/arrow.png" class="icon">Manage Categories</li>
                         </ul>
                     </div>
 
                 </div>
 
                 <div class="notifications navigationContent">
-                    <div class="title">
-                        <h1>Notifications</h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
-                    </div>
+                    <div class="title"><h1>Notifications</h1><hr style="color: #0000002B;  height: 2px; width: 80%; float: left; "></div>
 
                     <div class="notification-container">
                         <ul class="notification-list">
@@ -153,18 +123,14 @@
                     <div class="output-container">
 
                         <div id="search-output">
-                            <div class="postResult" onclick="toggleVisibility('postPage')">
-                                <h2>Post title</h2>
-                            </div>
+
                         </div>
 
                     </div>
                 </div>
 
                 <div class="registration navigationContent">
-                    <div class="title">
-                        <h1>Registration</h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    <div class="title"><h1>Registration</h1><hr style="color: #0000002B;  height: 2px; width: 80%; float: left; ">
                     </div>
                     <div id="formReg">
                         <table>
@@ -211,16 +177,15 @@
                             </tr>
                         </table>
 
+                        <button class="RegChange" onclick="toggleVisibility('login')">Login</button>
+
                         <button disabled id="registerBtn" onclick="submitForm()">Submit</button>
-                        <span class="login-text" onclick="toggleVisibility('login')">Login</span>
 
                     </div>
                 </div>
 
                 <div class="login navigationContent">
-                    <div class="title">
-                        <h1>login</h1>
-                        <hr style="color: #0000002B;  height: 2px; width: 80%; ">
+                    <div class="title"><h1>login</h1><hr style="color: #0000002B;  height: 2px; width: 80%; ">
                     </div>
                     <div id="formLog">
                         <table>
@@ -236,8 +201,9 @@
                             </tr>
                         </table>
 
+                        <button class="RegChange" onclick="toggleVisibility('registration')">Sign up</button>
+
                         <button disabled id="loginBtn" onclick="submitLoginForm()">Login</button>
-                        <span class="login-text" onclick="toggleVisibility('registration')">sign up</span>
                     </div>
                 </div>
 
@@ -265,20 +231,14 @@
                 <!-- Chats -->
                 <div class="messagesBox" id="messagesBoxDiv" style="display: block;">
                     <div class="messageBox">
-
                         <div class="chatUserPic"></div>
-
-                        <div class="chatUserName">
-                            <p>username</p>
-                        </div>
-
+                        <div class="chatUserName"><p>username</p></div>
                         <div class="newMessageIcon"> </div>
                     </div>
                 </div>
                 <div class="msgUser" id="msgDiv" style="display: none;">
                     <p>
                         username
-                        <hr>
                     </p>
                     <ol>
                         <li>tttt</li>
@@ -455,11 +415,11 @@
 </div>
 
 
-<script src="script.js"></script>
-<script src="responsive.js"></script>
-<script src="serverHandlers.js"></script>
-<script src="toggleDiv.js"></script>
-<script src="validation.js"></script>
-<script src="webSocket.js"></script>
+<script src="/js/script.js"></script>
+<script src="/js/responsive.js"></script>
+<script src="/js/serverHandlers.js"></script>
+<script src="/js/toggleDiv.js"></script>
+<script src="/js/validation.js"></script>
+<script src="/js/webSocket.js"></script>
 
 </html>

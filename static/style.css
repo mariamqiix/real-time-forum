@@ -6,16 +6,6 @@ body {
     box-sizing: border-box;
 }
 
-:root {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale
-}
-
-* {
-    box-sizing: border-box;
-    -webkit-font-smoothing: inherit
-}
-
 body,
 input,
 textarea,
@@ -23,21 +13,6 @@ select,
 button {
     font-size: 12px;
     font-family: 'Quicksand', sans-serif;
-}
-
-#__framer-badge-container {
-    position: fixed;
-    bottom: 0;
-    padding: 20px;
-    width: 100%;
-    display: flex;
-    justify-content: right;
-    pointer-events: none;
-    z-index: 314159
-}
-
-.__framer-badge {
-    pointer-events: auto
 }
 
 @font-face {
@@ -100,119 +75,6 @@ span.framer-text:not([data-text-fill]) {
     text-align: var(--framer-text-alignment, start)
 }
 
-p.framer-text:not(:first-child),
-div.framer-text:not(:first-child),
-h1.framer-text:not(:first-child),
-h2.framer-text:not(:first-child),
-h3.framer-text:not(:first-child),
-h4.framer-text:not(:first-child),
-h5.framer-text:not(:first-child),
-h6.framer-text:not(:first-child),
-ol.framer-text:not(:first-child),
-ul.framer-text:not(:first-child),
-.framer-image.framer-text:not(:first-child) {
-    margin-top: var(--framer-paragraph-spacing, 0)
-}
-
-li.framer-text>ul.framer-text:nth-child(2),
-li.framer-text>ol.framer-text:nth-child(2) {
-    margin-top: 0
-}
-
-.framer-text[data-text-fill] {
-    display: inline-block;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    padding: max(0em, calc(calc(1.3em - var(--framer-line-height, 1.3em)) / 2));
-    margin: min(0em, calc(calc(1.3em - var(--framer-line-height, 1.3em)) / -2))
-}
-
-.framer-image.framer-text {
-    display: block;
-    max-width: 100%;
-    height: auto
-}
-
-.text-styles-preset-reset.framer-text {
-    --framer-font-family: Inter, Inter Placeholder, sans-serif;
-    --framer-font-style: normal;
-    --framer-font-weight: 500;
-    --framer-text-color: #000;
-    --framer-font-size: 16px;
-    --framer-letter-spacing: 0;
-    --framer-text-transform: none;
-    --framer-text-decoration: none;
-    --framer-line-height: 1.2em;
-    --framer-text-alignment: start
-}
-
-ol.framer-text {
-    --list-style-type: decimal
-}
-
-ul.framer-text,
-ol.framer-text {
-    display: table;
-    width: 100%
-}
-
-li.framer-text {
-    display: table-row;
-    counter-increment: list-item;
-    list-style: none
-}
-
-ol.framer-text>li.framer-text:before {
-    display: table-cell;
-    width: 2.25ch;
-    box-sizing: border-box;
-    padding-inline-end: .75ch;
-    content: counter(list-item, var(--list-style-type)) ".";
-    white-space: nowrap
-}
-
-ul.framer-text>li.framer-text:before {
-    display: table-cell;
-    width: 2.25ch;
-    box-sizing: border-box;
-    padding-inline-end: .75ch;
-    content: "\2022"
-}
-
-.framer-text-module[style*=aspect-ratio]>:first-child {
-    width: 100%
-}
-
-@supports not (aspect-ratio: 1) {
-    .framer-text-module[style*=aspect-ratio] {
-        position: relative
-    }
-}
-
-@supports not (aspect-ratio: 1) {
-    .framer-text-module[style*=aspect-ratio]:before {
-        content: "";
-        display: block;
-        padding-bottom: calc(100% / calc(var(--aspect-ratio)))
-    }
-}
-
-@supports not (aspect-ratio: 1) {
-    .framer-text-module[style*=aspect-ratio]>:first-child {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%
-    }
-}
-
-@supports (aspect-ratio: 1) {
-    body {
-        --framer-aspect-ratio-supported: auto
-    }
-}
-
 .container {
     -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
@@ -248,7 +110,7 @@ ul.framer-text>li.framer-text:before {
 .navigationBarImage {
     height: 100%;
     width: 100%;
-    background-image: url(./images/navBackground.png);
+    background-image: url(/images/navBackground.png);
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
@@ -294,7 +156,7 @@ ul.framer-text>li.framer-text:before {
     top: 77px;
     width: 80px;
     height: 50px;
-    background-image: url(./images/logo.png);
+    background-image: url(/images/logo.png);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     margin: 4%;
@@ -304,13 +166,13 @@ ul.framer-text>li.framer-text:before {
 .postBox {
     background-color: #dad3c7cc;
     border-radius: 40px;
-    height: 220px;
-    margin-left: 3%;
+    height: 210px;
     width: 716px;
     padding: 2%;
     float: left;
     clear: both;
-    margin-bottom: 1%;
+    margin: 2%;
+    margin-left: 10%;
     transition: transform 0.3s;
     /* Add smooth transition effect */
 }
@@ -372,22 +234,22 @@ ul.framer-text>li.framer-text:before {
 
 .categoryIcon {
     left: 875px;
-    background-image: url(./images/categoryIcon.png);
+    background-image: url(/images/categoryIcon.png);
 }
 
 .sortIcon {
     left: 800px;
-    background-image: url(./images/sortIcon.png);
+    background-image: url(/images/sortIcon.png);
 }
 
 .penIcon {
     left: 950px;
-    background-image: url(./images/penIcon.png);
+    background-image: url(/images/penIcon.png);
 }
 
 /* .modeIcon {
     left: 735px;
-    background-image: url(./images/penIcon.png);
+    background-image: url(/images/penIcon.png);
 } */
 
 .homeBtn,
@@ -445,7 +307,7 @@ ul.framer-text>li.framer-text:before {
     position: absolute;
     top: 35px;
     width: 48px;
-    background-image: url(./images/plusIcon.png);
+    background-image: url(/images/plusIcon.png);
     left: 400px;
 }
 
@@ -457,11 +319,11 @@ ul.framer-text>li.framer-text:before {
 }
 
 .profileIcon {
-    background-image: url(./images/profileIcon.png);
+    background-image: url(/images/profileIcon.png);
 }
 
 .homeIcon {
-    background-image: url(./images/homeIcon.png);
+    background-image: url(/images/homeIcon.png);
 }
 
 .home {
@@ -469,26 +331,26 @@ ul.framer-text>li.framer-text:before {
 }
 
 .bellIcon {
-    background-image: url(./images/bellIcon.png);
+    background-image: url(/images/bellIcon.png);
 }
 
 .searchIcon {
-    background-image: url(./images/searchIcon.png);
+    background-image: url(/images/searchIcon.png);
 }
 
 .signOutIcon {
-    background-image: url(./images/signOutIcon.png);
+    background-image: url(/images/signOutIcon.png);
 }
 
 .settingIcon {
-    background-image: url(./images/settingIcon.png);
+    background-image: url(/images/settingIcon.png);
 }
 
 .newMessageIcon {
     height: 48px;
     position: absolute;
     width: 48px;
-    background-image: url(./images/newMessageIcon.png);
+    background-image: url(/images/newMessageIcon.png);
 }
 
 .mailIcon {
@@ -496,7 +358,7 @@ ul.framer-text>li.framer-text:before {
     width: 50px;
     position: absolute;
     float: left;
-    background-image: url(./images/mailIcon.png);
+    background-image: url(/images/mailIcon.png);
 }
 
 .messagesTitle {
@@ -610,7 +472,7 @@ ul.framer-text>li.framer-text:before {
 }
 
 .exitButton {
-    background-image: url(./images/xIcon.png);
+    background-image: url(/images/xIcon.png);
     height: 50px;
     width: 50px;
     float: left;
@@ -1028,22 +890,24 @@ button:hover {
     table-layout: fixed;
 }
 
-.login-text {
-    font-size: 20px;
-    color: #5d5e65;
-    padding: 10px 3px;
-    cursor: pointer;
-    position: relative;
-    top: 10px;
-}
-
 #formLog {
     float: left;
     clear: both;
     font-size: 30px;
     padding-left: 5%;
     width: 80%;
-    height: 80%;
+    height: 30%;
+}
+
+.RegChange {
+    background-color: greenyellow;
+    float: left;
+    clear: left;
+    width: 30px;
+}
+
+.RegChange:hover {
+    background-color: rgb(160, 210, 86);
 }
 
 #formLog label {
