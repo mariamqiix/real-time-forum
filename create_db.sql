@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS Category;
 DROP TABLE IF EXISTS UserNotification;
 DROP TABLE IF EXISTS UserSession;
 DROP TABLE IF EXISTS UploadedImage;
-DROP TABLE IF EXISTS Message;
+DROP TABLE IF EXISTS UserMessage;
 
 
 -- Create the Image table
@@ -36,6 +36,7 @@ CREATE TABLE User (
     github_name VARCHAR(20),
     linkedin_name VARCHAR(20),
     twitter_name VARCHAR(20),
+    bio VARCHAR(255),
     FOREIGN KEY(image_id) REFERENCES UploadedImage(id),
     FOREIGN KEY (type_id) REFERENCES UserRole(id)
 );
@@ -90,9 +91,6 @@ CREATE TABLE Post (
     time DATE,
     like_count    INTEGER,
 	dislike_count INTEGER,
-	love_count    INTEGER,
-	haha_count    INTEGER,
-	skull_count   INTEGER,
     FOREIGN KEY (parent_id) REFERENCES Post(id),
     FOREIGN KEY (user_id) REFERENCES User(id),
     FOREIGN KEY (image_id) REFERENCES UploadedImage(id)
@@ -151,14 +149,15 @@ CREATE TABLE UserSession (
     FOREIGN KEY (user_id) REFERENCES User(id)
 );
 
-CREATE TABLE Message {
+-- Create the message table
+CREATE TABLE UserMessage {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    senderId INTEGER,
-    receiverId INTEGER,
-    Message VARCHAR(300),
-    Time DATE,
-    FOREIGN KEY (senderId) REFERENCES User(id),
-    FOREIGN KEY (receiverId) REFERENCES User(id),
+    sender_id INTEGER,
+    receiver_id INTEGER,
+    messag VARCHAR(300),
+    time TIMESTAMP,
+    FOREIGN KEY (sender_id) REFERENCES User(id),
+    FOREIGN KEY (receiver_id) REFERENCES User(id),
 }
 
 -- Insert the default user roles
@@ -183,9 +182,8 @@ INSERT INTO ReactionType
     (id, type)
     VALUES 
     (1, 'like'),
-    (2, 'dislike'),
-    (3, 'haha'),
-    (4, 'skull');
+    (2, 'dislike');
+
 
 -- insert default users image
 INSERT INTO UploadedImage (id, data)

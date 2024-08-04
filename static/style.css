@@ -94,8 +94,8 @@ span.framer-text:not([data-text-fill]) {
     position: absolute;
     top: 0;
     float: right;
-    left: 15%;
-    width: 85%;
+    left: 17.5%;
+    width: 82.5%;
     overflow: hidden;
 }
 
@@ -104,7 +104,7 @@ span.framer-text:not([data-text-fill]) {
     height: 100%;
     position: fixed;
     float: left;
-    width: 15%;
+    width: 17.5%;
 }
 
 .navigationBarImage {
@@ -132,7 +132,7 @@ span.framer-text:not([data-text-fill]) {
     height: 82px;
     position: fixed;
     top: 58px;
-    width: 16%;
+    width: 19%;
     overflow: hidden;
 }
 
@@ -207,24 +207,19 @@ span.framer-text:not([data-text-fill]) {
     font-family: "Kufam";
     color: rgba(218, 211, 199, 1);
     font-size: 20px;
-    height: 5%px;
+    height: 20%;
     width: 80%;
     margin: 4%;
-    word-break: break-word;
-    word-wrap: break-word;
-    white-space: pre-wrap;
     float: left;
-    clear: both;
     margin-bottom: 0;
 }
 
 .mainPageIcons {
     height: 48px;
     width: 48px;
-    position: absolute;
-    top: 83px;
     float: right;
-    clear: both;
+    margin: 2%;
+    margin-top: 0;
     transition: 0.3s;
 }
 
@@ -301,7 +296,7 @@ span.framer-text:not([data-text-fill]) {
     word-break: break-word;
     word-wrap: break-word;
 }
-
+/* 
 .plusIcon {
     height: 48px;
     position: absolute;
@@ -309,7 +304,7 @@ span.framer-text:not([data-text-fill]) {
     width: 48px;
     background-image: url(/images/plusIcon.png);
     left: 400px;
-}
+} */
 
 .navigationBarIcons {
     height: 50px;
@@ -359,18 +354,20 @@ span.framer-text:not([data-text-fill]) {
 .mailIcon {
     height: 50px;
     width: 50px;
-    position: absolute;
     float: left;
-    background-image: url(/images/mailIcon.png);
+    margin: 2%;
+    margin-top: 5%;
+    margin-right: 0;
+    background-image: url(/images/backArrowIcon.png);
 }
 
 .messagesTitle {
-    margin: 2%;
-    margin-top: 5%;
+    margin-top: 7%;
+    margin-left: 2%;
     float: left;
-    height: auto;
-    width: auto;
-    white-space: pre-wrap;
+    color: rgba(217, 211, 198, 1);
+    font-family: 'Kufam';
+    font-size: 30px;
 }
 
 .messagesBox
@@ -516,22 +513,27 @@ span.framer-text:not([data-text-fill]) {
     border-radius: 30px;
 }
 
+#options {
+    position: relative;
+    display: inline-block;
+    font-size: 16px
+}
+
+#categoryFilter input {
+    font-size: 16;
+    height: 25px;
+    width: 25px;
+}
+
+#categoryFilter label {
+    font-size: 18;
+}
+  
 .exitButton {
     background-image: url(/images/xIcon.png);
     height: 50px;
     width: 50px;
     float: left;
-}
-
-#newPostTitle {
-    float: left;
-    margin: 1%;
-    height: 50px;
-    width: 500px;
-    border: none;
-    border-radius: 20px;
-    padding: 2%;
-    font-size: 28px;
 }
 
 .checkBoxCateg {
@@ -592,6 +594,7 @@ span.framer-text:not([data-text-fill]) {
 
 .error {
     color: red;
+    font-size: 16px;
 }
 
 #formReg {
@@ -882,19 +885,36 @@ span.framer-text:not([data-text-fill]) {
 
 #request-moderator textarea,
 #topic {
-    width: 80%;
-    height: 40%;
-    min-width: 80%;
-    min-height: 40%;
-    max-width: 80%;
-    max-height: 40%;
+    height: 350px;
+    min-height: 300px;
+    max-height: 300px;
+
+
+    width: 600px;
+    min-width: 600px;
+    max-width: 600px;
+
     background-color: #f2f2f2;
     border-radius: 5px;
     border: 1px solid #ccc;
-    padding: 5px;
-    font-size: 20px;
+    padding: 2%;
+    font-size: 16px;
     overflow: hidden;
-    margin-bottom: 2%;
+    margin: 1%;
+    outline: none;
+}
+
+#newPostTitle {
+    float: left;
+    margin: 1%;
+    height: 50px;
+    width: 600px;
+    border: 1px solid  #7c7a7a4d;
+    border-radius: 5px;
+    padding: 2%;
+    font-size: 16px;
+    background-color: transparent;
+    outline: none;
 }
 
 #newPostForm table {
@@ -910,9 +930,10 @@ td {
     width: auto;
 }
 
+
 button {
     font-size: 20px;
-    background-color: #9f9c9c4d;
+    background-color:#fbd998;;
     border: none;
     border-radius: 30px;
     width: 100px;
@@ -923,7 +944,20 @@ button {
 }
 
 button:hover {
-    background-color: #7c7a7a4d;
+    background-color: #eac176;
+}
+
+.RegChange {
+    background-color: greenyellow;
+    float: left;
+    clear: left;
+    margin: 3%;
+    margin-top: 0;
+    width:110px;
+}
+
+.RegChange:hover {
+    background-color: rgb(160, 210, 86);
 }
 
 .popup h2 {
@@ -944,16 +978,6 @@ button:hover {
     height: 30%;
 }
 
-.RegChange {
-    background-color: greenyellow;
-    float: left;
-    clear: left;
-    width: 30px;
-}
-
-.RegChange:hover {
-    background-color: rgb(160, 210, 86);
-}
 
 #formLog label {
     margin: 1%;
@@ -963,11 +987,12 @@ button:hover {
     margin: 1%;
     padding: 2%;
     font-size: 20px;
-    border-radius: 20px;
+    border-radius: 16px;
     border: none;
     opacity: 0.5;
     height: 60px;
     width: 350px;
+    max-width: 95%;
     text-align: left;
 }
 
