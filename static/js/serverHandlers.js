@@ -88,10 +88,10 @@ function displayPost(data) {
             postBox.appendChild(postUserPic);
 
             const postTitle = document.createElement("div");
-            postTitle.classList.add("postTitle");
+            postTitle.classList.add("postStyle");
 
             const titleElement = document.createElement("span");
-            titleElement.classList.add("title");
+            titleElement.classList.add("postTitle");
             titleElement.textContent = post.title;
 
             const postUserName = document.createElement("span");
@@ -1032,10 +1032,10 @@ function displayPostOnProfile(Posts) {
             postBox.appendChild(postUserPic);
 
             const postTitle = document.createElement("div");
-            postTitle.classList.add("postTitle");
+            postTitle.classList.add("postStyle");
 
             const titleElement = document.createElement("span");
-            titleElement.classList.add("title");
+            titleElement.classList.add("postTitle");
             titleElement.textContent = post.title;
 
             const postUserName = document.createElement("span");
@@ -1048,11 +1048,27 @@ function displayPostOnProfile(Posts) {
 
             postContent.textContent = post.message;
 
+            const postReactions = document.createElement("span");
+            postReactions.classList.add("postReaction");
+
+            const likeReactionCount = document.createElement("span");
+            likeReactionCount.classList.add("reactionCount");
+
+            likeReactionCount.textContent = "123";
+
+            const postLikeIcone = document.createElement("span");
+            postLikeIcone.classList.add("postLike");
+
             postTitle.appendChild(titleElement);
             postTitle.appendChild(postUserName);
             postTitle.appendChild(postContent);
 
+            postReactions.appendChild(postLikeIcone);
+            postReactions.appendChild(likeReactionCount);
+
             postBox.appendChild(postTitle);
+            postBox.appendChild(postReactions);
+
 
             homeNavigationContent.appendChild(postBox);
         });

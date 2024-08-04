@@ -18,6 +18,11 @@ back (Maryam) :
 -   ~~make limit for username~~
 -   ~~delete the long username user~~
 -   ~~make log-out, sign in, captalize~~
+-   connect the sort to the backend
+-   connect tje categories to the backend
+- search bar shold not take empty string (do validation)
+- profile page should open directly to post page
+- connect reaction count to the post
 
 DATABASE (Ruqaya) :
 
