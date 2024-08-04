@@ -37,6 +37,7 @@ CREATE TABLE User (
     linkedin_name VARCHAR(20),
     twitter_name VARCHAR(20),
     bio VARCHAR(255),
+    gender VARCHAR(10),
     FOREIGN KEY(image_id) REFERENCES UploadedImage(id),
     FOREIGN KEY (type_id) REFERENCES UserRole(id)
 );
@@ -150,15 +151,15 @@ CREATE TABLE UserSession (
 );
 
 -- Create the message table
-CREATE TABLE UserMessage {
+CREATE TABLE UserMessage (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sender_id INTEGER,
     receiver_id INTEGER,
     messag VARCHAR(300),
     time TIMESTAMP,
     FOREIGN KEY (sender_id) REFERENCES User(id),
-    FOREIGN KEY (receiver_id) REFERENCES User(id),
-}
+    FOREIGN KEY (receiver_id) REFERENCES User(id)
+);
 
 -- Insert the default user roles
 INSERT INTO UserRole 

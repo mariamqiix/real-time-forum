@@ -38,6 +38,9 @@ type User struct {
 	FirstName      string
 	LastName       string
 	DateOfBirth    time.Time
+	country        string
+	Gender         string
+	bio            string
 	HashedPassword string
 	ImageId        int
 	BannedUntil    time.Time
@@ -122,12 +125,12 @@ type UserNotification struct {
 	Read           bool // Add this line
 }
 
-type Message struct {
+type UserMessage struct {
 	Id         int
 	SenderId   int
 	ReceiverId int
-	Message    string
-	Time       string
+	Messag     string
+	Time       time.Time
 }
 
 type Chats struct {

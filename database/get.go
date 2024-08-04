@@ -1007,7 +1007,7 @@ func GetUserNotifications(userId int) ([]structs.UserNotification, error) {
 }
 
 // GetMessages retrieves all messages from the database where the senderId and receiverId match the provided values
-func GetMessages(senderId int, receiverId int) ([]structs.Message, error) {
+func GetMessages(senderId int, receiverId int) ([]structs.UserMessage, error) {
 	query := `
         SELECT id, senderId, receiverId, Message, Time 
         FROM Message 
@@ -1019,10 +1019,10 @@ func GetMessages(senderId int, receiverId int) ([]structs.Message, error) {
 	}
 	defer rows.Close()
 
-	var messages []structs.Message
+	var messages []structs.UserMessage
 	for rows.Next() {
-		var msg structs.Message
-		if err := rows.Scan(&msg.Id, &msg.SenderId, &msg.ReceiverId, &msg.Message, &msg.Time); err != nil {
+		var msg structs.UserMessage
+		if err := rows.Scan(&msg.Id, &msg.SenderId, &msg.ReceiverId, &msg.Messag, &msg.Time); err != nil {
 			return nil, fmt.Errorf("GetMessages: %v", err)
 		}
 		messages = append(messages, msg)
