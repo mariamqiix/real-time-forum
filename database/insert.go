@@ -15,9 +15,9 @@ func CreateUser(u structs.User) error {
 	// Prepare the SQL statement
 	stmt, err := db.Prepare(`INSERT INTO User 
 							(type_id, username, first_name, last_name, 
-							date_of_birth, email, hashed_password, image_id, banned_until,
-							github_name, linkedin_name, twitter_name) 
-							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+							country, date_of_birth, email, hashed_password, image_id, banned_until,
+							github_name, linkedin_name, twitter_name,bio,gender) 
+							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)`)
 
 	if err != nil {
 		return err
@@ -30,6 +30,7 @@ func CreateUser(u structs.User) error {
 		u.Username,
 		u.FirstName,
 		u.LastName,
+		u.Country,
 		u.DateOfBirth,
 		u.Email,
 		u.HashedPassword,
@@ -37,7 +38,9 @@ func CreateUser(u structs.User) error {
 		u.BannedUntil,
 		u.GithubName,
 		u.LinkedinName,
-		u.TwitterName)
+		u.TwitterName,
+		u.Bio,
+		u.Gender)
 
 	if err != nil {
 		return err
@@ -335,23 +338,20 @@ func AddNotification(notification structs.UserNotification) (int, error) {
 	return int(NotificationId), nil
 }
 
-
-
-
-// AddMessage adds a new message to the Messages table in the database
+// AddMessage adds a new message to the UserMessage table in the database
 func AddMessage(message structs.UserMessage) error {
     // Lock the mutex before accessing the database
     mutex.Lock()
     defer mutex.Unlock()
 
-    // Prepare the SQL statement to insert a new message into the Messages table
-    stmt, err := db.Prepare(`INSERT INTO Message (senderId, receiverId, Message, Time) VALUES (?, ?, ?, ?)`)
+    // Prepare the SQL statement to insert a new message into the UserMessage table
+    stmt, err := db.Prepare(`INSERT INTO UserMessage (sender_id, receiver_id, messag, time) VALUES (?, ?, ?, ?)`)
     if err != nil {
         return err
     }
     defer stmt.Close()
 
-    // Execute the SQL statement with the values from the Message struct
+    // Execute the SQL statement with the values from the UserMessage struct
     _, err = stmt.Exec(message.SenderId, message.ReceiverId, message.Messag, message.Time)
     if err != nil {
         return err

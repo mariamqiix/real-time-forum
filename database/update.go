@@ -44,9 +44,9 @@ func UpdateUserInfo(newUserInfo *structs.User) error {
 	defer mutex.Unlock()
 
 	// Prepare the SQL statement to update the user
-	stmt, err := db.Prepare(`UPDATE User SET type_id = ?, username = ?, first_name = ?, last_name = ?, 
+	stmt, err := db.Prepare(`UPDATE User SET type_id = ?, username = ?, first_name = ?, last_name = ?,country = ?, 
 	date_of_birth = ?, email = ?, hashed_password = ?, image_id = ?, banned_until = ?, github_name = ?, 
-	linkedin_name = ?, twitter_name = ? WHERE id = ?`)
+	linkedin_name = ?, twitter_name = ?,bio = ?,gender = ?  WHERE id = ?`)
 	if err != nil {
 		return err
 	}
@@ -58,6 +58,7 @@ func UpdateUserInfo(newUserInfo *structs.User) error {
 		newUserInfo.Username,
 		newUserInfo.FirstName,
 		newUserInfo.LastName,
+		newUserInfo.Country,
 		newUserInfo.DateOfBirth,
 		newUserInfo.Email,
 		newUserInfo.HashedPassword,
@@ -66,6 +67,8 @@ func UpdateUserInfo(newUserInfo *structs.User) error {
 		newUserInfo.GithubName,
 		newUserInfo.LinkedinName,
 		newUserInfo.TwitterName,
+		newUserInfo.Bio,
+		newUserInfo.Gender,
 		newUserInfo.Id)
 	if err != nil {
 		return err
@@ -129,50 +132,48 @@ func MarkNotificationAsRead(notificationID int) error {
 	return err
 }
 
-
-
 // UpdateUserType updates the type_id of a user in the User table.
 func UpdateUserType(userID int, newTypeID int) error {
-    // Lock the mutex before accessing the database
-    mutex.Lock()
-    defer mutex.Unlock()
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
 
-    // Prepare the SQL statement to update the user's type_id
-    stmt, err := db.Prepare(`UPDATE User SET type_id = ? WHERE id = ?`)
-    if err != nil {
-        return err
-    }
-    defer stmt.Close()
+	// Prepare the SQL statement to update the user's type_id
+	stmt, err := db.Prepare(`UPDATE User SET type_id = ? WHERE id = ?`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
 
-    // Execute the SQL statement to update the user's type_id
-    _, err = stmt.Exec(newTypeID, userID)
-    if err != nil {
-        return err
-    }
+	// Execute the SQL statement to update the user's type_id
+	_, err = stmt.Exec(newTypeID, userID)
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 // UpdateUserPassword updates the password for a given user.
 func UpdateUserPassword(userID int, newPasswordHash string) error {
-// Lock the mutex before accessing the database
-    mutex.Lock()
-    defer mutex.Unlock()
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
 
-    query := `UPDATE User SET hashed_password = ? WHERE id = ?`
-    result, err := db.Exec(query, newPasswordHash, userID)
-    if err != nil {
-        return err
-    }
+	query := `UPDATE User SET hashed_password = ? WHERE id = ?`
+	result, err := db.Exec(query, newPasswordHash, userID)
+	if err != nil {
+		return err
+	}
 
-    rowsAffected, err := result.RowsAffected()
-    if err != nil {
-        return err
-    }
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
 
-    if rowsAffected == 0 {
-        return errors.New("no rows affected, user not found")
-    }
+	if rowsAffected == 0 {
+		return errors.New("no rows affected, user not found")
+	}
 
-    return nil
+	return nil
 }

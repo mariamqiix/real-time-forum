@@ -9,30 +9,48 @@ socket.onmessage = function(event) {
     // Assuming the received data is a JSON string representing a structs.Message
     const messageData = JSON.parse(event.data);
     const messageBox = document.getElementById(messageData.SenderId);
-
+    const OldmsgDiv = document.getElementById("msgDiv");
     // Create the new chat div
-    const chatDiv = document.createElement("div");
-    chatDiv.className = "fullMessage";
+    const id = OldmsgDiv.getAttribute("data-id");
+    if (id == messageData.SenderId) {
+        const chatDiv = document.createElement("div");
+        chatDiv.className = "fullMessage";
 
-    // Create the message div
-    const msgDiv = document.createElement("div");
-    msgDiv.className = "msg";
-    msgDiv.textContent = messageData.Message;
-    msgDiv.style.backgroundColor = "white";
+        // Create the message div
+        const msgDiv = document.createElement("div");
+        msgDiv.className = "msg";
+        msgDiv.textContent = messageData.Messag;
+        msgDiv.style.backgroundColor = "white";
 
-    // Create the message time div
-    const msgTimeDiv = document.createElement("div");
-    msgTimeDiv.className = "msgTime";
-    msgTimeDiv.textContent = new Date(messageData.Time).toLocaleTimeString();
+        // Create the message time div
+        const msgTimeDiv = document.createElement("div");
+        msgTimeDiv.className = "msgTime";
+        console.log(messageData);
 
-    // Append the message and time divs to the chat div
-    chatDiv.appendChild(msgDiv);
-    chatDiv.appendChild(msgTimeDiv);
+        // Convert the timestamp to a readable format
+        const date = new Date(messageData.Time);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const formattedTime = `${hours % 12 || 12}:${minutes < 10 ? "0" : ""}${minutes} ${
+            hours >= 12 ? "PM" : "AM"
+        }`;
 
-    const chats = document.getElementById("UserChat");
-    chats.appendChild(chatDiv);
-    // Make the newMessageIcon green
-    if (messageBox) {
+        msgTimeDiv.textContent = formattedTime;
+
+        // Append the message and time divs to the chat div
+        chatDiv.appendChild(msgTimeDiv);
+        chatDiv.appendChild(msgDiv);
+
+        const chats = document.getElementById("UserChat");
+        chats.appendChild(chatDiv);
+        // Make the newMessageIcon green
+        if (messageBox) {
+            const newMessageIcon = messageBox.querySelector(".newMessageIcon");
+            if (newMessageIcon) {
+                newMessageIcon.style.backgroundColor = "#fbd998";
+            }
+        }
+    } else if (messageBox) {
         const newMessageIcon = messageBox.querySelector(".newMessageIcon");
         if (newMessageIcon) {
             newMessageIcon.style.backgroundColor = "lightgreen";
@@ -50,12 +68,12 @@ socket.onerror = function(error) {
 
 // submitButton for the messages
 // document.getElementById("submitButton").addEventListener("click", function() {
-//     const recipientID = document.getElementById("recipientID").value;
+//     const ReceiverId = document.getElementById("ReceiverId").value;
 //     const message = document.getElementById("message").value;
-//     sendMessage(recipientID, message);
+//     sendMessage(ReceiverId, message);
 // });
-function SendMessage(RecipientId) {
-    const Message = document.getElementById("msgType").value;
+function SendMessage(ReceiverId) {
+    const Messag = document.getElementById("msgType").value;
     document.getElementById("msgType").value = "";
     fetch(`http://localhost:8080/user`, {
             method: "GET",
@@ -74,8 +92,8 @@ function SendMessage(RecipientId) {
 
                 const messageObject = {
                     SenderId: newcleanedText,
-                    RecipientId: RecipientId,
-                    Message: Message,
+                    ReceiverId: ReceiverId,
+                    Messag: Messag,
                     Time: new Date().toISOString(),
                 };
                 console.log("Sending message:", messageObject);
@@ -88,17 +106,19 @@ function SendMessage(RecipientId) {
                 // Create the message div
                 const msgDiv = document.createElement("div");
                 msgDiv.className = "msg";
-                msgDiv.textContent = Message;
+                msgDiv.textContent = Messag;
 
                 // Create the message time div
                 const msgTimeDiv = document.createElement("div");
                 msgTimeDiv.className = "msgTime";
-                msgTimeDiv.textContent = new Date(messageObject.Time).toLocaleTimeString();
-
+                msgTimeDiv.textContent = new Date(messageObject.Time).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                });
                 // Append the message and time divs to the chat div
-                chatDiv.appendChild(msgTimeDiv);
-
                 chatDiv.appendChild(msgDiv);
+                chatDiv.appendChild(msgTimeDiv);
 
                 // Append the chat div to the msgUser chat container
 

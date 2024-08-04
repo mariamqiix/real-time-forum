@@ -3,6 +3,7 @@ package Server
 import (
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -207,7 +208,9 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 	lastName := r.FormValue("lastName")
 	email := r.FormValue("email")
 	username := r.FormValue("username")
-	dob, _ := strconv.Atoi(r.FormValue("dob"))
+	country := r.FormValue("country")
+	gender := r.FormValue("gender")
+	dobString := r.FormValue("dob")
 	password := r.FormValue("password")
 
 	// check password length
@@ -262,19 +265,24 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "something went wrong, please try again later", http.StatusInternalServerError)
 		return
 	}
+	layout := "2006-01-02"
+	dob, _ := time.Parse(layout, dobString)
 	cleanedUserData := structs.User{
 		Username:       username,
 		Email:          email,
 		FirstName:      firstName,
 		LastName:       lastName,
-		DateOfBirth:    time.Unix(int64(dob), 0),
+		Country:        country,
+		DateOfBirth:    dob,
 		HashedPassword: hashedPassword,
 		ImageId:        imageID,
 		GithubName:     "",
 		LinkedinName:   "",
 		TwitterName:    "",
+		Bio:            "",
+		Gender:         gender,
 	}
-
+	fmt.Print("cleanedUserData", cleanedUserData.Gender)
 	err = database.CreateUser(cleanedUserData)
 	if err != nil {
 		http.Error(w, "could not create a user, please try again later", http.StatusBadRequest)
@@ -1667,8 +1675,11 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	email := r.FormValue("email")
 	dateOfBirth := r.FormValue("dateOfBirth")
+	fmt.Print("\n\n\n" + dateOfBirth)
 	firstName := r.FormValue("firstName")
 	lastName := r.FormValue("lastName")
+	country := r.FormValue("country")
+	gender := r.FormValue("gender")
 	newUserName := sessionUser.Username
 
 	if username != sessionUser.Username {
@@ -1692,15 +1703,17 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	exist, err := database.CheckExistance("User", "email", email)
-	if err != nil {
-		http.Error(w, "something went wrong, please try again later", http.StatusInternalServerError)
-		return
-	}
+	if email != sessionUser.Email {
+		exist, err := database.CheckExistance("User", "email", email)
+		if err != nil {
+			http.Error(w, "something went wrong, please try again later", http.StatusInternalServerError)
+			return
+		}
 
-	if exist {
-		http.Error(w, "Email already exists", http.StatusConflict)
-		return
+		if exist {
+			http.Error(w, "Email already exists", http.StatusConflict)
+			return
+		}
 	}
 
 	// Convert dateOfBirth from string to time.Time
@@ -1717,13 +1730,17 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 		DateOfBirth:    dob,
 		FirstName:      firstName,
 		LastName:       lastName,
+		Country:        country,
 		HashedPassword: sessionUser.HashedPassword,
 		ImageId:        sessionUser.ImageId,
 		Type:           sessionUser.Type,
 		BannedUntil:    sessionUser.BannedUntil,
 		GithubName:     "",
 		LinkedinName:   "",
-		TwitterName:    ""}
+		TwitterName:    "",
+		Bio:            sessionUser.Bio,
+		Gender:         gender,
+	}
 
 	err = database.UpdateUserInfo(&newUser)
 	if err != nil {
@@ -1782,3 +1799,23 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func messagesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		fmt.Print("helli")
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+	userId := r.FormValue("id")
+	IntId, _ := strconv.Atoi(userId)
+	messages, err := database.GetMessages(sessionUser.Id, IntId)
+	if err != nil {
+		fmt.Println("Ggggggggggggg")
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	writeToJson(messages, w)
+}

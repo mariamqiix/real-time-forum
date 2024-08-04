@@ -6,6 +6,7 @@ import (
 	"RealTimeForum/structs"
 	"fmt"
 	"strconv"
+	"time"
 
 	"encoding/json"
 	"log"
@@ -75,7 +76,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		ReceiverId, err := database.GetUserByUsername(MessageRequest.RecipientId)
+		ReceiverId, err := database.GetUserByUsername(MessageRequest.ReceiverId)
 		if err != nil {
 			log.Println("Error getting user by username:", err)
 			return
@@ -84,14 +85,22 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("Receiver not found")
 			continue
 		}
-
-		message := structs.Message{
-			SenderId:   SenderId.Id,
-			ReceiverId: ReceiverId.Id,
-			Message:    MessageRequest.Message,
-			Time:       MessageRequest.Time,
+		parsedTime, err := convertMessageRequestTime(MessageRequest.Time)
+		if err != nil {
+			fmt.Println("Error:", err)
 		}
 
+		message := structs.UserMessage{
+			SenderId:   SenderId.Id,
+			ReceiverId: ReceiverId.Id,
+			Messag:     MessageRequest.Messag,
+			Time:       parsedTime,
+		}
+		err = database.AddMessage(message)
+		if err != nil {
+			errorServer(w, r, http.StatusInternalServerError)
+			continue
+		}
 		reciverConnections, ok := GetConnectionByID(message.ReceiverId)
 		if !ok {
 			log.Println("No connection found for the user with id:", message.ReceiverId)
@@ -101,13 +110,15 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// err = database.AddMessage(message)
-// if err != nil {
-// 	errorServer(w, r, http.StatusInternalServerError)
-// 	continue
-// }
+func convertMessageRequestTime(messageRequest string) (time.Time, error) {
+	parsedTime, err := time.Parse(time.RFC3339, messageRequest)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("error parsing time: %v", err)
+	}
+	return parsedTime, nil
+}
 
-func SendMessage(conn Connection, message *structs.Message) {
+func SendMessage(conn Connection, message *structs.UserMessage) {
 	b, err := json.Marshal(message)
 	if err != nil {
 		log.Println("Error wrapping the message to bytes. " + err.Error())
@@ -133,6 +144,8 @@ func BodyToMessage(body []byte) *structs.MessageRequest {
 		fmt.Println("Error:", err.Error())
 		return nil
 	}
+	fmt.Print(message)
+
 	return &message
 }
 

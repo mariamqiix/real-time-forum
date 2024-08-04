@@ -12,7 +12,7 @@ textarea,
 select,
 button {
     font-size: 12px;
-    font-family: 'Quicksand', sans-serif;
+    font-family: "Quicksand", sans-serif;
 }
 
 @font-face {
@@ -21,7 +21,7 @@ button {
     font-weight: 400;
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/kufam/v21/C8ct4cY7pG7w_q6FJj0.woff2) format("woff2");
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
@@ -30,7 +30,7 @@ button {
     font-weight: 400;
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/kulimpark/v14/fdN79secq3hflz1Uu3IwhFks5A.woff2) format("woff2");
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
@@ -39,7 +39,7 @@ button {
     ascent-override: 82.18%;
     descent-override: 36.52%;
     line-gap-override: 0%;
-    size-adjust: 109.51%
+    size-adjust: 109.51%;
 }
 
 @font-face {
@@ -48,7 +48,7 @@ button {
     ascent-override: 90.81%;
     descent-override: 19.9%;
     line-gap-override: 0%;
-    size-adjust: 102.52%
+    size-adjust: 102.52%;
 }
 
 p.framer-text,
@@ -72,7 +72,7 @@ span.framer-text:not([data-text-fill]) {
     text-transform: var(--framer-text-transform, none);
     text-decoration: var(--framer-text-decoration, none);
     line-height: var(--framer-line-height, 1.2em);
-    text-align: var(--framer-text-alignment, start)
+    text-align: var(--framer-text-alignment, start);
 }
 
 .container {
@@ -88,7 +88,7 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .rightSide {
-    background: linear-gradient(180.03936920356128deg, #465e8d 0%, rgba(158, 161, 169, 1) 19.70800757408142%);
+    background: linear-gradient( 180.03936920356128deg, #465e8d 0%, rgba(158, 161, 169, 1) 19.70800757408142%);
     flex: none;
     height: 100%;
     position: absolute;
@@ -128,7 +128,7 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .logoDiv {
-    background: linear-gradient(90deg, rgba(226, 222, 222, 0) 0%, rgba(234, 220, 197, .35710206627845764) 25.51265060901642%, rgba(237, 219, 189, .4651417136192322) 60.515183210372925%, rgba(250, 217, 152, 1) 100%);
+    background: linear-gradient( 90deg, rgba(226, 222, 222, 0) 0%, rgba(234, 220, 197, 0.35710206627845764) 25.51265060901642%, rgba(237, 219, 189, 0.4651417136192322) 60.515183210372925%, rgba(250, 217, 152, 1) 100%);
     height: 82px;
     position: fixed;
     top: 58px;
@@ -140,7 +140,7 @@ span.framer-text:not([data-text-fill]) {
     float: right;
     font-family: "Kufam";
     font-size: 33px;
-    fonT-weight: 600px;
+    font-weight: 600px;
     margin-right: 10%;
 }
 
@@ -242,6 +242,7 @@ span.framer-text:not([data-text-fill]) {
     background-image: url(/images/penIcon.png);
 }
 
+
 /* .modeIcon {
     left: 735px;
     background-image: url(/images/penIcon.png);
@@ -296,6 +297,8 @@ span.framer-text:not([data-text-fill]) {
     word-break: break-word;
     word-wrap: break-word;
 }
+
+
 /* 
 .plusIcon {
     height: 48px;
@@ -347,7 +350,7 @@ span.framer-text:not([data-text-fill]) {
     width: 25px;
     margin-top: 15px;
     margin-left: 10px;
-    background-color:  #fbd998;
+    background-color: #fbd998;
     border-radius: 100%;
 }
 
@@ -366,12 +369,11 @@ span.framer-text:not([data-text-fill]) {
     margin-left: 2%;
     float: left;
     color: rgba(217, 211, 198, 1);
-    font-family: 'Kufam';
+    font-family: "Kufam";
     font-size: 30px;
 }
 
-.messagesBox
-.msgUser {
+.messagesBox .msgUser {
     --border-bottom-width: 1px;
     --border-color: #9747ff;
     --border-left-width: 1px;
@@ -385,7 +387,7 @@ span.framer-text:not([data-text-fill]) {
     overflow: hidden;
     top: 160px;
     width: 402px;
-    will-change: var(--framer-will-change-override, transform)
+    will-change: var(--framer-will-change-override, transform);
 }
 
 .messageBox {
@@ -394,10 +396,10 @@ span.framer-text:not([data-text-fill]) {
     overflow: visible;
     position: relative;
     top: 20px;
-    width: 382px
+    width: 382px;
 }
 
-.messageBox:hover{
+.messageBox:hover {
     cursor: pointer;
 }
 
@@ -423,11 +425,11 @@ span.framer-text:not([data-text-fill]) {
     inset: 50px 0 0 100px;
     position: absolute;
     word-break: break-word;
-    word-wrap: break-word
+    word-wrap: break-word;
 }
 
 .msg {
-    background-color:#fbd998;
+    background-color: #fbd998;
     border-radius: 5px;
     float: left;
     clear: left;
@@ -444,13 +446,15 @@ span.framer-text:not([data-text-fill]) {
     overflow: hidden;
 }
 
-.msgTime{
+.msgTime {
+    position: relative;
     float: left;
     font-size: 15px;
     margin-top: 2%;
 }
 
 .msgTypingBar {
+    position: absolute;
     float: left;
     clear: both;
     height: 20%;
@@ -462,8 +466,9 @@ span.framer-text:not([data-text-fill]) {
 
 #msgType {
     background: transparent;
-    border: none;   
-    outline: none; /* Remove default input focus outline */
+    border: none;
+    outline: none;
+    /* Remove default input focus outline */
     width: 60%;
     margin: 0;
     height: 20%;
@@ -516,7 +521,7 @@ span.framer-text:not([data-text-fill]) {
 #options {
     position: relative;
     display: inline-block;
-    font-size: 16px
+    font-size: 16px;
 }
 
 #categoryFilter input {
@@ -528,7 +533,7 @@ span.framer-text:not([data-text-fill]) {
 #categoryFilter label {
     font-size: 18;
 }
-  
+
 .exitButton {
     background-image: url(/images/xIcon.png);
     height: 50px;
@@ -565,6 +570,7 @@ span.framer-text:not([data-text-fill]) {
     overflow-y: auto;
 }
 
+
 /* Hide the scrollbar for a specific div */
 
 .navigationContent::-webkit-scrollbar,
@@ -574,6 +580,7 @@ span.framer-text:not([data-text-fill]) {
     /* Set the width of the scrollbar (adjust as needed) */
 }
 
+
 /* Optional: Style the scrollbar track */
 
 .navigationContent::-webkit-scrollbar-track,
@@ -582,6 +589,7 @@ span.framer-text:not([data-text-fill]) {
     border-radius: 30px;
     /* Change the background color as desired */
 }
+
 
 /* Optional: Style the scrollbar thumb */
 
@@ -653,7 +661,7 @@ span.framer-text:not([data-text-fill]) {
     margin-left: 10%;
 }
 
-.search-container input[type=text] {
+.search-container input[type="text"] {
     padding: 10px;
     width: 600px;
     height: 80px;
@@ -888,12 +896,9 @@ span.framer-text:not([data-text-fill]) {
     height: 350px;
     min-height: 300px;
     max-height: 300px;
-
-
     width: 600px;
     min-width: 600px;
     max-width: 600px;
-
     background-color: #f2f2f2;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -909,7 +914,7 @@ span.framer-text:not([data-text-fill]) {
     margin: 1%;
     height: 50px;
     width: 600px;
-    border: 1px solid  #7c7a7a4d;
+    border: 1px solid #7c7a7a4d;
     border-radius: 5px;
     padding: 2%;
     font-size: 16px;
@@ -930,10 +935,9 @@ td {
     width: auto;
 }
 
-
 button {
     font-size: 20px;
-    background-color:#fbd998;;
+    background-color: #fbd998;
     border: none;
     border-radius: 30px;
     width: 100px;
@@ -953,7 +957,7 @@ button:hover {
     clear: left;
     margin: 3%;
     margin-top: 0;
-    width:110px;
+    width: 110px;
 }
 
 .RegChange:hover {
@@ -977,7 +981,6 @@ button:hover {
     width: 80%;
     height: 30%;
 }
-
 
 #formLog label {
     margin: 1%;
@@ -1034,6 +1037,7 @@ button:hover {
     /* Add space between each messageBox */
 }
 
+
 /* Customize the scrollbar for #messagesBoxDiv */
 
 #messagesBoxDiv::-webkit-scrollbar {
@@ -1062,4 +1066,15 @@ button:hover {
     margin-bottom: 10px;
     /* Add space below each messageBox */
     padding: 10px;
+}
+
+.msgUser {
+    position: relative;
+    height: 100%;
+}
+
+.chat {
+    overflow-y: auto;
+    height: calc(100% - 60px);
+    /* Adjust the height to leave space for the msgTypingBar */
 }

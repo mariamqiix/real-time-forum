@@ -68,8 +68,8 @@ HomePageRequest();
 
 function displayPost(data) {
     if (Array.isArray(data.Posts)) {
-        const homeNavigationContent = document.getElementById("home navigationContent");
-
+        const homeNavigationContent = document.getElementById("homeContent");
+        homeNavigationContent.innerHTML = "";
         data.Posts.forEach((post) => {
             const postBox = document.createElement("div");
             postBox.classList.add("postBox");
@@ -244,7 +244,7 @@ async function submitLoginForm() {
         if (response.ok) {
             console.log("Login successful");
             const loginSpan = document.getElementById("loginSpan");
-            loginSpan.innerHTML = "logout";
+            loginSpan.innerHTML = "LOGOUT";
             GetUserLoggedIn();
             toggleVisibility("home");
         } else {
@@ -264,13 +264,17 @@ async function submitForm() {
     const email = document.getElementById("email").value;
     const username = document.getElementById("username").value;
     const dob = document.getElementById("dob").value;
+    const country = document.getElementById("country").value;
     const password = document.getElementById("password").value;
-
+    const gender = document.getElementById("gender").value;
+    console.log(gender);
     // Create the request body
     const formData = new FormData();
     formData.append("firstName", firstName);
     formData.append("lastName", lastName);
     formData.append("email", email);
+    formData.append("country", country);
+    formData.append("gender", gender);
     formData.append("username", username);
     formData.append("dob", dob);
     formData.append("password", password);
@@ -301,6 +305,10 @@ async function submitForm() {
             dob.innerHTML = "";
             const password = document.getElementById("password");
             password.innerHTML = "";
+            const country = document.getElementById("country");
+            country.innerHTML = "";
+            const gender = document.getElementById("gender");
+            gender.innerHTML = "";
         } else {
             const error = await response.text();
             alert("Signup failed: " + error);
@@ -836,6 +844,8 @@ function ChangeUserInformation() {
                 const date = new Date(data.DateOfBirth);
                 const formattedDate = date.toISOString().split("T")[0];
                 document.getElementById("ChangeDOB").value = formattedDate || "";
+                document.getElementById("ChangeCountry").value = data.Country || "";
+                // document.getElementById("ChangeGender").value = data.Gender || "";
             } else {
                 console.error("Data is undefined");
             }
@@ -855,13 +865,18 @@ function UpdateUserInformation() {
     const lastName = document.getElementById("ChangeLastName").value;
     const email = document.getElementById("ChangeEmail").value;
     const dateOfBirth = document.getElementById("ChangeDOB").value;
+    console.log(dateOfBirth);
+    const country = document.getElementById("ChangeCountry").value;
+    const gender = document.getElementById("ChangeGender").value;
 
     if (
         username.trim() === "" ||
         firstName.trim() === "" ||
         lastName.trim() === "" ||
         email.trim() === "" ||
-        dateOfBirth.trim() === ""
+        dateOfBirth.trim() === "" ||
+        country.trim() === "" ||
+        gender.trim() === ""
     ) {
         alert("Please fill in all fields.");
         return;
@@ -872,6 +887,8 @@ function UpdateUserInformation() {
     formData.append("lastName", lastName);
     formData.append("email", email);
     formData.append("dateOfBirth", dateOfBirth);
+    formData.append("country", country);
+    formData.append("gender", gender);
     if (confirm("Are you sure you want to proceed?")) {
         fetch("http://localhost:8080/updateUserInfo", {
                 method: "POST",
@@ -934,7 +951,7 @@ function ChatView() {
                     messageBox.appendChild(chatUserPic);
                     messageBox.appendChild(chatUserName);
                     messageBox.appendChild(newMessageIcon);
-                    messageBox.setAttribute("onclick", `OpenMesages('${chat.Username}')`);
+                    messageBox.setAttribute("onclick", `OpenMesages('${chat.Username}','${chat.UserId}')`);
                     usersList.appendChild(messageBox);
                 });
             })

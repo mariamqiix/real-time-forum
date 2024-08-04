@@ -38,9 +38,9 @@ type User struct {
 	FirstName      string
 	LastName       string
 	DateOfBirth    time.Time
-	country        string
+	Country        string
 	Gender         string
-	bio            string
+	Bio            string
 	HashedPassword string
 	ImageId        int
 	BannedUntil    time.Time

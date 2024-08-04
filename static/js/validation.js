@@ -174,8 +174,10 @@ function validateField(input, type = 0) {
             errorElement.textContent = "";
         }
     }
-
-    checkFormValidity();
+    var registerBtn = document.getElementById("registerBtn");
+    registerBtn.removeAttribute("disabled");
+    registerBtn.classList.remove("disabled");
+    // checkFormValidity();
 }
 
 function isValidEmail(email) {
@@ -211,7 +213,7 @@ function checkFormValidity() {
 
     var registerBtn = document.getElementById("registerBtn");
     var isValid = allFieldsFilled && allErrorsEmpty;
-
+    console.log(isValid);
     if (isValid) {
         registerBtn.removeAttribute("disabled");
         registerBtn.classList.remove("disabled");
