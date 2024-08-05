@@ -520,14 +520,18 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .msgTypingBar {
-    position: absolute;
     float: left;
     clear: both;
-    height: 20%;
-    width: 100%;
+    height: 16%;
+    width: 96%;
     padding: 2%;
     border-top: 2px solid #fbd998;
     color: #ccc;
+}
+
+.msgTypingBar button {
+    float: right;
+    margin-right: 2%;
 }
 
 #msgType {
@@ -1111,14 +1115,6 @@ button:hover {
 #UserChat {
     height: 80%;
     overflow: scroll;
-    float: left;
-    clear: left;
-    width: 100%;
-}
-
-
-#msgTypingBar{
-    height: 20%;
     float: left;
     clear: left;
     width: 100%;
