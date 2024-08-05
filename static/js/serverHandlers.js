@@ -922,6 +922,7 @@ ChatView();
 
 // Set an interval to refresh the chat view every 5 seconds
 setInterval(ChatView, 5000);
+setInterval(GetUserLoggedIn, 5000);
 
 function profile(userId, caseString) {
     const url = new URL("http://localhost:8080/userProfile");
@@ -982,7 +983,7 @@ function displayPostOnProfile(Posts) {
     }
 }
 
-function createPost(Posts, divName){
+function createPost(Posts, divName) {
     const homeNavigationContent = document.getElementById(divName);
     homeNavigationContent.innerHTML = "";
 
@@ -1030,7 +1031,7 @@ function createPost(Posts, divName){
 
         const postDislikeIcone = document.createElement("button");
         postDislikeIcone.classList.add("postDislike");
-        
+
         const dislikeReactionCount = document.createElement("span");
         dislikeReactionCount.classList.add("reactionCount");
 
