@@ -1122,3 +1122,11 @@ function validateUserInfoForm() {
     // Additional validation can be added here (e.g., email format, date format)
     return true;
 }
+
+var element = document.getElementById("UserChat");
+element.scrollTop = element.scrollHeight;
+
+// To always keep the div scrolled to the bottom
+element.addEventListener("DOMSubtreeModified", function() {
+    element.scrollTop = element.scrollHeight;
+});

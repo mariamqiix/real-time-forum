@@ -242,7 +242,7 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .postDislike {
-    background-image: url(/images/likeIcon.png);
+    background-image: url(/images/dislikeIcon.png);
     background-repeat: no-repeat;
     background-color: transparent;
     float: right;
@@ -252,16 +252,25 @@ span.framer-text:not([data-text-fill]) {
     padding: 0;
 } 
 
-.postDislike:hover,
+.postDislike:hover {
+    background-color: transparent;
+    transform: scale(1.3);
+    background-image: url(/images/dislikedIcon.png);
+}
+
 .postLike:hover {
     background-color: transparent;
-    transform: scale(1.2);
+    transform: scale(1.3);
+    background-image: url(/images/likedIcon.png);
 
 }
 
-.postDislike.clicked,
+.postDislike.clicked {
+    background-image: url(/images/dislikedIcon.png);
+}
+
 .postLike.clicked {
-    background-color: #3e8e41;
+    background-image: url(/images/likedIcon.png);
 }
 
 .title {
@@ -292,11 +301,12 @@ span.framer-text:not([data-text-fill]) {
     height: 48px;
     width: 48px;
     float: right;
-    margin: 2%;
+    margin: 1%;
     margin-top: 0;
     transition: 0.3s;
 }
 
+.navigationBarIcons:hover,
 .mainPageIcons:hover {
     transform: scale(1.2);
 }
@@ -349,16 +359,16 @@ span.framer-text:not([data-text-fill]) {
 
 .signOutBtn,
 .signOutIcon {
-    top: 700px;
+    top: 760px;
 }
 
 .navigationBarBtns {
     height: 52px;
-    left: 73px;
+    left: 100px;
     width: 282px;
-    white-space: pre-wrap;
     position: fixed;
     overflow-y: hidden;
+    padding-top: 15px;
 }
 
 .userName {
@@ -388,6 +398,7 @@ span.framer-text:not([data-text-fill]) {
     width: 50px;
     left: 37px;
     position: absolute;
+    margin-top: 4px;
 }
 
 .profileIcon {
@@ -505,6 +516,7 @@ span.framer-text:not([data-text-fill]) {
     padding: 2%;
     margin: 2%;
     font-size: 25px;
+    word-break: break-all;
 }
 
 .chat {
