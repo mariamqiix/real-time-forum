@@ -218,21 +218,50 @@ span.framer-text:not([data-text-fill]) {
 .postReaction {
     float: right;
     clear: both;
-    height: 10%;    
-    margin-right: 10%;
+    height: 10%;  
+    width: 60%;  
+    margin-right: 5%;
 }
 
 .reactionCount {
-    float: left;
-    margin: 1%;
+    float: right;
     font-size: 14px;
+    margin: 1%;
+    margin-right: 3%;
 }
 
 .postLike {
     background-image: url(/images/likeIcon.png);
-    float: left;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    float: right;
     height: 24px;
     width: 24px;
+    border-radius: 0;
+    padding: 0;
+}
+
+.postDislike {
+    background-image: url(/images/likeIcon.png);
+    background-repeat: no-repeat;
+    background-color: transparent;
+    float: right;
+    height: 24px;
+    width: 24px;
+    border-radius: 0;
+    padding: 0;
+} 
+
+.postDislike:hover,
+.postLike:hover {
+    background-color: transparent;
+    transform: scale(1.2);
+
+}
+
+.postDislike.clicked,
+.postLike.clicked {
+    background-color: #3e8e41;
 }
 
 .title {
@@ -244,6 +273,7 @@ span.framer-text:not([data-text-fill]) {
     margin: 4%;
     float: left;
     margin-bottom: 0;
+    
 }
 
 .postTitle {
@@ -417,21 +447,13 @@ span.framer-text:not([data-text-fill]) {
     font-size: 30px;
 }
 
-.messagesBox .msgUser {
-    --border-bottom-width: 1px;
-    --border-color: #9747ff;
-    --border-left-width: 1px;
-    --border-right-width: 1px;
-    --border-style: dashed;
-    --border-top-width: 1px;
-    border-radius: 5px;
+#msgDiv {
     flex: none;
-    height: 389px;
-    left: 1038px;
-    overflow: hidden;
-    top: 160px;
-    width: 402px;
-    will-change: var(--framer-will-change-override, transform);
+    height: 100%;
+    overflow: scroll;
+    width: 100%;
+    float: left;
+    clear: left;
 }
 
 .messageBox {
@@ -1004,6 +1026,25 @@ button:hover {
     table-layout: fixed;
 }
 
+#user-info table {
+    text-align: left;
+    width: 60%;
+    margin-left: 20%;
+
+}
+
+#user-info input {
+    background-color: none;
+    outline: none;
+    border-radius: 10px;
+    width: 300px;
+    max-width: 95%;
+    height: 50px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    padding-left: 2%;
+}
+
 #formLog {
     float: left;
     clear: both;
@@ -1054,8 +1095,7 @@ button:hover {
     table-layout: fixed;
 }
 
-#messagesBoxDiv,
-#msgDiv {
+#messagesBoxDiv {
     display: flex;
     flex-direction: column;
     height: 1000px;
@@ -1068,6 +1108,21 @@ button:hover {
     /* Add space between each messageBox */
 }
 
+#UserChat {
+    height: 80%;
+    overflow: scroll;
+    float: left;
+    clear: left;
+    width: 100%;
+}
+
+
+#msgTypingBar{
+    height: 20%;
+    float: left;
+    clear: left;
+    width: 100%;
+}
 
 /* Customize the scrollbar for #messagesBoxDiv */
 
@@ -1093,19 +1148,3 @@ button:hover {
     /* Change the color of the scrollbar thumb on hover */
 }
 
-.messageBox {
-    margin-bottom: 10px;
-    /* Add space below each messageBox */
-    padding: 10px;
-}
-
-.msgUser {
-    position: relative;
-    height: 100%;
-}
-
-.chat {
-    overflow-y: auto;
-    height: calc(100% - 60px);
-    /* Adjust the height to leave space for the msgTypingBar */
-}

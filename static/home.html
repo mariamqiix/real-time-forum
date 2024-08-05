@@ -315,17 +315,19 @@
                         <div class="newMessageIcon"></div>
                     </div>
                 </div>
-                <div class="msgUser chat" id="msgDiv" style="display: none">
-                    <div class="chat" id="UserChat">
+                <div id="msgDiv" style="display: none">
+                    <div id="UserChat">
                         <div class="fullMessage" id="fullMessage">
                             <div class="msg">Hello, How r u?</div>
                             <div class="msgTime">12:00pm</div>
                         </div>
                     </div>
+
                     <div class="msgTypingBar">
                         <input type="text" placeholder="Typing..." id="msgType" name="msgType" />
                         <button id="sendMessage" onclick="sendMessage()">Send</button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -400,30 +402,48 @@
 <div id="user-info" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('user-info')"></div>
     <h2>User Information</h2>
-    <label for="ChangeUserName"> Username?</label>
-    <input type="text" id="ChangeUserName" name="ChangeUserName" required /><br />
-    <label for="ChangeFirstName"> First Name</label>
-    <input type="text" id="ChangeFirstName" name="ChangeFirstName" required /><br />
-    <label for="ChangeLastName"> Last Name</label>
-    <input type="text" id="ChangeLastName" name="ChangeLastName" required /><br />
-    <label for="ChangeEmail"> Email</label>
-    <input type="text" id="ChangeEmail" name="ChangeEmail" required /><br />
-    <label for="ChangeDOB"> date of birth</label>
-    <input type="date" id="ChangeDOB" name="ChangeDOB" required /><br />
-    <label for="ChangeCountry"> Country</label>
-    <input type="text" id="ChangeCountry" name="ChangeCountry" required /><br />
-    <label for="ChangeGender"> gender</label>
-    <select id="ChangeGender">
-    <option value="female">Female</option>
-    <option value="male">Male</option>
-</select>
-    <br /><br /><br />
-    <button class="UpdateUserInformation-button" onclick="UpdateUserInformation()">
-            update
-        </button>
+
+    <table>
+        <tr>
+          <th><label for="ChangeUserName">Username</label></th>
+          <td><input type="text" id="ChangeUserName" name="ChangeUserName" required></td>
+        </tr>
+        <tr>
+          <th><label for="ChangeFirstName">First Name</label></th>
+          <td><input type="text" id="ChangeFirstName" name="ChangeFirstName" required></td>
+        </tr>
+        <tr>
+          <th><label for="ChangeLastName">Last Name</label></th>
+          <td><input type="text" id="ChangeLastName" name="ChangeLastName" required></td>
+        </tr>
+        <tr>
+          <th><label for="ChangeEmail">Email</label></th>
+          <td><input type="email" id="ChangeEmail" name="ChangeEmail" required></td>
+        </tr>
+        <tr>
+          <th><label for="ChangeDOB">Date of Birth</label></th>
+          <td><input type="date" id="ChangeDOB" name="ChangeDOB" required></td>
+        </tr>
+        <tr>
+          <th><label for="ChangeCountry">Country</label></th>
+          <td><input type="text" id="ChangeCountry" name="ChangeCountry" required></td>
+        </tr>
+        <tr>
+          <th><label for="ChangeGender">Gender</label></th>
+          <td>
+            <select id="ChangeGender" name="ChangeGender">
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+          </td>
+        </tr>
+    </table>
+    <br>
+    <button class="UpdateUserInformation-button" onclick="UpdateUserInformation()">Update</button>
 </div>
 
 <div id="change-password" class="popup" style="display: none">
+    <div class="exitButton" onclick="toggleDiv('change-password')"></div>
     <h2>Change Password</h2>
     <table>
         <tr>
@@ -438,21 +458,20 @@
         </tr>
     </table>
 
-    <button type="button" id="cancel-btn" onclick="toggleDiv('change-password')">Cancel</button>
     <button type="button" id="save-btn" onclick="saveNewPassword()">Save</button>
 </div>
 
 <div id="request-moderator" class="popup" style="display: none">
+    <div class="exitButton" onclick="toggleDiv('request-moderator')"></div>
     <h2>Request to be Moderator</h2>
     <label for="answer">Why do you want to be a moderator?</label>
     <br /><br />
     <textarea id="answer" name="answer" rows="5"></textarea>
     <br />
-    <button type="button" id="cancel-btn" onclick="toggleDiv('request-moderator')">
-            Cancel
-        </button>
+
     <button type="button" id="send-btn" onclick="sendPromotionRequest()">Send</button>
 </div>
+
 <div id="list-moderators" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('list-moderators')"></div>
     <h2>List of Moderators</h2>
@@ -480,6 +499,7 @@
         </li>
     </ul>
 </div>
+
 <div id="ShowPromotionRequest" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('ShowPromotionRequest')"></div>
     <h2 id="ShowPromotionRequestUser">user</h2>

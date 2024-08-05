@@ -17,12 +17,13 @@ back (Maryam) :
 -   make backIcon on message go baack from chat to messages (and hide it on messages)
 -   ~~make limit for username~~
 -   ~~delete the long username user~~
--   ~~make log-out, sign in, captalize~~
+-   make log-out, sign un, captalize
 -   connect the sort to the backend
 -   connect tje categories to the backend
-- search bar shold not take empty string (do validation)
-- profile page should open directly to post page
-- connect reaction count to the post
+-   search bar shold not take empty string (do validation)
+-   profile page should open directly to post page
+-   connect reaction count to the post
+-   user can't send empty string (disable the button until he write valid thing)
 
 DATABASE (Ruqaya) :
 

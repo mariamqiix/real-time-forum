@@ -68,50 +68,7 @@ HomePageRequest();
 
 function displayPost(data) {
     if (Array.isArray(data.Posts)) {
-        const homeNavigationContent = document.getElementById("homeContent");
-        homeNavigationContent.innerHTML = "";
-        data.Posts.forEach((post) => {
-            const postBox = document.createElement("div");
-            postBox.classList.add("postBox");
-            postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(post)})`);
-            postBox.setAttribute("id", `${post.Id}`);
-
-            // // Create a EditButton element
-            // const editButton = document.createElement("button");
-            // editButton.classList.add("editPost-button");
-            // editButton.setAttribute("onclick", "EditPost()");
-            // editButton.textContent = "Edit";
-            // postBox.appendChild(editButton);
-
-            const postUserPic = document.createElement("div");
-            postUserPic.classList.add("postUserPic");
-            postBox.appendChild(postUserPic);
-
-            const postTitle = document.createElement("div");
-            postTitle.classList.add("postStyle");
-
-            const titleElement = document.createElement("span");
-            titleElement.classList.add("postTitle");
-            titleElement.textContent = post.title;
-
-            const postUserName = document.createElement("span");
-            postUserName.classList.add("postUserName");
-
-            postUserName.textContent = post.author.username;
-
-            const postContent = document.createElement("span");
-            postContent.classList.add("postContent");
-
-            postContent.textContent = post.message;
-
-            postTitle.appendChild(titleElement);
-            postTitle.appendChild(postUserName);
-            postTitle.appendChild(postContent);
-
-            postBox.appendChild(postTitle);
-
-            homeNavigationContent.appendChild(postBox);
-        });
+        createPost(data.Posts, "homeContent")
     } else {
         console.error("Invalid data format. Expected an array of posts.");
     }
@@ -1019,62 +976,104 @@ function posts(userId, caseString, column, element) {
 
 function displayPostOnProfile(Posts) {
     if (Array.isArray(Posts)) {
-        const homeNavigationContent = document.getElementById("profileContent");
-        homeNavigationContent.innerHTML = "";
-        Posts.forEach((post) => {
-            const postBox = document.createElement("div");
-            postBox.classList.add("postBox");
-            postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(post)})`);
-            postBox.setAttribute("id", `${post.Id}`);
-
-            const postUserPic = document.createElement("div");
-            postUserPic.classList.add("postUserPic");
-            postBox.appendChild(postUserPic);
-
-            const postTitle = document.createElement("div");
-            postTitle.classList.add("postStyle");
-
-            const titleElement = document.createElement("span");
-            titleElement.classList.add("postTitle");
-            titleElement.textContent = post.title;
-
-            const postUserName = document.createElement("span");
-            postUserName.classList.add("postUserName");
-
-            postUserName.textContent = post.author.username;
-
-            const postContent = document.createElement("span");
-            postContent.classList.add("postContent");
-
-            postContent.textContent = post.message;
-
-            const postReactions = document.createElement("span");
-            postReactions.classList.add("postReaction");
-
-            const likeReactionCount = document.createElement("span");
-            likeReactionCount.classList.add("reactionCount");
-
-            likeReactionCount.textContent = "123";
-
-            const postLikeIcone = document.createElement("span");
-            postLikeIcone.classList.add("postLike");
-
-            postTitle.appendChild(titleElement);
-            postTitle.appendChild(postUserName);
-            postTitle.appendChild(postContent);
-
-            postReactions.appendChild(postLikeIcone);
-            postReactions.appendChild(likeReactionCount);
-
-            postBox.appendChild(postTitle);
-            postBox.appendChild(postReactions);
-
-
-            homeNavigationContent.appendChild(postBox);
-        });
+        createPost(Posts, "profileContent")
     } else {
         console.error("Invalid data format. Expected an array of posts.");
     }
+}
+
+function createPost(Posts, divName){
+    const homeNavigationContent = document.getElementById(divName);
+    homeNavigationContent.innerHTML = "";
+
+    Posts.forEach((post) => {
+        let numOfLike = 0;
+        let numOfDislike = 2;
+
+        const postBox = document.createElement("div");
+        postBox.classList.add("postBox");
+        postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(post)})`);
+        postBox.setAttribute("id", `${post.Id}`);
+
+        const postUserPic = document.createElement("div");
+        postUserPic.classList.add("postUserPic");
+        postBox.appendChild(postUserPic);
+
+        const postTitle = document.createElement("div");
+        postTitle.classList.add("postStyle");
+
+        const titleElement = document.createElement("span");
+        titleElement.classList.add("postTitle");
+        titleElement.textContent = post.title;
+
+        const postUserName = document.createElement("span");
+        postUserName.classList.add("postUserName");
+
+        postUserName.textContent = post.author.username;
+
+        const postContent = document.createElement("span");
+        postContent.classList.add("postContent");
+
+        postContent.textContent = post.message;
+
+        // Add rxn stuff
+        const postReactions = document.createElement("span");
+        postReactions.classList.add("postReaction");
+
+        const postLikeIcone = document.createElement("button");
+        postLikeIcone.classList.add("postLike");
+
+        const likeReactionCount = document.createElement("span");
+        likeReactionCount.classList.add("reactionCount");
+
+        likeReactionCount.textContent = numOfLike;
+
+        const postDislikeIcone = document.createElement("button");
+        postDislikeIcone.classList.add("postDislike");
+        
+        const dislikeReactionCount = document.createElement("span");
+        dislikeReactionCount.classList.add("reactionCount");
+
+        dislikeReactionCount.textContent = numOfDislike;
+
+        postTitle.appendChild(titleElement);
+        postTitle.appendChild(postUserName);
+        postTitle.appendChild(postContent);
+
+        postReactions.appendChild(dislikeReactionCount);
+        postReactions.appendChild(postDislikeIcone);
+
+        postReactions.appendChild(likeReactionCount);
+        postReactions.appendChild(postLikeIcone);
+
+
+
+        postBox.appendChild(postTitle);
+        postBox.appendChild(postReactions);
+
+
+        homeNavigationContent.appendChild(postBox);
+
+        let liskIsClicked = false;
+        let disliskIsClicked = false;
+
+
+        postLikeIcone.addEventListener('click', (event) => {
+            // Prevent the click event on the button from bubbling up to the div
+            event.stopPropagation();
+            liskIsClicked = !liskIsClicked && !disliskIsClicked;
+            postLikeIcone.classList.toggle('clicked', liskIsClicked);
+            numOfLike++;
+        });
+
+        postDislikeIcone.addEventListener('click', (event) => {
+            // Prevent the click event on the button from bubbling up to the div
+            event.stopPropagation();
+            disliskIsClicked = !disliskIsClicked && !liskIsClicked;
+            postDislikeIcone.classList.toggle('clicked', disliskIsClicked);
+            numOfDislike++;
+        });
+    });
 }
 
 function validateUserInfoForm() {
