@@ -18,15 +18,13 @@
                 <span class="framer-text">Profile</span>
             </div>
 
-            <div class="homeIcon navigationBarIcons" onclick="toggleVisibility('home')"></div>
-            <div class="homeBtn navigationBarBtns" onclick="toggleVisibility('home')">
+            <div class="homeIcon navigationBarIcons" onclick="HomePageRequest()"></div>
+            <div class="homeBtn navigationBarBtns" onclick="HomePageRequest()">
                 <span class="framer-text">Home</span>
             </div>
 
-            <div class="bellIcon navigationBarIcons" id="bellIcon navigationBarIcons"
-                onclick="toggleVisibility('notifications')"></div>
-            <div class="notificationsBtn navigationBarBtns" id="notificationsBtn navigationBarBtns"
-                onclick="toggleVisibility('notifications')">
+            <div class="bellIcon navigationBarIcons" id="bellIcon navigationBarIcons" onclick="toggleVisibility('notifications')"></div>
+            <div class="notificationsBtn navigationBarBtns" id="notificationsBtn navigationBarBtns" onclick="toggleVisibility('notifications')">
                 <span class="framer-text">Notifications</span>
             </div>
 
@@ -52,8 +50,8 @@
                 <div class="home navigationContent" id="home navigationContent">
                     <div class="title">
                         <h1>Home
-                            <div class="sortIcon mainPageIcons" onclick="toggleDiv('sortFilter')"></div>
-                            <div class="categoryIcon mainPageIcons" onclick="toggleDiv('categoryFilter')"></div>
+                            <div class="sortIcon mainPageIcons" id="sort" onclick="sortPost()"></div>
+                            <div class="categoryIcon mainPageIcons" onclick="fetchAndAppendCategoriesToFilter()"></div>
                             <div class="penIcon mainPageIcons" onclick="toggleDiv('newPostForm')"></div>
                         </h1>
 
@@ -66,7 +64,7 @@
 
                 <div class="profile navigationContent">
                     <div class="userPic" id="userPic"></div>
-                    
+
                     <h1 class="profileUsername" id="profileUsername">UserName</h1>
                     <h2 class="userInfo">Age: 12, location: Bahrain</h2>
 
@@ -152,8 +150,7 @@
                                     <label for="firstName">First Name:</label>
                                 </td>
                                 <td class="formReg-input">
-                                    <input type="text" id="firstName" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="text" id="firstName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="firstNameError" class="error"></span>
@@ -164,8 +161,7 @@
                                     <label for="lastName">Last Name:</label>
                                 </td>
                                 <td class="formReg-input">
-                                    <input type="text" id="lastName" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="text" id="lastName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="lastNameError" class="error"></span>
@@ -174,8 +170,7 @@
                             <tr>
                                 <td class="formReg-label"><label for="email">Email:</label></td>
                                 <td class="formReg-input">
-                                    <input type="text" id="email" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="text" id="email" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="emailError" class="error"></span>
@@ -186,8 +181,7 @@
                                     <label for="username">Username:</label>
                                 </td>
                                 <td class="formReg-input">
-                                    <input type="text" id="username" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="text" id="username" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="usernameError" class="error"></span>
@@ -198,8 +192,7 @@
                                     <label for="dob">Date of Birth:</label>
                                 </td>
                                 <td class="formReg-input">
-                                    <input type="date" id="dob" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="date" id="dob" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error"><span id="dobError" class="error"></span></td>
                             </tr>
@@ -208,8 +201,7 @@
                                     <label for="country">Country:</label>
                                 </td>
                                 <td class="formReg-input">
-                                    <input type="text" id="country" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="text" id="country" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="countryError" class="error"></span>
@@ -220,8 +212,7 @@
                                     <label for="password">Password:</label>
                                 </td>
                                 <td class="formReg-input">
-                                    <input type="password" id="password" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="password" id="password" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="passwordError" class="error"></span>
@@ -232,8 +223,7 @@
                                     <label for="confirmPassword">Re-enter Password:</label>
                                 </td>
                                 <td class="formReg-input">
-                                    <input type="password" id="confirmPassword" onfocus="validateField(this)"
-                                        onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="password" id="confirmPassword" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="confirmPasswordError" class="error"></span>
@@ -274,8 +264,7 @@
                                     <label for="usernameLogin">Username or email:</label>
                                 </td>
                                 <td class="formLog-input">
-                                    <input type="text" id="usernameLogin" onfocus="validateLogInField(this)"
-                                        onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
+                                    <input type="text" id="usernameLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="usernameLoginError" class="error"></span>
@@ -286,8 +275,7 @@
                                     <label for="passwordLogin">Password:</label>
                                 </td>
                                 <td class="formLog-input">
-                                    <input type="password" id="passwordLogin" onfocus="validateLogInField(this)"
-                                        onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
+                                    <input type="password" id="passwordLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="passwordLoginError" class="error"></span>
@@ -307,10 +295,7 @@
                         <div class="postPageTime">12:00 - 21/August/2023</div>
                         <div class="postPageTitle"> My First Post</div>
                         <div class="postPageContent">
-                            Helllo, My First Post
-                            Helllo, My First Post
-                            Helllo, My First Post
-                            Helllo, My First Post
+                            Helllo, My First Post Helllo, My First Post Helllo, My First Post Helllo, My First Post
 
                         </div>
                         <div class="postPageReaction">likes. dislikses</div>
@@ -382,7 +367,7 @@
         </tr>
     </table>
 
-    <button onclick="submitSelection('categoryFilter')">Submit</button>
+    <button onclick="PostsByCategories()">Submit</button>
 </div>
 
 <div id="sortFilter" class="popup" style="display: none">

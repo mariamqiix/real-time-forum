@@ -170,7 +170,6 @@ func ReomvePromoteRequest(userId int) error {
 	return nil
 }
 
-
 // ReomvePromoteRequest removes all promotion requests with the given userId from the PromoteRequest table.
 func RemoveCategory(Id int) error {
 
@@ -190,15 +189,15 @@ func RemoveCategory(Id int) error {
 // RemovePostCategory removes all entries from the PostCategory table with the given categoryId.
 func RemovePostCategory(categoryId int) error {
 
-    mutex.Lock()
-    defer mutex.Unlock()
+	mutex.Lock()
+	defer mutex.Unlock()
 
-    // Delete the post categories associated with the category ID from the PostCategory table
-    _, err := db.Exec("DELETE FROM PostCategory WHERE category_id = ?", categoryId)
-    if err != nil {
-        return err
-    }
+	// Delete the post categories associated with the category ID from the PostCategory table
+	_, err := db.Exec("DELETE FROM PostCategory WHERE category_id = ?", categoryId)
+	if err != nil {
+		return err
+	}
 
-    // Return no error if the deletion was successful
-    return nil
+	// Return no error if the deletion was successful
+	return nil
 }

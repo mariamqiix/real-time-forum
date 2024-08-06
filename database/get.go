@@ -4,6 +4,7 @@ import (
 	"RealTimeForum/structs"
 	"database/sql"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -1173,4 +1174,77 @@ func GetUsers() ([]structs.User, error) {
 	}
 
 	return users, nil
+}
+
+// retrieves the count of posts associated with given category names by joining the post_category with the category tables, based on the provided category names.
+func GetPostsCountByCategories(categoryNames []string) (int, error) {
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Prepare the SQL statement to get the count of posts for the given category names
+	query := `SELECT COUNT(*) 
+              FROM PostCategory 
+              INNER JOIN Category ON PostCategory.category_id = Category.id
+              WHERE Category.name IN (` + strings.Repeat("?,", len(categoryNames)-1) + `?)`
+
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return 0, err
+	}
+	defer stmt.Close()
+
+	args := make([]interface{}, len(categoryNames))
+	for i, name := range categoryNames {
+		args[i] = name
+	}
+
+	var count int
+	err = stmt.QueryRow(args...).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
+// retrieve the posts from the DB based on categories, which can be sorted based on time(most liked, most disliked, oldest, latest) -- use 'DESC' for latest sorting
+func GetPostsByCategories(categoryNames []string, count, offset int, sortType string) ([]structs.Post, error) {
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Prepare the SQL statement to get posts by categories with specified count, offset and sort type
+	query := `SELECT Post.id, Post.user_id, Post.parent_id, Post.title, Post.message, Post.image_id,
+                            Post.time
+              FROM Post 
+              INNER JOIN PostCategory ON Post.id = PostCategory.post_id
+              INNER JOIN Category ON PostCategory.category_id = Category.id
+              WHERE Category.name IN (` + strings.Repeat("?,", len(categoryNames)-1) + `?)
+              AND Post.parent_id IS NULL
+              ORDER BY ?
+              LIMIT ? 
+              OFFSET ?`
+
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	args := make([]interface{}, len(categoryNames)+3)
+	for i, name := range categoryNames {
+		args[i] = name
+	}
+	args[len(categoryNames)] = sortType
+	args[len(categoryNames)+1] = count
+	args[len(categoryNames)+2] = offset
+
+	rows, err := stmt.Query(args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return getPostsHelper(rows)
 }

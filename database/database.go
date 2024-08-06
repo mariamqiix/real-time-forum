@@ -1,11 +1,11 @@
 package database
 
 import (
+	"RealTimeForum/structs"
 	"database/sql"
 	"errors"
 	"fmt"
 	"os"
-	"RealTimeForum/structs"
 	"sync"
 
 	_ "github.com/mattn/go-sqlite3"

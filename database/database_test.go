@@ -1,9 +1,9 @@
 package database_test
 
 import (
-	"path"
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
+	"path"
 	"testing"
 )
 

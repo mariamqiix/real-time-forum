@@ -56,7 +56,7 @@ func GoLive(port string) {
 	http.HandleFunc("/changePassword", changePasswordHandler)
 	http.HandleFunc("/updateUserInfo", updateUserInfoHandler)
 	http.HandleFunc("/messages", messagesHandler)
-	http.HandleFunc("/category/{category_name}/", categoryPostsHandler)
+	http.HandleFunc("/postsByCategories", categoryPostsHandler)
 	http.HandleFunc("/category", categoryGetHandler)
 	http.HandleFunc("/post/{post_id}", postsHandler)
 	http.HandleFunc("/post/{post_id}/delete", deletePostHandler)

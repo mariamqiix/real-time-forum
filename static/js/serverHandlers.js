@@ -42,6 +42,38 @@ async function submitSelection(divName) {
     }
 }
 
+function fetchAndAppendCategoriesToFilter() {
+    // Fetch the categories from the server
+    const categoriesContainer = document.querySelector("#categoryFilter table");
+    categoriesContainer.innerHTML = "";
+
+    fetch("http://localhost:8080/category")
+        .then((response) => response.json())
+        .then((data) => {
+            // Iterate over the categories and append them to the container
+            data.forEach((category) => {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+                const label = document.createElement("label");
+                const checkbox = document.createElement("input");
+
+                checkbox.type = "checkbox";
+                checkbox.name = category.Name;
+                checkbox.value = category.Name;
+
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(` ${category.Name}`));
+                cell.appendChild(label);
+                row.appendChild(cell);
+                categoriesContainer.appendChild(row);
+            });
+            toggleDiv("categoryFilter");
+        })
+        .catch((error) => {
+            console.error("Error fetching categories:", error);
+        });
+}
+
 // display posts in home
 function HomePageRequest() {
     GetUserLoggedIn();
@@ -57,11 +89,90 @@ function HomePageRequest() {
         })
         .then((data) => {
             displayPost(data); // Pass the response data to the displayScores function
+
+            // Select the element with id="sort"
+            const sortElement = document.getElementById("sort");
+
+            // Set its attributes to "old"
+            sortElement.setAttribute("data-sort", "new");
+
+            // Put the data in its onclick function
+            sortElement.onclick = function() {
+                sortPosts(data);
+            };
+            toggleVisibility("home");
         })
         .catch((error) => {
             console.error("Error:", error);
             console.log(response);
         });
+}
+
+function PostsByCategories() {
+    // Gather selected options
+    const selectedOptions = [];
+    const checkboxes = document.querySelectorAll('#categoryFilter input[type="checkbox"]:checked');
+    checkboxes.forEach((checkbox) => {
+        selectedOptions.push(checkbox.value);
+    });
+
+    // Ensure there are selected options before making the request
+    if (selectedOptions.length === 0) {
+        alert("Please select at least one category.");
+        return;
+    }
+
+    fetch("http://localhost:8080/postsByCategories", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ categories: selectedOptions }), // Ensure the key matches the server's expected key
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error: " + response.status);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            displayPost(data); // Pass the response data to the displayPost function
+
+            // Select the element with id="sort"
+            const sortElement = document.getElementById("sort");
+
+            // Set its attributes to "old"
+            sortElement.setAttribute("data-sort", "new");
+
+            // Put the data in its onclick function
+            sortElement.onclick = function() {
+                sortPosts(data);
+            };
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
+function sortPosts(data) {
+    const sortElement = document.getElementById("sort");
+    const sortValue = sortElement.getAttribute("data-sort");
+
+    if (Array.isArray(data.Posts)) {
+        // Reverse the array based on the current sort value
+        if (sortValue === "new") {
+            data.Posts.reverse(); // Reverse the array
+            sortElement.setAttribute("data-sort", "old");
+        } else {
+            data.Posts.reverse(); // Reverse the array
+            sortElement.setAttribute("data-sort", "new");
+        }
+
+        // Display the sorted posts
+        displayPost(data);
+    } else {
+        console.error("Invalid data format. Expected an array of posts.");
+    }
 }
 
 HomePageRequest();
@@ -490,7 +601,7 @@ function RemoveModerator(id) {
     const formData = new FormData();
     formData.append("id", id);
 
-    fetch("http://localhost:8080/RemoveModerator", {
+    fetch("h  ttp://localhost:8080/RemoveModerator", {
             method: "POST",
             body: formData,
         })
@@ -530,7 +641,7 @@ function saveNewPassword() {
         const formData = new FormData();
         formData.append("password", newPassword);
 
-        fetch("http://localhost:8080/changePassword", {
+        fetch("h    ttp://localhost:8080/changePassword", {
                 method: "POST",
                 body: formData,
             })
@@ -548,7 +659,7 @@ function saveNewPassword() {
 }
 
 function PromotionRequests() {
-    fetch("http://localhost:8080/PromotionRequests", {
+    fetch("h ttp://localhost:8080/PromotionRequests", {
             method: "GET",
         })
         .then((response) => {
@@ -593,7 +704,7 @@ function ShowPromotion(Id) {
     const formData = new FormData();
     formData.append("id", Id);
 
-    fetch("http://localhost:8080/ShowUserPromotion", {
+    fetch("h    ttp://localhost:8080/ShowUserPromotion", {
             method: "POST",
             body: formData,
         })
@@ -770,7 +881,7 @@ async function addCategory() {
         if (response.ok) {
             console.log("Category added successfully");
 
-            // Optionally, you can append the new category to the list
+            // Optionally, you can append thenew category to the list
             appendCategoryToList(categoryName, await response.text());
 
             // Clear the form fields
@@ -789,7 +900,7 @@ async function addCategory() {
 }
 
 function ChangeUserInformation() {
-    fetch("http://localhost:8080/getUserInfo", {
+    fetch("h ttp://localhost:8080/getUserInfo", {
             method: "GET",
         })
         .then((response) => response.json())
@@ -850,7 +961,7 @@ function UpdateUserInformation() {
     formData.append("country", country);
     formData.append("gender", gender);
     if (confirm("Are you sure you want to proceed?")) {
-        fetch("http://localhost:8080/updateUserInfo", {
+        fetch("h    ttp://localhost:8080/updateUserInfo", {
                 method: "POST",
                 body: formData,
             })

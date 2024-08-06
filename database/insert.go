@@ -340,22 +340,22 @@ func AddNotification(notification structs.UserNotification) (int, error) {
 
 // AddMessage adds a new message to the UserMessage table in the database
 func AddMessage(message structs.UserMessage) error {
-    // Lock the mutex before accessing the database
-    mutex.Lock()
-    defer mutex.Unlock()
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
 
-    // Prepare the SQL statement to insert a new message into the UserMessage table
-    stmt, err := db.Prepare(`INSERT INTO UserMessage (sender_id, receiver_id, messag, time) VALUES (?, ?, ?, ?)`)
-    if err != nil {
-        return err
-    }
-    defer stmt.Close()
+	// Prepare the SQL statement to insert a new message into the UserMessage table
+	stmt, err := db.Prepare(`INSERT INTO UserMessage (sender_id, receiver_id, messag, time) VALUES (?, ?, ?, ?)`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
 
-    // Execute the SQL statement with the values from the UserMessage struct
-    _, err = stmt.Exec(message.SenderId, message.ReceiverId, message.Messag, message.Time)
-    if err != nil {
-        return err
-    }
+	// Execute the SQL statement with the values from the UserMessage struct
+	_, err = stmt.Exec(message.SenderId, message.ReceiverId, message.Messag, message.Time)
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }

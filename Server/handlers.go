@@ -3,6 +3,7 @@ package Server
 import (
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -404,7 +405,7 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 func categoryPostsHandler(w http.ResponseWriter, r *http.Request) {
 	// Set CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	sessionUser := GetUser(r)
@@ -418,24 +419,32 @@ func categoryPostsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	categoryName := r.PathValue("category_name")
+	var requestBody struct {
+		Categories []string `json:"categories"`
+	}
 
-	categoryExists, _ := database.CheckExistance("Category", "name", categoryName)
-	if !categoryExists {
-		errorServer(w, r, http.StatusNotFound)
+	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
+		errorServer(w, r, http.StatusBadRequest)
 		return
 	}
 
-	posts_count, err := database.GetPostsCountByCategory(categoryName)
+	if len(requestBody.Categories) == 0 {
+		errorServer(w, r, http.StatusBadRequest)
+		return
+	}
+
+	categoryNames := requestBody.Categories
+fmt.Print("categoryNames", categoryNames)
+	posts_count, err := database.GetPostsCountByCategories(categoryNames)
 	if err != nil {
-		log.Printf("error getting posts count by category: %s\n", err.Error())
+		log.Printf("error getting posts count by categories: %s\n", err.Error())
 		errorServer(w, r, http.StatusInternalServerError)
 		return
 	}
 
-	dbPosts, err := database.GetPostsByCategory(categoryName, posts_count, 0, "latest")
+	dbPosts, err := database.GetPostsByCategories(categoryNames, posts_count, 0, "latest")
 	if err != nil {
-		log.Printf("error getting posts by category: %s\n", err.Error())
+		log.Printf("error getting posts by categories: %s\n", err.Error())
 	}
 
 	dbCategories, err := database.GetCategories()
@@ -450,7 +459,7 @@ func categoryPostsHandler(w http.ResponseWriter, r *http.Request) {
 		Posts:       mappedPosts,
 		User:        nil,
 		Categories:  mappedCategories,
-		SortOptions: []string{"latest", "most liked", "least liked", "oldestq"},
+		SortOptions: []string{"latest", "most liked", "least liked", "oldest"},
 	}
 
 	if sessionUser != nil {
@@ -464,7 +473,6 @@ func categoryPostsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeToJson(view, w)
-
 }
 
 func postsHandler(w http.ResponseWriter, r *http.Request) {

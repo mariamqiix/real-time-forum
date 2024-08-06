@@ -1,8 +1,9 @@
 front (Ruqaya) :
+
 -   edit post page : to edit only the title and the content
 -   add comments exampole for the profile page
 -   replay section for the posts , in the post page add something to create a reply or a comment
-- add gender/birthday/country/bio in profile page
+-   add gender/birthday/country/bio in profile page
 
 back (Maryam) :
 
@@ -15,8 +16,8 @@ back (Maryam) :
 -   ~~make limit for username~~
 -   ~~delete the long username user~~
 -   ~~make log-out, sign un, captalize~~
--   connect the sort to the backend
--   connect tje categories to the backend
+-   ~~connect the sort to the backend~~
+-   ~~connect tje categories to the backend~~
 -   ~~search bar shold not take empty string (do validation)~~
 -   ~~profile page should open directly to post page~~
 -   connect reaction count to the post
@@ -29,9 +30,9 @@ back (Maryam) :
 -   if user like, or dislick any post, make it red (in home, profile page)
 -   prevent guest from liking any post
 -   add button at the end of post bage so the user can add comment (i'll handle the style later), make the button unvisible if user is guest
-- double check the website functionality (registration, login, chat, post, like, dislike .... etc)
-- there is an edit button in post page (make it visible only if the user is the owner of the post)
-- add report button on the post page like the edit and make it visible only if the user is moderator (if user click on it open div like (why u want to be moderator, later i'll fix it))
+-   double check the website functionality (registration, login, chat, post, like, dislike .... etc)
+-   there is an edit button in post page (make it visible only if the user is the owner of the post)
+-   add report button on the post page like the edit and make it visible only if the user is moderator (if user click on it open div like (why u want to be moderator, later i'll fix it))
 
 DATABASE (Ruqaya) :
 
