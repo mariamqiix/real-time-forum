@@ -908,6 +908,13 @@ span.framer-text:not([data-text-fill]) {
     color: #ccc;
 }
 
+.userInfo {
+    float: left;
+    margin-top: 18%;
+    font-size: 16px;
+    color: #706767;
+}
+
 .profile table {
     border-collapse: collapse;
     width: 80%;
@@ -938,6 +945,8 @@ span.framer-text:not([data-text-fill]) {
     float: left;
     clear: both;
 }
+
+
 
 .selected {
     border-bottom: 5px solid rgb(247, 245, 245);
