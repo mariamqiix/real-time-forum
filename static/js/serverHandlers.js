@@ -68,7 +68,7 @@ HomePageRequest();
 
 function displayPost(data) {
     if (Array.isArray(data.Posts)) {
-        createPost(data.Posts, "homeContent")
+        createPost(data.Posts, "homeContent");
     } else {
         console.error("Invalid data format. Expected an array of posts.");
     }
@@ -123,7 +123,10 @@ HomePageRequest();
 
 function Search() {
     const search = document.getElementById("search").value;
-
+    if (search == "" || search.trim() == "") {
+        alert("Please enter a search term.");
+        return;
+    }
     // Create the request body
     const formData = new FormData();
     formData.append("search", search);
@@ -908,7 +911,10 @@ function ChatView() {
                     messageBox.appendChild(chatUserPic);
                     messageBox.appendChild(chatUserName);
                     messageBox.appendChild(newMessageIcon);
-                    messageBox.setAttribute("onclick", `OpenMesages('${chat.Username}','${chat.UserId}')`);
+                    messageBox.setAttribute(
+                        "onclick",
+                        `OpenMesages('${chat.Username}','${chat.UserId}')`
+                    );
                     usersList.appendChild(messageBox);
                 });
             })
@@ -940,6 +946,10 @@ function profile(userId, caseString) {
             // profileName.innerHTML = data.UserProfile.FirstName + " " + data.UserProfile.LastName;
             const userPic = document.getElementById("userPic");
             userPic.style.backgroundImage = `url(${data.UserProfile.image_url})`;
+            const postsThElement = document.querySelector(
+                "th[onclick=\"posts(-1,'Posts','Posts', event.target)\"]"
+            );
+            posts(-1, "Posts", "Posts", postsThElement);
         })
         .catch((error) => {
             console.error("Error fetching profile:", error);
@@ -977,7 +987,7 @@ function posts(userId, caseString, column, element) {
 
 function displayPostOnProfile(Posts) {
     if (Array.isArray(Posts)) {
-        createPost(Posts, "profileContent")
+        createPost(Posts, "profileContent");
     } else {
         console.error("Invalid data format. Expected an array of posts.");
     }
@@ -1047,31 +1057,27 @@ function createPost(Posts, divName) {
         postReactions.appendChild(likeReactionCount);
         postReactions.appendChild(postLikeIcone);
 
-
-
         postBox.appendChild(postTitle);
         postBox.appendChild(postReactions);
-
 
         homeNavigationContent.appendChild(postBox);
 
         let liskIsClicked = false;
         let disliskIsClicked = false;
 
-
-        postLikeIcone.addEventListener('click', (event) => {
+        postLikeIcone.addEventListener("click", (event) => {
             // Prevent the click event on the button from bubbling up to the div
             event.stopPropagation();
             liskIsClicked = !liskIsClicked && !disliskIsClicked;
-            postLikeIcone.classList.toggle('clicked', liskIsClicked);
+            postLikeIcone.classList.toggle("clicked", liskIsClicked);
             numOfLike++;
         });
 
-        postDislikeIcone.addEventListener('click', (event) => {
+        postDislikeIcone.addEventListener("click", (event) => {
             // Prevent the click event on the button from bubbling up to the div
             event.stopPropagation();
             disliskIsClicked = !disliskIsClicked && !liskIsClicked;
-            postDislikeIcone.classList.toggle('clicked', disliskIsClicked);
+            postDislikeIcone.classList.toggle("clicked", disliskIsClicked);
             numOfDislike++;
         });
     });
