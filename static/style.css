@@ -215,6 +215,87 @@ span.framer-text:not([data-text-fill]) {
     font-size: 16px;
 }
 
+.postPageTitle {
+    word-break: break-word;
+    word-wrap: break-word;
+    float: left;
+    clear: left;
+    font-size: 20px;
+    padding: 2%;
+    background-color: rgba(222, 221, 218, 0.7);
+    width: auto;
+    height: auto;
+    max-width: 80%;
+    border-radius: 15px;
+    color: #555;
+    margin: 2%;
+    margin-bottom: 0;
+    font-weight: bolder;
+}
+
+.postPageContent{
+    word-break: break-word;
+    word-wrap: break-word;
+    float: left;
+    clear: both;
+    font-size: 20px;
+    padding: 3%;
+    background-color: rgba(251, 217, 152, 0.7);
+    width: auto;
+    height: auto;
+    max-width: 80%;
+    border-radius: 15px;
+    color: #555;
+    margin: 2%;
+}
+
+.postPageComment{
+    word-break: break-word;
+    word-wrap: break-word;
+    float: left;
+    clear: both;
+    font-size: 20px;
+    padding: 1%;
+    background-color: #c7c1c14d;;
+    width: auto;
+    height: auto;
+    max-width: 80%;
+    border-radius: 10px;
+    color: #555;
+    margin-left: 6%;
+    margin-top: 1%;
+}
+
+.postPageCommentUser {
+    font-size: 16px;
+    font-weight: lighter;
+    color: #ccc;
+}
+
+.postPageCommentTime {
+    font-size: 16px;
+    font-weight: lighter;
+    color: #ccc;
+}
+
+.postPageTime {
+    font-size: 16px;
+    font-weight: lighter;
+    color: #ccc;
+    float: right;
+    width: auto;
+    height: auto;
+    margin-top: 5%;
+}
+
+.postPageReaction{
+    float: left;
+    clear: both;
+    height: auto;
+    width: 100%;
+    margin: 2%;
+}
+
 .postReaction {
     float: right;
     clear: both;
