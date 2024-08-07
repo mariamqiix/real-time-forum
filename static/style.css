@@ -225,7 +225,7 @@ span.framer-text:not([data-text-fill]) {
     background-color: rgba(222, 221, 218, 0.7);
     width: auto;
     height: auto;
-    max-width: 80%;
+    max-width: 70%;
     border-radius: 15px;
     color: #555;
     margin: 2%;
@@ -243,7 +243,7 @@ span.framer-text:not([data-text-fill]) {
     background-color: rgba(251, 217, 152, 0.7);
     width: auto;
     height: auto;
-    max-width: 80%;
+    max-width: 70%;
     border-radius: 15px;
     color: #555;
     margin: 2%;
@@ -259,7 +259,7 @@ span.framer-text:not([data-text-fill]) {
     background-color: #c7c1c14d;;
     width: auto;
     height: auto;
-    max-width: 80%;
+    max-width: 70%;
     border-radius: 10px;
     color: #555;
     margin-left: 6%;
@@ -288,12 +288,38 @@ span.framer-text:not([data-text-fill]) {
     margin-top: 5%;
 }
 
+.postPageCategories,
 .postPageReaction{
     float: left;
     clear: both;
     height: auto;
     width: 100%;
     margin: 2%;
+}
+
+.postPage {
+    padding: 3%;
+    padding-top: 10%;
+}
+
+.hidden {
+    display: none;
+}
+
+#inputBox{
+    float: left;
+    clear: both;
+}
+
+.replayPost {
+    float: left;
+    clear: both;
+    background-color: transparent;
+}
+
+.replayPost:hover {
+    background-color: transparent;
+    color: red;
 }
 
 .postReaction {
@@ -764,6 +790,8 @@ span.framer-text:not([data-text-fill]) {
     margin: 1%;
 }
 
+
+#gender,
 #formReg input {
     margin: 1%;
     padding: 2%;
@@ -1052,12 +1080,10 @@ span.framer-text:not([data-text-fill]) {
 
 #request-moderator textarea,
 #topic {
-    height: 350px;
-    min-height: 300px;
-    max-height: 300px;
-    width: 600px;
-    min-width: 600px;
-    max-width: 600px;
+    min-height: 200px;
+    max-height: 200px;
+    min-width: 800px;
+    max-width: 800px;
     background-color: #f2f2f2;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -1130,15 +1156,17 @@ button:hover {
 #change-password table {
     font-size: 20px;
     table-layout: fixed;
+    margin-right: 20%;
+    width: 60%;
 }
 
 #user-info table {
     text-align: left;
     width: 60%;
     margin-left: 20%;
-
 }
 
+#ChangeGender,
 #user-info input {
     background-color: none;
     outline: none;

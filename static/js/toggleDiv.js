@@ -157,3 +157,8 @@ function OpenMesages(username, id) {
 
     // Set the onclick attribute to call SendMessage with the username
 }
+
+function toggleInputBox() {
+    var inputBox = document.getElementById('inputBox');
+    inputBox.classList.toggle('hidden');
+}

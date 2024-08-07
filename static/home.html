@@ -68,6 +68,7 @@
                     <h1 class="profileUsername" id="profileUsername">UserName</h1>
                     <h2 class="userInfo">Age: 12, location: Bahrain</h2>
 
+
                     <table>
                         <tr>
                             <th onclick="posts(-1,'Posts','Posts', event.target)">Posts</th>
@@ -290,26 +291,32 @@
                 </div>
 
                 <div class="postPage navigationContent">
-                    <div class="title">
-                        <button id="editPost-button" class="editPost-button" onclick="EditPost()">Edit</button>
-                        <div class="postPageTime">12:00 - 21/August/2023</div>
-                        <div class="postPageTitle"> My First Post</div>
-                        <div class="postPageContent">
-                            Helllo, My First Post Helllo, My First Post Helllo, My First Post Helllo, My First Post
 
-                        </div>
-                        <div class="postPageReaction">likes. dislikses</div>
+                    <button id="editPost-button" class="editPost-button" onclick="EditPost()">Edit</button>
 
-                        <hr style="color: #0000002b; height: 2px; width: 80%" />
+                    <div class="postPageTime">12:00 - 21/August/2023</div>
+                    <div class="postPageTitle"> My First Post</div>
+                    <div class="postPageContent">Helllo, My First Post Helllo, My First Post Helllo, My First Post Helllo, My First Post</div>
+                    <div class="postPageReaction">likes. dislikses</div>
+                    <div class="postPageCategories">general, ...</div>
 
-                        <div class="postPageComment">Fist Comment <span class="postPageCommentUser">hdd</span>
-                            <span class="postPageCommentTime">- 12:08</span>
-                        </div>
-                        <div class="postPageComment">Fist Comment</div>
-                        <div class="postPageComment">Fist Comment</div>
-
+                    <div class="postPageComment">Fist Comment 
+                        <span class="postPageCommentUser">hdd</span>
+                        <span class="postPageCommentTime">- 12:08</span>
                     </div>
+                    
+                    <div class="postPageComment">Fist Comment</div>
+                    <div class="postPageComment">Fist Comment</div>
+
+                    <button id="replayPost-button" class="replayPost" onclick="toggleInputBox()">Replay?</button>
+
+                    <div id="inputBox" class="hidden">
+                        <input type="text" id="textInput">
+                        <button onclick="">Send</button>
+                    </div>
+
                 </div>
+
             </div>
 
             <div class="messagesBar" id="messagesBar">
@@ -468,7 +475,6 @@
             <td class="error"><span id="confirmPasswordError2" class="error"></span></td>
         </tr>
     </table>
-
     <button type="button" id="save-btn" onclick="saveNewPassword()">Save</button>
 </div>
 

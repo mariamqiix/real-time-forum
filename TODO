@@ -1,9 +1,7 @@
 front (Ruqaya) :
 
 -   edit post page : to edit only the title and the content
--   add comments exampole for the profile page
--   replay section for the posts , in the post page add something to create a reply or a comment
--   add gender/birthday/country/bio in profile page
+-   add comments example for the profile page
 
 back (Maryam) :
 
@@ -33,6 +31,9 @@ back (Maryam) :
 -   double check the website functionality (registration, login, chat, post, like, dislike .... etc)
 -   there is an edit button in post page (make it visible only if the user is the owner of the post)
 -   add report button on the post page like the edit and make it visible only if the user is moderator (if user click on it open div like (why u want to be moderator, later i'll fix it))
+-   the web should not allwo the user to post without choosing category!
+-   after the user click on submit sort by category (the div should dissapear)
+- شيلي الاشياء الي تنطبع في الترمنل لان واجد فوضى
 
 DATABASE (Ruqaya) :
 
