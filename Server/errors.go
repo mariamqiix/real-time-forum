@@ -16,6 +16,8 @@ func errorServer(w http.ResponseWriter, r *http.Request, code int) {
 			Username:  sessionUser.Username,
 			FirstName: sessionUser.FirstName,
 			LastName:  sessionUser.LastName,
+			DateOfBirth: sessionUser.DateOfBirth,
+			Location:  sessionUser.Country,
 			ImageURL:  imageIdToUrl(sessionUser.ImageId),
 			Type:      userTypeToResponse(sessionUser.Type),
 		}

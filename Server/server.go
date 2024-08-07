@@ -40,6 +40,7 @@ func GoLive(port string) {
 
 	http.HandleFunc("/", homepageHandler)
 	http.HandleFunc("/homePageDataHuncler", homePageDataHuncler)
+	http.HandleFunc("/posts/AddReactions", addReactionHandler)
 	// http.HandleFunc("/static/", staticHandler)
 	http.HandleFunc("/uploads/{image_id}", uploadedContentServerHandler)
 	http.HandleFunc("/uploads/add", uploadHandler)
@@ -79,7 +80,7 @@ func GoLive(port string) {
 	http.HandleFunc("/user/{user_id}/report", reportUserHandler)
 	http.HandleFunc("/post/{post_id}/report", reportPostHandler)
 	http.HandleFunc("/post/{post_id}/{reaction_type}", postReactionHandler)
-	http.HandleFunc("/post/{post_id}/{reaction_type}/delete", deletePostReactionHandler)
+	http.HandleFunc("/post/reaction/delete", deletePostReactionHandler)
 	http.HandleFunc("/post/{post_id}/comment", addCommentGetHandler)
 	http.HandleFunc("POST /post/{post_id}/comment", addCommentPostHandler)
 	http.HandleFunc("/userMessage", userMessageHandler)
@@ -136,11 +137,13 @@ func homePageDataHuncler(w http.ResponseWriter, r *http.Request) {
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
-			Username:  sessionUser.Username,
-			FirstName: sessionUser.FirstName,
-			LastName:  sessionUser.LastName,
-			ImageURL:  imageIdToUrl(sessionUser.ImageId),
-			Type:      userTypeToResponse(sessionUser.Type),
+			Username:    sessionUser.Username,
+			FirstName:   sessionUser.FirstName,
+			LastName:    sessionUser.LastName,
+			DateOfBirth: sessionUser.DateOfBirth,
+			Location:    sessionUser.Country,
+			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			Type:        userTypeToResponse(sessionUser.Type),
 		}
 	}
 

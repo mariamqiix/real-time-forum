@@ -79,6 +79,8 @@ func mapPosts(oldArr []structs.Post, loggedUserId int) []structs.PostResponse {
 			author.Username = user.Username
 			author.FirstName = user.FirstName
 			author.LastName = user.LastName
+			author.DateOfBirth = user.DateOfBirth
+			author.Location = user.Country
 			author.Type = userTypeToResponse(user.Type)
 			author.ImageURL = imageIdToUrl(user.ImageId)
 		}
@@ -112,23 +114,12 @@ func mapReactionsForPost(post *structs.Post, loggedUserId int) []structs.PostRea
 		reactionsResp = append(reactionsResp, *likeResp)
 	}
 
-	// skull
-	skullResp := mapReactionForPost(post, loggedUserId, structs.PostReactionTypeSkull, "💀")
-	if skullResp != nil {
-		reactionsResp = append(reactionsResp, *skullResp)
-	}
-
 	// dislike
 	dislikeResp := mapReactionForPost(post, loggedUserId, structs.PostReactionTypeDislike, "👎")
 	if dislikeResp != nil {
 		reactionsResp = append(reactionsResp, *dislikeResp)
 	}
 
-	// haha
-	hahaResp := mapReactionForPost(post, loggedUserId, structs.PostReactionTypeHaha, "😂")
-	if hahaResp != nil {
-		reactionsResp = append(reactionsResp, *hahaResp)
-	}
 	return reactionsResp
 }
 
@@ -207,13 +198,11 @@ func mapReactionForPost(post *structs.Post, loggedUserId int, reactionType struc
 
 	reactionId, err := database.GetReactionId(reactionType)
 	if err != nil {
-		log.Printf("mapReactionForPost: reaction id: %s\n", err.Error())
 		return nil
 	}
 
 	reactersIds, err := database.GetReactionUsers(post.Id, reactionId)
 	if err != nil {
-		log.Printf("mapReactionForPost: reacters Ids: %s\n", err.Error())
 		return nil
 	}
 

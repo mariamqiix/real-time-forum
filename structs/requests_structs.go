@@ -18,10 +18,11 @@ type UserRequest struct {
 }
 
 type MessageRequest struct {
-	SenderId    string    `json:"SenderId"`
-	ReceiverId string    `json:"ReceiverId"`
+	Type       string `json:"type"`
+	SenderId   string `json:"SenderId"`
+	ReceiverId string `json:"ReceiverId"`
 	Messag     string `json:"Messag"`
-	Time        string `json:"Time"`
+	Time       string `json:"Time"`
 }
 
 type CategoryRequest struct {

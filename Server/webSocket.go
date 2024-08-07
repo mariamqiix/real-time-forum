@@ -64,7 +64,6 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("Message is nil or invalid.")
 			continue
 		}
-		fmt.Print(MessageRequest)
 
 		SenderId, err := database.GetUserByUsername(MessageRequest.SenderId)
 		if err != nil {
@@ -89,24 +88,33 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Error:", err)
 		}
-
 		message := structs.UserMessage{
 			SenderId:   SenderId.Id,
 			ReceiverId: ReceiverId.Id,
 			Messag:     MessageRequest.Messag,
 			Time:       parsedTime,
 		}
-		err = database.AddMessage(message)
-		if err != nil {
-			errorServer(w, r, http.StatusInternalServerError)
-			continue
+		if MessageRequest.Type != "typing" {
+
+			err = database.AddMessage(message)
+			if err != nil {
+				errorServer(w, r, http.StatusInternalServerError)
+				continue
+			}
 		}
 		reciverConnections, ok := GetConnectionByID(message.ReceiverId)
 		if !ok {
 			log.Println("No connection found for the user with id:", message.ReceiverId)
 			continue
 		}
-		SendMessage(*reciverConnections, &message)
+		newMessageStruct := structs.MessageResponse{
+			Type:       MessageRequest.Type,
+			SenderId:   (message.SenderId),
+			ReceiverId: (message.ReceiverId),
+			Messag:     message.Messag,
+			Time:       message.Time,
+		}
+		SendMessage(*reciverConnections, &newMessageStruct)
 	}
 }
 
@@ -118,7 +126,7 @@ func convertMessageRequestTime(messageRequest string) (time.Time, error) {
 	return parsedTime, nil
 }
 
-func SendMessage(conn Connection, message *structs.UserMessage) {
+func SendMessage(conn Connection, message *structs.MessageResponse) {
 	b, err := json.Marshal(message)
 	if err != nil {
 		log.Println("Error wrapping the message to bytes. " + err.Error())
@@ -144,7 +152,6 @@ func BodyToMessage(body []byte) *structs.MessageRequest {
 		fmt.Println("Error:", err.Error())
 		return nil
 	}
-	fmt.Print(message)
 
 	return &message
 }

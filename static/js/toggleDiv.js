@@ -54,6 +54,7 @@ function OpenMesages(username, id) {
     const msgDiv = document.getElementById("msgDiv");
     const sendMessageButton = document.getElementById("sendMessage");
     const mailIcon = document.getElementById("mailIcon");
+    const msgType = document.getElementById("msgType");
 
     if (messagesBoxDiv.style.display === "none") {
         document.getElementById("messagesTitle").innerHTML = "Messages";
@@ -74,7 +75,8 @@ function OpenMesages(username, id) {
             .then((text) => {
                 if (text != "null") {
                     sendMessageButton.setAttribute("onclick", `SendMessage('${username}')`);
-
+                    console.log(username);
+                    msgType.setAttribute("oninput", `notifyTyping('${username}')`);
                     mailIcon.style.display = "block";
                     mailIcon.onclick = function() {
                         OpenMesages();
@@ -122,11 +124,6 @@ function OpenMesages(username, id) {
                                 msgDiv.textContent = messageData.Messag;
                                 // Create the new chat div
                                 const id = OldmsgDiv.getAttribute("data-id");
-                                if (id == messageData.ReceiverId) {
-                                    msgDiv.style.backgroundColor = "#fbd998";
-                                } else {
-                                    msgDiv.style.backgroundColor = "white";
-                                }
 
                                 // Create the message time div
                                 const msgTimeDiv = document.createElement("div");
@@ -135,10 +132,19 @@ function OpenMesages(username, id) {
                                     messageData.Time
                                 ).toLocaleTimeString();
 
-                                // Append the message and time divs to the chat div
-                                chatDiv.appendChild(msgDiv);
-                                chatDiv.appendChild(msgTimeDiv);
+                                if (id == messageData.ReceiverId) {
+                                    chatDiv.classList.add("receiver");
+                                    msgDiv.style.backgroundColor = "#fbd998";
+                                    chatDiv.appendChild(msgTimeDiv);
+                                    chatDiv.appendChild(msgDiv);
+                                } else {
+                                    chatDiv.classList.add("sender");
+                                    msgDiv.classList.add("msg-right");
+                                    chatDiv.appendChild(msgDiv);
+                                    chatDiv.appendChild(msgTimeDiv);
+                                }
                                 chats.appendChild(chatDiv);
+
                                 sendMessageButton.setAttribute(
                                     "onclick",
                                     `SendMessage('${username}')`
@@ -159,6 +165,6 @@ function OpenMesages(username, id) {
 }
 
 function toggleInputBox() {
-    var inputBox = document.getElementById('inputBox');
-    inputBox.classList.toggle('hidden');
+    var inputBox = document.getElementById("inputBox");
+    inputBox.classList.toggle("hidden");
 }

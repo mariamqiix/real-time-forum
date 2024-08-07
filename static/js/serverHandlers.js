@@ -5,7 +5,10 @@ async function submitSelection(divName) {
     );
 
     const selectedCategories = Array.from(categoryCheckboxes).map((checkbox) => checkbox.value);
-
+    if (selectedCategories.length === 0) {
+        alert("Please select at least one category.");
+        return;
+    }
     // Get the title and topic
     const title = document.getElementById("newPostTitle").value;
     const topic = document.getElementById("topic").value;
@@ -148,6 +151,7 @@ function PostsByCategories() {
             sortElement.onclick = function() {
                 sortPosts(data);
             };
+            toggleDiv("categoryFilter");
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -267,8 +271,7 @@ function displaySearchPosts(data) {
         data.Posts.forEach((post) => {
             const postBox = document.createElement("div");
             postBox.classList.add("postResult");
-            postBox.setAttribute("onclick", "toggleVisibility('postPage')");
-
+            postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(post)})`);
             const postTitleElement = document.createElement("h2");
             postTitleElement.classList.add("title");
             postTitleElement.setAttribute(
@@ -317,7 +320,8 @@ async function submitLoginForm() {
             const loginSpan = document.getElementById("loginSpan");
             loginSpan.innerHTML = "LOGOUT";
             GetUserLoggedIn();
-            toggleVisibility("home");
+            HomePageRequest();
+            initializeWebSocket();
         } else {
             const error = await response.text();
             console.log(error);
@@ -362,8 +366,7 @@ async function submitForm() {
             GetUserLoggedIn();
             const loginSpan = document.getElementById("loginSpan");
             loginSpan.innerHTML = "logout";
-            toggleVisibility("home");
-            // Get the form values
+            HomePageRequest(); // Get the form values
             const firstName = document.getElementById("firstName");
             firstName.innerHTML = "";
             const lastName = document.getElementById("lastName");
@@ -380,6 +383,7 @@ async function submitForm() {
             country.innerHTML = "";
             const gender = document.getElementById("gender");
             gender.innerHTML = "";
+            initializeWebSocket();
         } else {
             const error = await response.text();
             alert("Signup failed: " + error);
@@ -418,10 +422,8 @@ function PostPageHandler(data) {
                     const data1 = JSON.parse(cleanedText); // Parse the cleaned text as JSON
                     console.log(data1);
                     if (data1 === data.author.username) {
-                        console.log("hello");
                         editPostButton.style.display = "block";
                     } else {
-                        console.log("hi");
                         editPostButton.style.display = "none";
                     }
                 } catch (error) {
@@ -465,6 +467,8 @@ async function GetUserLoggedIn() {
                 profileBtn.style.display = "none";
                 const loginSpan = document.getElementById("loginSpan");
                 loginSpan.innerHTML = "sign up";
+                const replayPostButton = document.getElementById("replayPost-button");
+                replayPostButton.style.display = "none";
                 return;
             } else {
                 setting.style.display = "block";
@@ -476,6 +480,8 @@ async function GetUserLoggedIn() {
                 profileBtn.style.display = "block";
                 const loginSpan = document.getElementById("loginSpan");
                 loginSpan.innerHTML = "logout";
+                const replayPostButton = document.getElementById("replayPost-button");
+                replayPostButton.style.display = "block";
                 return text;
             }
         })
@@ -495,7 +501,7 @@ async function logout() {
             console.log("Logout successful");
             GetUserLoggedIn();
             // Perform any additional actions needed after successful logout
-            toggleVisibility("home");
+            HomePageRequest();
         } else {
             const error = await response.text();
             console.error("Logout failed:", error);
@@ -1041,6 +1047,20 @@ ChatView();
 setInterval(ChatView, 5000);
 setInterval(GetUserLoggedIn, 5000);
 
+function calculateAge(birthDateString) {
+    const birthDate = new Date(birthDateString);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    // If the birth date hasn't occurred yet this year, subtract one year from the age.
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
+}
+
 function profile(userId, caseString) {
     const url = new URL("http://localhost:8080/userProfile");
     url.searchParams.append("user_id", userId);
@@ -1051,10 +1071,17 @@ function profile(userId, caseString) {
         })
         .then((response) => response.json())
         .then((data) => {
-            console.log(data.UserProfile.image_url); // Change imageURL to ImageURL            const profileUsername = document.getElementById("profileUsername");
+            console.log(data);
+            console.log(data.UserProfile.image_url); // Change imageURL to ImageURL
+            const profileUsername = document.getElementById("profileUsername");
             profileUsername.innerHTML = data.UserProfile.username;
-            // const profileName = document.getElementById("profileName");
-            // profileName.innerHTML = data.UserProfile.FirstName + " " + data.UserProfile.LastName;
+
+            // Calculate and display the age
+            const birthDate = data.UserProfile.DateOfBirth;
+            const age = calculateAge(birthDate);
+            const profileAge = document.getElementById("userInfo");
+            profileAge.innerHTML = `Age: ${age},  location: ${data.UserProfile.location}`;
+
             const userPic = document.getElementById("userPic");
             userPic.style.backgroundImage = `url(${data.UserProfile.image_url})`;
             const postsThElement = document.querySelector(
@@ -1110,13 +1137,32 @@ function createPost(Posts, divName) {
 
     Posts.forEach((post) => {
         let numOfLike = 0;
-        let numOfDislike = 2;
+        let numOfDislike = 0;
+        console.log(post);
+
+        let liskIsClicked = false;
+        let disliskIsClicked = false;
+        // Assuming `post` is of type `structs.PostResponse`
+        const reactions = post.reactions; // This should be an array of `structs.PostReactionResponse`
+        // if (reactions.length > 0) {
+        reactions.forEach((reaction) => {
+            console.log("hi");
+            if (reaction.type === "like") {
+                liskIsClicked = reaction.did_react;
+
+                numOfLike = reaction.count;
+            } else if (reaction.type === "dislike") {
+                numOfDislike = reaction.count;
+                disliskIsClicked = reaction.did_react;
+            }
+        });
+        // }
 
         const postBox = document.createElement("div");
         postBox.classList.add("postBox");
         postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(post)})`);
-        postBox.setAttribute("id", `${post.Id}`);
-
+        postBox.setAttribute("id", `${post.id}`);
+        console.log(post.id);
         const postUserPic = document.createElement("div");
         postUserPic.classList.add("postUserPic");
         postBox.appendChild(postUserPic);
@@ -1144,6 +1190,9 @@ function createPost(Posts, divName) {
 
         const postLikeIcone = document.createElement("button");
         postLikeIcone.classList.add("postLike");
+        if (liskIsClicked) {
+            postLikeIcone.classList.toggle("clicked", liskIsClicked);
+        }
 
         const likeReactionCount = document.createElement("span");
         likeReactionCount.classList.add("reactionCount");
@@ -1152,7 +1201,9 @@ function createPost(Posts, divName) {
 
         const postDislikeIcone = document.createElement("button");
         postDislikeIcone.classList.add("postDislike");
-
+        if (disliskIsClicked) {
+            postDislikeIcone.classList.toggle("clicked", disliskIsClicked);
+        }
         const dislikeReactionCount = document.createElement("span");
         dislikeReactionCount.classList.add("reactionCount");
 
@@ -1172,25 +1223,104 @@ function createPost(Posts, divName) {
         postBox.appendChild(postReactions);
 
         homeNavigationContent.appendChild(postBox);
-
-        let liskIsClicked = false;
-        let disliskIsClicked = false;
-
         postLikeIcone.addEventListener("click", (event) => {
             // Prevent the click event on the button from bubbling up to the div
             event.stopPropagation();
-            liskIsClicked = !liskIsClicked && !disliskIsClicked;
-            postLikeIcone.classList.toggle("clicked", liskIsClicked);
-            numOfLike++;
+            const profileIcon = document.querySelector(".profileIcon.navigationBarIcons");
+            if (profileIcon.style.display === "block") {
+                liskIsClicked = !liskIsClicked && !disliskIsClicked;
+                postLikeIcone.classList.toggle("clicked", liskIsClicked);
+                if (liskIsClicked) {
+                    numOfLike++;
+                    console.log(post.id);
+                    AddReaction(1, post.id);
+                } else {
+                    numOfLike--;
+                    deleteReaction(1, post.id);
+                }
+                likeReactionCount.textContent = numOfLike;
+            }
         });
 
         postDislikeIcone.addEventListener("click", (event) => {
             // Prevent the click event on the button from bubbling up to the div
             event.stopPropagation();
-            disliskIsClicked = !disliskIsClicked && !liskIsClicked;
-            postDislikeIcone.classList.toggle("clicked", disliskIsClicked);
-            numOfDislike++;
+            const profileIcon = document.querySelector(".profileIcon.navigationBarIcons");
+            if (profileIcon.style.display === "block") {
+                disliskIsClicked = !disliskIsClicked && !liskIsClicked;
+                postDislikeIcone.classList.toggle("clicked", disliskIsClicked);
+                if (disliskIsClicked) {
+                    numOfDislike++;
+                    AddReaction(2, post.id);
+                    console.log("hi");
+                } else {
+                    numOfDislike--;
+                    deleteReaction(2, post.id);
+                }
+                dislikeReactionCount.textContent = numOfDislike;
+            }
         });
+    });
+}
+
+async function deleteReaction(reaction, postId) {
+    try {
+        const response = await fetch(`/posts/${postId}/reactions/${reaction}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to delete reaction");
+        }
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error("Error deleting reaction:", error);
+    }
+}
+
+function deleteReaction(reaction, postId) {
+    const Form = new FormData();
+    Form.append("reaction", reaction);
+    Form.append("postId", postId);
+    fetch(`/post/reaction/delete`, {
+            method: "POST",
+            body: Form,
+        })
+        .then((response) => {
+            console.log("hi");
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        })
+
+    .catch((error) => {
+        console.error("Error removing reaction:", error);
+    });
+}
+
+function AddReaction(reaction, postId) {
+    console.log("hi");
+    const Form = new FormData();
+    Form.append("reaction", reaction);
+    Form.append("postId", postId);
+    fetch(`/posts/AddReactions`, {
+            method: "POST",
+            body: Form,
+        })
+        .then((response) => {
+            console.log("hi");
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        })
+
+    .catch((error) => {
+        console.error("Error adding reaction:", error);
     });
 }
 

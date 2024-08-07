@@ -1,5 +1,7 @@
 package structs
 
+import "time"
+
 // MARK: Session
 // Might not be needed
 // type SessionResponse struct {
@@ -13,6 +15,14 @@ type CategoryResponse struct {
 	Description string `json:"description"`
 	Color       string `json:"color"`
 	IconURL     string `json:"icon_url"`
+}
+
+type MessageResponse struct {
+	Type       string    `json:"type"`
+	SenderId   int       `json:"SenderId"`
+	ReceiverId int       `json:"ReceiverId"`
+	Messag     string    `json:"Messag"`
+	Time       time.Time `json:"Time"`
 }
 
 // MARK: Reaction
@@ -45,11 +55,13 @@ type UserTypeResponse struct {
 }
 
 type UserResponse struct {
-	Username  string           `json:"username"`
-	FirstName string           `json:"first_name"`
-	LastName  string           `json:"last_name"`
-	ImageURL  string           `json:"image_url"`
-	Type      UserTypeResponse `json:"type"`
+	Username    string           `json:"username"`
+	FirstName   string           `json:"first_name"`
+	LastName    string           `json:"last_name"`
+	DateOfBirth time.Time        `json:"DateOfBirth"`
+	Location    string           `json:"location"`
+	ImageURL    string           `json:"image_url"`
+	Type        UserTypeResponse `json:"type"`
 }
 
 // Badges: github, twitter ...

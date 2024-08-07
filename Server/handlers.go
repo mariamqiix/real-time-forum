@@ -151,20 +151,24 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	// Prepare the view data
 	view := profileView{}
 	view.UserProfile = structs.UserResponse{
-		Username:  dbUser.Username,
-		FirstName: dbUser.FirstName,
-		LastName:  dbUser.LastName,
-		ImageURL:  imageIdToUrl(dbUser.ImageId),
-		Type:      userTypeToResponse(dbUser.Type),
+		Username:    dbUser.Username,
+		FirstName:   dbUser.FirstName,
+		LastName:    dbUser.LastName,
+		DateOfBirth: sessionUser.DateOfBirth,
+		Location:    sessionUser.Country,
+		ImageURL:    imageIdToUrl(dbUser.ImageId),
+		Type:        userTypeToResponse(dbUser.Type),
 	}
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
-			Username:  sessionUser.Username,
-			FirstName: sessionUser.FirstName,
-			LastName:  sessionUser.LastName,
-			ImageURL:  imageIdToUrl(sessionUser.ImageId),
-			Type:      userTypeToResponse(sessionUser.Type),
+			Username:    sessionUser.Username,
+			FirstName:   sessionUser.FirstName,
+			LastName:    sessionUser.LastName,
+			DateOfBirth: sessionUser.DateOfBirth,
+			Location:    sessionUser.Country,
+			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			Type:        userTypeToResponse(sessionUser.Type),
 		}
 	} else {
 		sessionUser = &structs.User{Id: -1}
@@ -283,7 +287,6 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 		Bio:            "",
 		Gender:         gender,
 	}
-	fmt.Print("cleanedUserData", cleanedUserData.Gender)
 	err = database.CreateUser(cleanedUserData)
 	if err != nil {
 		http.Error(w, "could not create a user, please try again later", http.StatusBadRequest)
@@ -434,7 +437,6 @@ func categoryPostsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	categoryNames := requestBody.Categories
-fmt.Print("categoryNames", categoryNames)
 	posts_count, err := database.GetPostsCountByCategories(categoryNames)
 	if err != nil {
 		log.Printf("error getting posts count by categories: %s\n", err.Error())
@@ -464,11 +466,13 @@ fmt.Print("categoryNames", categoryNames)
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
-			Username:  sessionUser.Username,
-			FirstName: sessionUser.FirstName,
-			LastName:  sessionUser.LastName,
-			ImageURL:  imageIdToUrl(sessionUser.ImageId),
-			Type:      userTypeToResponse(sessionUser.Type),
+			Username:    sessionUser.Username,
+			FirstName:   sessionUser.FirstName,
+			LastName:    sessionUser.LastName,
+			DateOfBirth: sessionUser.DateOfBirth,
+			Location:    sessionUser.Country,
+			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			Type:        userTypeToResponse(sessionUser.Type),
 		}
 	}
 
@@ -520,11 +524,13 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
-			Username:  sessionUser.Username,
-			FirstName: sessionUser.FirstName,
-			LastName:  sessionUser.LastName,
-			ImageURL:  imageIdToUrl(sessionUser.ImageId),
-			Type:      userTypeToResponse(sessionUser.Type),
+			Username:    sessionUser.Username,
+			FirstName:   sessionUser.FirstName,
+			LastName:    sessionUser.LastName,
+			DateOfBirth: sessionUser.DateOfBirth,
+			Location:    sessionUser.Country,
+			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			Type:        userTypeToResponse(sessionUser.Type),
 		}
 		view.Post = mapPosts([]structs.Post{*post}, sessionUser.Id)[0]
 		view.Comments = mapPosts(comments, sessionUser.Id)
@@ -608,11 +614,13 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 		// fill the view data
 		addPostView := addPostView{
 			User: &structs.UserResponse{
-				Username:  sessionUser.Username,
-				FirstName: sessionUser.FirstName,
-				LastName:  sessionUser.LastName,
-				ImageURL:  imageIdToUrl(sessionUser.ImageId),
-				Type:      userTypeToResponse(sessionUser.Type),
+				Username:    sessionUser.Username,
+				FirstName:   sessionUser.FirstName,
+				LastName:    sessionUser.LastName,
+				DateOfBirth: sessionUser.DateOfBirth,
+				Location:    sessionUser.Country,
+				ImageURL:    imageIdToUrl(sessionUser.ImageId),
+				Type:        userTypeToResponse(sessionUser.Type),
 			},
 			Categories: nil,
 			ParentId:   -1,
@@ -731,11 +739,13 @@ func addPostHandlerGet(w http.ResponseWriter, r *http.Request) {
 		// fill the view data
 		addPostView := addPostView{
 			User: &structs.UserResponse{
-				Username:  sessionUser.Username,
-				FirstName: sessionUser.FirstName,
-				LastName:  sessionUser.LastName,
-				ImageURL:  imageIdToUrl(sessionUser.ImageId),
-				Type:      userTypeToResponse(sessionUser.Type),
+				Username:    sessionUser.Username,
+				FirstName:   sessionUser.FirstName,
+				LastName:    sessionUser.LastName,
+				DateOfBirth: sessionUser.DateOfBirth,
+				Location:    sessionUser.Country,
+				ImageURL:    imageIdToUrl(sessionUser.ImageId),
+				Type:        userTypeToResponse(sessionUser.Type),
 			},
 			Categories: nil,
 			ParentId:   -1,
@@ -1048,71 +1058,6 @@ func postReactionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func deletePostReactionHandler(w http.ResponseWriter, r *http.Request) {
-	// Set CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "DELETE, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	sessionUser := GetUser(r)
-	limiterUsername := "[GUESTS]"
-	if sessionUser != nil {
-		limiterUsername = sessionUser.Username
-	}
-	if !userLimiter.Allow(limiterUsername) {
-		errorServer(w, r, http.StatusTooManyRequests)
-		return
-	}
-
-	postId := r.PathValue("post_id")
-	reactionType := r.PathValue("reaction_type")
-
-	// validate the reaction type
-	if reactionType != string(structs.PostReactionTypeLike) && reactionType != string(structs.PostReactionTypeDislike) && reactionType != string(structs.PostReactionTypeLove) && reactionType != string(structs.PostReactionTypeHaha) && reactionType != string(structs.PostReactionTypeSkull) {
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
-
-	// validate the post id and covert it to int
-	postIdInt, err := strconv.Atoi(postId)
-	if err != nil {
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
-
-	// get the post struct from the database
-	PostStructForRec, err := database.GetPost(postIdInt)
-	if err != nil || PostStructForRec == nil {
-		errorServer(w, r, http.StatusNotFound)
-		return
-	}
-
-	UsersPost := GetUser(r)
-	if UsersPost == nil {
-		errorServer(w, r, http.StatusUnauthorized)
-		return
-	}
-
-	mappedReaction := mapReactionForPost(PostStructForRec, UsersPost.Id, structs.PostReactionType(reactionType), reactionType)
-	if mappedReaction == nil {
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
-	reactionId, err2 := database.GetReactionId(mappedReaction.Type)
-	if err2 != nil {
-		log.Printf("deletePostReactionHandler: %s\n", err2.Error())
-
-		errorServer(w, r, http.StatusInternalServerError)
-		return
-	}
-
-	err3 := database.RemoveReactionFromPost(PostStructForRec.Id, reactionId, UsersPost.Id)
-	if err3 != nil {
-		log.Printf("deletePostReactionHandler: %s\n", err3.Error())
-		errorServer(w, r, http.StatusInternalServerError)
-		return
-	}
-}
-
 // same logic as addPostPostHandler
 func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 	// Set CORS headers
@@ -1221,11 +1166,13 @@ func addCommentGetHandler(w http.ResponseWriter, r *http.Request) {
 	// fill the view data
 	addPostView := addPostView{
 		User: &structs.UserResponse{
-			Username:  sessionUser.Username,
-			FirstName: sessionUser.FirstName,
-			LastName:  sessionUser.LastName,
-			ImageURL:  imageIdToUrl(sessionUser.ImageId),
-			Type:      userTypeToResponse(sessionUser.Type),
+			Username:    sessionUser.Username,
+			FirstName:   sessionUser.FirstName,
+			LastName:    sessionUser.LastName,
+			DateOfBirth: sessionUser.DateOfBirth,
+			Location:    sessionUser.Country,
+			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			Type:        userTypeToResponse(sessionUser.Type),
 		},
 		Categories: nil,
 		ParentId:   postId,
@@ -1281,11 +1228,13 @@ func searchPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
-			Username:  sessionUser.Username,
-			FirstName: sessionUser.FirstName,
-			LastName:  sessionUser.LastName,
-			ImageURL:  imageIdToUrl(sessionUser.ImageId),
-			Type:      userTypeToResponse(sessionUser.Type),
+			Username:    sessionUser.Username,
+			FirstName:   sessionUser.FirstName,
+			LastName:    sessionUser.LastName,
+			DateOfBirth: sessionUser.DateOfBirth,
+			Location:    sessionUser.Country,
+			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			Type:        userTypeToResponse(sessionUser.Type),
 		}
 	}
 
@@ -1683,7 +1632,6 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	email := r.FormValue("email")
 	dateOfBirth := r.FormValue("dateOfBirth")
-	fmt.Print("\n\n\n" + dateOfBirth)
 	firstName := r.FormValue("firstName")
 	lastName := r.FormValue("lastName")
 	country := r.FormValue("country")
@@ -1813,7 +1761,6 @@ func messagesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	sessionUser := GetUser(r)
 	if sessionUser == nil {
-		fmt.Print("helli")
 		errorServer(w, r, http.StatusUnauthorized)
 		return
 	}
@@ -1826,4 +1773,76 @@ func messagesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeToJson(messages, w)
+}
+
+func addReactionHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+	// // Parse the postId from the URL
+
+	postId, err := strconv.Atoi(r.FormValue("postId"))
+	if err != nil {
+		http.Error(w, "Invalid postId", http.StatusBadRequest)
+		return
+	}
+	ReactionId, _ := strconv.Atoi(r.FormValue("reaction"))
+	// Create the reaction object
+	reaction := structs.PostReaction{
+		PostId:     postId,
+		UserId:     sessionUser.Id, // Assuming you have a function to get the user ID from the request context
+		ReactionId: ReactionId,
+	}
+
+	// Add the reaction to the database
+	err = database.AddReactionToPost(reaction)
+	if err != nil {
+		http.Error(w, "Failed to add reaction", http.StatusInternalServerError)
+		return
+	}
+
+	// Send a success response
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Reaction added successfully"})
+}
+
+func deletePostReactionHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+	// // Parse the postId from the URL
+
+	postId, err := strconv.Atoi(r.FormValue("postId"))
+	if err != nil {
+		http.Error(w, "Invalid postId", http.StatusBadRequest)
+		return
+	}
+	ReactionId, _ := strconv.Atoi(r.FormValue("reaction"))
+	// Create the reaction object
+	reaction := structs.PostReaction{
+		PostId:     postId,
+		UserId:     sessionUser.Id, // Assuming you have a function to get the user ID from the request context
+		ReactionId: ReactionId,
+	}
+
+	// Add the reaction to the database
+	err = database.RemoveReactionFromPost(reaction.PostId, reaction.UserId, reaction.ReactionId)
+	if err != nil {
+		http.Error(w, "Failed to add reaction", http.StatusInternalServerError)
+		return
+	}
+
+	// Send a success response
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Reaction removed successfully"})
 }

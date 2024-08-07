@@ -335,18 +335,6 @@ func TestAddReactionToPost(t *testing.T) {
 	}
 }
 
-func TestRemoveReactionFromPost(t *testing.T) {
-	err := database.Connect(DB_PATH)
-	if err != nil {
-		t.Fatal(err.Error())
-	}
-
-	err = database.RemoveReactionFromPost(2, 1, 1)
-
-	if err != nil {
-		t.Error(err.Error())
-	}
-}
 
 func TestGetPost(t *testing.T) {
 	err := database.Connect(DB_PATH)

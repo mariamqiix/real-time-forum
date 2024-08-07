@@ -5,8 +5,19 @@ front (Ruqaya) :
 
 back (Maryam) :
 
--   ~~profile~~
 -   notification
+-   link post page with the back
+-   double check the website functionality (registration, login, chat, post, like, dislike .... etc)
+-   add report button on the post page like the edit and make it visible only if the user is moderator (if user click on it open div like (why u want to be moderator, later i'll fix it))
+-   ~~do typing -websocket~~
+-   ~~reciver message should be on right~~
+-   ~~link profile page with the back~~
+-   ~~the web should not allwo the user to post without choosing category!~~
+-   ~~after the user click on submit sort by category (the div should dissapear)~~
+-   ~~شيلي الاشياء الي تنطبع في الترمنل لان واجد فوضى~~
+-   ~~there is an edit button in post page (make it visible only if the user is the owner of the post)~~
+-   ~~add button at the end of post bage so the user can add comment (i'll handle the style later), make the button unvisible if user is guest~~
+-   ~~user can't send empty string (disable the button until he write valid thing)~~
 -   ~~if user not authenticated prvent him from clicking on the users to message them~~
 -   ~~if user change the size of the screen and mesg bar disppear, the right side of the screen should be maxmuized~~
 -   ~~the green dot should be shown only if there is a new message~~
@@ -18,24 +29,12 @@ back (Maryam) :
 -   ~~connect tje categories to the backend~~
 -   ~~search bar shold not take empty string (do validation)~~
 -   ~~profile page should open directly to post page~~
--   connect reaction count to the post
--   user can't send empty string (disable the button until he write valid thing)
--   do typing -websocket
--   link the like, dislike with the back, also, handle the number (like/dislick count)
--   reciver message should be on right
--   link post page with the back
--   link profile page with the back
--   if user like, or dislick any post, make it red (in home, profile page)
--   prevent guest from liking any post
--   add button at the end of post bage so the user can add comment (i'll handle the style later), make the button unvisible if user is guest
--   double check the website functionality (registration, login, chat, post, like, dislike .... etc)
--   there is an edit button in post page (make it visible only if the user is the owner of the post)
--   add report button on the post page like the edit and make it visible only if the user is moderator (if user click on it open div like (why u want to be moderator, later i'll fix it))
--   the web should not allwo the user to post without choosing category!
--   after the user click on submit sort by category (the div should dissapear)
-- شيلي الاشياء الي تنطبع في الترمنل لان واجد فوضى
+-   ~~profile~~
+-   ~~if user like, or dislick any post, make it red (in home, profile page)~~
+-   ~~prevent guest from liking any post~~
+-   ~~link the like, dislike with the back, also, handle the number (like/dislick count)~~
+-   ~~connect reaction count to the post~~
 
 DATABASE (Ruqaya) :
-
 -   ~~in user table , add gender~~
 -   ~~reactions : only like and dislike~~

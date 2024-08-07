@@ -66,7 +66,7 @@
                     <div class="userPic" id="userPic"></div>
 
                     <h1 class="profileUsername" id="profileUsername">UserName</h1>
-                    <h2 class="userInfo">Age: 12, location: Bahrain</h2>
+                    <h2 class="userInfo" id="userInfo">Age: 12, location: Bahrain</h2>
 
 
                     <table>
@@ -246,7 +246,7 @@
                             </tr>
                         </table>
 
-                        <button id="registerBtn" onclick="submitForm()">Submit</button>
+                        <button id="registerBtn" onclick="submitForm()" onblur="checkFormValidity()" onfocus="checkFormValidity()" disabled>Submit</button>
 
                     </div>
                     <button class="RegChange" onclick="toggleVisibility('login')">Login</button>
@@ -267,7 +267,7 @@
                                 <td class="formLog-input">
                                     <input type="text" id="usernameLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
                                 </td>
-                                <td class="error">
+                                <td class="errorLogin">
                                     <span id="usernameLoginError" class="error"></span>
                                 </td>
                             </tr>
@@ -278,13 +278,13 @@
                                 <td class="formLog-input">
                                     <input type="password" id="passwordLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
                                 </td>
-                                <td class="error">
+                                <td class="errorLogin">
                                     <span id="passwordLoginError" class="error"></span>
                                 </td>
                             </tr>
                         </table>
 
-                        <button id="loginBtn" onclick="submitLoginForm()">Login</button>
+                        <button id="loginBtn" disabled onclick="submitLoginForm()">Login</button>
                     </div>
                     <button class="RegChange" onclick="toggleVisibility('registration')">Sign-up</button>
 
@@ -300,11 +300,11 @@
                     <div class="postPageReaction">likes. dislikses</div>
                     <div class="postPageCategories">general, ...</div>
 
-                    <div class="postPageComment">Fist Comment 
+                    <div class="postPageComment">Fist Comment
                         <span class="postPageCommentUser">hdd</span>
                         <span class="postPageCommentTime">- 12:08</span>
                     </div>
-                    
+
                     <div class="postPageComment">Fist Comment</div>
                     <div class="postPageComment">Fist Comment</div>
 
@@ -340,9 +340,10 @@
                             <div class="msgTime">12:00pm</div>
                         </div>
                     </div>
+                    <div id="typingIndicator" style="display: none;">User is typing...</div>
 
                     <div class="msgTypingBar">
-                        <input type="text" placeholder="Typing..." id="msgType" name="msgType" />
+                        <input type="text" placeholder="Typing..." id="msgType" name="msgType" oninput="notifyTyping()" />
                         <button id="sendMessage" onclick="sendMessage()">Send</button>
                     </div>
 

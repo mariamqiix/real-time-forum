@@ -10,7 +10,7 @@ func RemoveReactionFromPost(postId, reactionTypeId, reacterId int) error {
 	if err != nil {
 		return err
 	}
-	_, err = tx.Exec("DELETE FROM PostReaction WHERE post_id = ? AND reaction_id = ? AND user_id = ?;", postId, reactionTypeId, reacterId)
+	_, err = tx.Exec("DELETE FROM PostReaction WHERE post_id = ? AND user_id = ?;", postId, reactionTypeId, reacterId)
 	if err != nil {
 		tx.Rollback()
 		return err

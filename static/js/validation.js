@@ -19,43 +19,6 @@ textField.addEventListener("keyup", function() {
     }
 });
 
-//Registration validation
-
-// // Update button state and styles
-// function updateButtonState() {
-//     var registerBtn = document.getElementById('registerBtn');
-//     var isValid = validateForm();
-
-//     if (isValid) {
-//         registerBtn.removeAttribute('disabled');
-//         registerBtn.classList.remove('disabled');
-//     } else {
-//         registerBtn.setAttribute('disabled', 'disabled');
-//         registerBtn.classList.add('disabled');
-//     }
-// }
-
-// // Validation function for the entire form
-// function validateForm() {
-//     var firstName = document.getElementById('firstName');
-//     var lastName = document.getElementById('lastName');
-//     var email = document.getElementById('email');
-//     var username = document.getElementById('username');
-//     var dob = document.getElementById('dob');
-//     var country = document.getElementById('country');
-//     var password = document.getElementById('password');
-//     var confirmPassword = document.getElementById('confirmPassword');
-
-//     return ((firstName.length > 4) &&
-//         (lastName.length > 4) &&
-//         (email.length > 4) &&
-//         (username.length > 4) &&
-//         validateDate(dob !== null) &&
-//         (country.length > 4) &&
-//         (password.length > 4) &&
-//         validatePasswordMatch());
-// }
-
 function validateLogInField(input) {
     const fieldName = input.id;
     const errorId = fieldName + "Error";
@@ -80,7 +43,7 @@ function validateLogInField(input) {
         }
     }
 
-    // checkLogFormValidity();
+    checkLogFormValidity();
 }
 
 function validateField(input, type = 0) {
@@ -174,10 +137,7 @@ function validateField(input, type = 0) {
             errorElement.textContent = "";
         }
     }
-    var registerBtn = document.getElementById("registerBtn");
-    registerBtn.removeAttribute("disabled");
-    registerBtn.classList.remove("disabled");
-    // checkFormValidity();
+    checkFormValidity();
 }
 
 function isValidEmail(email) {
@@ -200,13 +160,17 @@ function checkFormValidity() {
     inputFields.forEach(function(input) {
         if (input.value.trim() === "") {
             allFieldsFilled = false;
+            console.log("hello");
         }
     });
 
     // Check if any error messages are displayed
     const errorMessages = document.querySelectorAll(".error");
     errorMessages.forEach(function(error) {
-        if (error.textContent !== "") {
+        if (error.textContent.trim() !== "") {
+            console.log("hi");
+            console.log(error.textContent);
+
             allErrorsEmpty = false;
         }
     });
@@ -241,9 +205,10 @@ function checkLogFormValidity() {
     });
 
     // Check if any error messages are displayed
-    const errorMessages = document.querySelectorAll(".error");
+    const errorMessages = document.querySelectorAll(".errorLogin");
     errorMessages.forEach(function(error) {
-        if (error.textContent !== "") {
+        if (error.textContent.trim() !== "") {
+            console.log("hiLogin");
             allErrorsEmpty = false;
         }
     });

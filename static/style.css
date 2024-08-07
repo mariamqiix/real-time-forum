@@ -167,12 +167,12 @@ span.framer-text:not([data-text-fill]) {
     background-color: #dad3c7cc;
     border-radius: 40px;
     height: 210px;
-    width: 716px;
+    width: 80%;
     padding: 2%;
     float: left;
     clear: both;
-    margin: 2%;
-    margin-left: 10%;
+    margin: 1%;
+    margin-left: 8%;
     transition: transform 0.3s;
     /* Add smooth transition effect */
 }
@@ -203,7 +203,7 @@ span.framer-text:not([data-text-fill]) {
     font-size: 16px;
     margin: 3%;
     margin-left: 0;
-    color:#989292;
+    color: #989292;
 }
 
 .postContent {
@@ -233,7 +233,7 @@ span.framer-text:not([data-text-fill]) {
     font-weight: bolder;
 }
 
-.postPageContent{
+.postPageContent {
     word-break: break-word;
     word-wrap: break-word;
     float: left;
@@ -249,14 +249,14 @@ span.framer-text:not([data-text-fill]) {
     margin: 2%;
 }
 
-.postPageComment{
+.postPageComment {
     word-break: break-word;
     word-wrap: break-word;
     float: left;
     clear: both;
     font-size: 20px;
     padding: 1%;
-    background-color: #c7c1c14d;;
+    background-color: #c7c1c14d;
     width: auto;
     height: auto;
     max-width: 70%;
@@ -289,7 +289,7 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .postPageCategories,
-.postPageReaction{
+.postPageReaction {
     float: left;
     clear: both;
     height: auto;
@@ -306,7 +306,7 @@ span.framer-text:not([data-text-fill]) {
     display: none;
 }
 
-#inputBox{
+#inputBox {
     float: left;
     clear: both;
 }
@@ -325,8 +325,8 @@ span.framer-text:not([data-text-fill]) {
 .postReaction {
     float: right;
     clear: both;
-    height: 10%;  
-    width: 60%;  
+    height: 10%;
+    width: 60%;
     margin-right: 5%;
 }
 
@@ -357,7 +357,7 @@ span.framer-text:not([data-text-fill]) {
     width: 24px;
     border-radius: 0;
     padding: 0;
-} 
+}
 
 .postDislike:hover {
     background-color: transparent;
@@ -369,7 +369,6 @@ span.framer-text:not([data-text-fill]) {
     background-color: transparent;
     transform: scale(1.3);
     background-image: url(/images/likedIcon.png);
-
 }
 
 .postDislike.clicked {
@@ -389,7 +388,6 @@ span.framer-text:not([data-text-fill]) {
     margin: 4%;
     float: left;
     margin-bottom: 0;
-    
 }
 
 .postTitle {
@@ -568,7 +566,6 @@ span.framer-text:not([data-text-fill]) {
 #msgDiv {
     flex: none;
     height: 100%;
-    overflow: scroll;
     width: 100%;
     float: left;
     clear: left;
@@ -772,7 +769,8 @@ span.framer-text:not([data-text-fill]) {
     /* Change the thumb color as desired */
 }
 
-.error {
+.error,
+.errorLogin {
     color: red;
     font-size: 16px;
 }
@@ -789,7 +787,6 @@ span.framer-text:not([data-text-fill]) {
 #formReg label {
     margin: 1%;
 }
-
 
 #gender,
 #formReg input {
@@ -973,8 +970,6 @@ span.framer-text:not([data-text-fill]) {
     float: left;
     clear: both;
 }
-
-
 
 .selected {
     border-bottom: 5px solid rgb(247, 245, 245);
@@ -1244,11 +1239,12 @@ button:hover {
 
 #UserChat {
     height: 80%;
-    overflow: scroll;
-    float: left;
+    overflow-y: scroll;
+    overflow-x: hidden;
     clear: left;
     width: 100%;
 }
+
 
 /* Customize the scrollbar for #messagesBoxDiv */
 
@@ -1274,3 +1270,55 @@ button:hover {
     /* Change the color of the scrollbar thumb on hover */
 }
 
+.fullMessage {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sender {
+    justify-content: flex-start;
+}
+
+.receiver {
+    justify-content: flex-end;
+}
+
+.msg {
+    margin-right: 10px;
+}
+
+.msg-right {
+    margin-left: 10px;
+    float: right;
+    background-color: rgba(208, 214, 216, 0.938);
+}
+
+.msgTime {
+    font-size: 0.8em;
+    color: #d9d3c6;
+    margin-left: 10px;
+}
+
+#UserChat::-webkit-scrollbar {
+    width: 0.5em;
+    border-radius: 30px;
+    /* Set the width of the scrollbar */
+}
+
+#UserChat::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Set the background of the scrollbar track */
+}
+
+#UserChat::-webkit-scrollbar-thumb {
+    background: #888;
+    /* Set the color of the scrollbar thumb */
+    border-radius: 20px;
+    /* Optional: Add rounded corners to the scrollbar thumb */
+}
+
+#UserChat::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    /* Change the color of the scrollbar thumb on hover */
+}

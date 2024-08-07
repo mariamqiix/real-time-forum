@@ -28,6 +28,7 @@ function checkSize(mediaQuery2) {
             btn.style.display = "none";
         });
         navigationContent.forEach((content) => {
+            messagesBar.style.display = "none";
             content.style.width = "100%";
         });
 
@@ -35,17 +36,18 @@ function checkSize(mediaQuery2) {
         messagesBar.style.display = "none";
         // navigationBar.classList.add("center-content");
     } else {
+        console.log("hello");
         navigationBarBtns.forEach((btn) => {
             btn.style.display = "block";
             GetUserLoggedIn();
         });
         navigationContent.forEach((content) => {
             content.style.width = "70%";
+            messagesBar.style.display = "block";
         });
 
         logoName.style.display = "block";
         GetUserLoggedIn();
-        messagesBar.style.display = "block";
 
         // navigationBar.classList.remove("center-content");
     }
