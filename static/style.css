@@ -1090,7 +1090,6 @@ span.framer-text:not([data-text-fill]) {
     outline: none;
 }
 
-
 #newPostTitle {
     float: left;
     margin: 1%;
@@ -1180,10 +1179,10 @@ button:hover {
 
 #promotion-requests button:hover {
     background-color: transparent;
-    color:#706767;
+    color: #706767;
 }
 
-.requestName{
+.requestName {
     width: 80%;
 }
 

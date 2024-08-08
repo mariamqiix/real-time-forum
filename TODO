@@ -9,7 +9,7 @@ back (Maryam) :
 -   link post page with the back
 -   double check the website functionality (registration, login, chat, post, like, dislike .... etc)
 -   add report button on the post page like the edit and make it visible only if the user is moderator (if user click on it open div like (why u want to be moderator, later i'll fix it))
-- still the user can send empty messages
+-   still the user can send empty messages
 -   ~~do typing -websocket~~
 -   ~~reciver message should be on right~~
 -   ~~link profile page with the back~~
@@ -37,5 +37,6 @@ back (Maryam) :
 -   ~~connect reaction count to the post~~
 
 DATABASE (Ruqaya) :
+
 -   ~~in user table , add gender~~
 -   ~~reactions : only like and dislike~~

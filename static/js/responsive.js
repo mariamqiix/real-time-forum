@@ -36,7 +36,6 @@ function checkSize(mediaQuery2) {
         messagesBar.style.display = "none";
         // navigationBar.classList.add("center-content");
     } else {
-        console.log("hello");
         navigationBarBtns.forEach((btn) => {
             btn.style.display = "block";
             GetUserLoggedIn();

@@ -160,7 +160,6 @@ function checkFormValidity() {
     inputFields.forEach(function(input) {
         if (input.value.trim() === "") {
             allFieldsFilled = false;
-            console.log("hello");
         }
     });
 
@@ -168,7 +167,6 @@ function checkFormValidity() {
     const errorMessages = document.querySelectorAll(".error");
     errorMessages.forEach(function(error) {
         if (error.textContent.trim() !== "") {
-            console.log("hi");
             console.log(error.textContent);
 
             allErrorsEmpty = false;
@@ -177,7 +175,6 @@ function checkFormValidity() {
 
     var registerBtn = document.getElementById("registerBtn");
     var isValid = allFieldsFilled && allErrorsEmpty;
-    console.log(isValid);
     if (isValid) {
         registerBtn.removeAttribute("disabled");
         registerBtn.classList.remove("disabled");
@@ -208,7 +205,6 @@ function checkLogFormValidity() {
     const errorMessages = document.querySelectorAll(".errorLogin");
     errorMessages.forEach(function(error) {
         if (error.textContent.trim() !== "") {
-            console.log("hiLogin");
             allErrorsEmpty = false;
         }
     });
@@ -223,4 +219,50 @@ function checkLogFormValidity() {
         loginBtn.setAttribute("disabled", "disabled");
         loginBtn.classList.add("disabled");
     }
+}
+
+function validateUserInfoForm() {
+    const username = document.getElementById("ChangeUserName").value.trim();
+    const firstName = document.getElementById("ChangeFirstName").value.trim();
+    const lastName = document.getElementById("ChangeLastName").value.trim();
+    const email = document.getElementById("ChangeEmail").value.trim();
+    const dateOfBirth = document.getElementById("ChangeDOB").value.trim();
+
+    if (!username) {
+        alert("Username is required.");
+        return false;
+    } else if (username.length < 4 || username.length > 20) {
+        alert("Username must be between 4 and 20 characters.");
+        return false;
+    }
+    if (!firstName) {
+        alert("First Name is required.");
+        return false;
+    } else if (firstName.length < 3 || firstName.length > 20) {
+        alert("First Name must be between 3 and 20 characters.");
+        return false;
+    }
+    if (!lastName) {
+        alert("Last Name is required.");
+        return false;
+    } else if (lastName.length < 3 || lastName.length > 20) {
+        alert("Last Name must be between 3 and 20 characters.");
+        return false;
+    }
+    if (!email) {
+        alert("Email is required.");
+        return false;
+    } else if (!isValidEmail(email)) {
+        alert("Invalid email format.");
+        return false;
+    }
+    if (!dateOfBirth) {
+        alert("Date of Birth is required.");
+        return false;
+    } else if (dateOfBirth > new Date()) {
+        alert("Invalid date of birth.");
+        return false;
+    }
+    // Additional validation can be added here (e.g., email format, date format)
+    return true;
 }

@@ -184,9 +184,8 @@ func GetUsersByType(userType int) ([]structs.User, error) {
 
 	// Prepare the SQL statement with a placeholder
 	stmt, err := db.Prepare(`SELECT id, type_id, username, first_name, last_name, country,
-		date_of_birth, email, hashed_password, image_id, banned_until,
-		github_name, linkedin_name, twitter_name,bio,gender FROM User WHERE type_id = ?`)
-
+        date_of_birth, email, hashed_password, image_id, banned_until,
+        github_name, linkedin_name, twitter_name, bio, gender FROM User WHERE type_id = ?`)
 	if err != nil {
 		return nil, err
 	}
@@ -216,13 +215,12 @@ func GetUsersByType(userType int) ([]structs.User, error) {
 			&u.Email,
 			&u.HashedPassword,
 			&u.ImageId,
-			bannedUntil,
+			&bannedUntil,
 			&u.GithubName,
 			&u.LinkedinName,
 			&u.TwitterName,
 			&u.Bio,
 			&u.Gender)
-
 		if err != nil {
 			return nil, err
 		}

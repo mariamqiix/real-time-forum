@@ -15,8 +15,8 @@ function toggleDiv(divName) {
 
 function toggleLogout(className) {
     fetch("http://localhost:8080/user", {
-            method: "GET",
-        })
+        method: "GET",
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -64,8 +64,8 @@ function OpenMesages(username, id) {
         mailIcon.style.display = "none";
     } else {
         fetch("http://localhost:8080/user", {
-                method: "GET",
-            })
+            method: "GET",
+        })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -75,17 +75,14 @@ function OpenMesages(username, id) {
             .then((text) => {
                 if (text != "null") {
                     sendMessageButton.setAttribute("onclick", `SendMessage('${username}')`);
-                    console.log(username);
                     msgType.setAttribute("oninput", `notifyTyping('${username}')`);
                     mailIcon.style.display = "block";
-                    mailIcon.onclick = function() {
+                    mailIcon.onclick = function () {
                         OpenMesages();
                     };
                     messagesBoxDiv.style.display = "none";
                     msgDiv.style.display = "block";
                     document.getElementById("messagesTitle").innerHTML = username;
-                    console.log(id);
-                    console.log(username);
                     msgDiv.setAttribute("data-id", id);
                     const messageBox = document.getElementById(id);
 
@@ -99,11 +96,13 @@ function OpenMesages(username, id) {
                     const formData = new FormData();
                     formData.append("id", id);
                     const chats = document.getElementById("UserChat");
+                    chats.scrollTop = chats.scrollHeight;
+
                     chats.innerHTML = "";
                     fetch(`http://localhost:8080/messages`, {
-                            method: "POST",
-                            body: formData,
-                        })
+                        method: "POST",
+                        body: formData,
+                    })
                         .then((response) => {
                             if (!response.ok) {
                                 throw new Error(`HTTP error! status: ${response.status}`);

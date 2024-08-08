@@ -1,6 +1,6 @@
 socket = new WebSocket(`ws://localhost:8080/ws`);
 
-socket.onopen = function(event) {
+socket.onopen = function (event) {
     console.log("WebSocket is open now.");
 };
 
@@ -8,7 +8,7 @@ function initializeWebSocket() {
     location.reload();
 }
 
-socket.onmessage = function(event) {
+socket.onmessage = function (event) {
     console.log("WebSocket message received:", event.data);
     const messageData = JSON.parse(event.data);
 
@@ -37,7 +37,6 @@ socket.onmessage = function(event) {
             // Create the message time div
             const msgTimeDiv = document.createElement("div");
             msgTimeDiv.className = "msgTime";
-            console.log(messageData);
 
             // Convert the timestamp to a readable format
             const date = new Date(messageData.Time);
@@ -72,11 +71,11 @@ socket.onmessage = function(event) {
     }
 };
 
-socket.onclose = function(event) {
+socket.onclose = function (event) {
     console.log("WebSocket is closed now.");
 };
 
-socket.onerror = function(error) {
+socket.onerror = function (error) {
     console.error("WebSocket error observed:", error);
 };
 
@@ -90,8 +89,8 @@ function SendMessage(ReceiverId) {
     const Messag = document.getElementById("msgType").value;
     document.getElementById("msgType").value = "";
     fetch(`http://localhost:8080/user`, {
-            method: "GET",
-        })
+        method: "GET",
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -148,9 +147,9 @@ function SendMessage(ReceiverId) {
 
 function checkUserOnline(userID) {
     fetch(`http://localhost:8080/checkUserOnline?userID=${userID}`, {
-            method: "POST",
-            body: formData,
-        })
+        method: "POST",
+        body: formData,
+    })
         .then((response) => {
             if (response.ok) {
                 console.log(`User ${userID} is online`);
@@ -164,10 +163,9 @@ function checkUserOnline(userID) {
 }
 
 function notifyTyping(Receiver) {
-    console.log("Typing notification sent to user:", Receiver);
     fetch(`http://localhost:8080/user`, {
-            method: "GET",
-        })
+        method: "GET",
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
