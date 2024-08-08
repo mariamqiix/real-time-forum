@@ -1,8 +1,8 @@
 function settingsHandler() {
     // Send the form data to the Go server
     fetch("http://localhost:8080/userType", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -55,8 +55,8 @@ function settingsHandler() {
 function fetchAndAppendModerators() {
     // Fetch the list of moderators from the server
     fetch("http://localhost:8080/Moderator", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -95,14 +95,15 @@ function fetchAndAppendModerators() {
 
 function RemoveModerator(id) {
     confirmAction();
+    console.log("Removing moderator with ID:", id);
     // Create the request body
     const formData = new FormData();
-    formData.append("id", id);
+    formData.append("Id", id);
 
-    fetch("h  ttp://localhost:8080/RemoveModerator", {
-        method: "POST",
-        body: formData,
-    })
+    fetch("http://localhost:8080/RemoveModerator", {
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (response.ok) {
                 alert("Moderator removed successfully");
@@ -135,9 +136,9 @@ function saveNewPassword() {
         formData.append("password", newPassword);
 
         fetch("h    ttp://localhost:8080/changePassword", {
-            method: "POST",
-            body: formData,
-        })
+                method: "POST",
+                body: formData,
+            })
             .then((response) => {
                 if (response.ok) {
                     alert("Password changed successfully!");
@@ -155,8 +156,8 @@ function PromotionRequests() {
     const promotionRequestsTable = document.querySelector("#promotion-requests table");
     promotionRequestsTable.innerHTML = ""; // Clear existing table rows
     fetch("http://localhost:8080/PromotionRequests", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -214,9 +215,9 @@ function ShowPromotion(Id) {
     formData.append("id", Id);
 
     fetch("http://localhost:8080/ShowUserPromotion", {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -259,9 +260,9 @@ function RejectPromotion(userId) {
     formData.append("userId", userId);
 
     fetch("http://localhost:8080/RejectPromotion", {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (response.ok) {
                 alert("Promotion request rejected successfully");
@@ -284,9 +285,9 @@ function ApprovePromotion(userId) {
     formData.append("userId", userId);
 
     fetch("http://localhost:8080/ApprovePromotion", {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (response.ok) {
                 alert("Promotion request approved successfully");
@@ -353,9 +354,9 @@ function removeCategory(id) {
 
     if (confirm("Are you sure you want to proceed?")) {
         fetch("http://localhost:8080/removeCategory", {
-            method: "POST",
-            body: formData,
-        })
+                method: "POST",
+                body: formData,
+            })
             .then((response) => {
                 if (response.ok) {
                     alert("Category removed successfully");
@@ -415,8 +416,8 @@ async function addCategory() {
 
 function ChangeUserInformation() {
     fetch("http://localhost:8080/getUserInfo", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -480,9 +481,9 @@ function UpdateUserInformation() {
     formData.append("gender", gender);
     if (confirm("Are you sure you want to proceed?")) {
         fetch("h    ttp://localhost:8080/updateUserInfo", {
-            method: "POST",
-            body: formData,
-        })
+                method: "POST",
+                body: formData,
+            })
             .then((response) => {
                 if (response.ok) {
                     alert("User information updated successfully");

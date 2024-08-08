@@ -1317,9 +1317,9 @@ func ModeratorHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RemoveModeratorHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
+	// w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	// w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	sessionUser := GetUser(r)
 
@@ -1331,7 +1331,7 @@ func RemoveModeratorHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusTooManyRequests)
 		return
 	}
-	user := r.FormValue("id")
+	user := r.FormValue("Id")
 	intUser, _ := strconv.Atoi(user)
 	err := database.UpdateUserType(intUser, 1)
 	if err != nil {
