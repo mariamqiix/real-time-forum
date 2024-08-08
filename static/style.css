@@ -611,7 +611,7 @@ span.framer-text:not([data-text-fill]) {
 
 .msg {
     background-color: #fbd998;
-    border-radius: 5px;
+    border-radius: 15px;
     float: left;
     clear: left;
     height: auto;
@@ -621,6 +621,7 @@ span.framer-text:not([data-text-fill]) {
     margin: 2%;
     font-size: 25px;
     word-break: break-all;
+    margin-right: 10px;
 }
 
 .chat {
@@ -1282,10 +1283,6 @@ button:hover {
 
 .receiver {
     justify-content: flex-end;
-}
-
-.msg {
-    margin-right: 10px;
 }
 
 .msg-right {

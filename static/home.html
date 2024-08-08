@@ -343,7 +343,7 @@
                     <div id="typingIndicator" style="display: none;">User is typing...</div>
 
                     <div class="msgTypingBar">
-                        <input type="text" placeholder="Typing..." id="msgType" name="msgType" oninput="notifyTyping()" />
+                        <input type="text" maxlength="50" placeholder="Typing..." id="msgType" name="msgType" oninput="notifyTyping()" />
                         <button id="sendMessage" onclick="sendMessage()">Send</button>
                     </div>
 
@@ -361,8 +361,8 @@
 
 <div id="categoryFilter" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('categoryFilter')"></div>
-    <h2>Select option(s):</h2>
-
+<br>
+<br>
     <table>
         <tr>
             <td><label><input type="checkbox" name="option1" value="option1" /> Option 1</label></td>
@@ -394,7 +394,6 @@
 
 <div id="newPostForm" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('newPostForm')"></div>
-    <h2>Create New Post</h2>
     <table>
         <tr>
             <td><label for="newPostTitle">Title:</label></td>
@@ -420,8 +419,6 @@
 
 <div id="user-info" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('user-info')"></div>
-    <h2>User Information</h2>
-
     <table>
         <tr>
             <th><label for="ChangeUserName">Username</label></th>
@@ -463,7 +460,7 @@
 
 <div id="change-password" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('change-password')"></div>
-    <h2>Change Password</h2>
+    <br>
     <table>
         <tr>
             <td class="changePass"><label for="password">Password:</label></td>
@@ -481,7 +478,7 @@
 
 <div id="request-moderator" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('request-moderator')"></div>
-    <h2>Request to be Moderator</h2>
+    <br>
     <label for="answer">Why do you want to be a moderator?</label>
     <br /><br />
     <textarea id="answer" name="answer" rows="5"></textarea>
