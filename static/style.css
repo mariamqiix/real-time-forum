@@ -1330,3 +1330,35 @@ button:hover {
     background: #555;
     /* Change the color of the scrollbar thumb on hover */
 }
+
+#list-moderators ul li {
+    display: flex;
+    justify-content: space-between;
+    /* Ensures the button is on the right */
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#list-moderators .remove-button {
+    background-color: transparent;
+    font-size: 16px;
+    color: rgb(239, 103, 103);
+    margin-left: 10px;
+    /* Optional: Add some space between the text and the button */
+}
+
+#manage-categories ul li {
+    display: flex;
+    justify-content: space-between;
+    /* Ensures the button is on the right */
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.remove-button {
+    background-color: transparent;
+    font-size: 16px;
+    color: rgb(239, 103, 103);
+    margin-left: 10px;
+    /* Optional: Add some space between the text and the button */
+}
