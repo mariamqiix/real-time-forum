@@ -62,8 +62,8 @@ function validateField(input, type = 0) {
     }
 
     // Validate last name
-    if (fieldName === "lastName" || value.length < 4 || value.length > 20) {
-        if (value === "") {
+    if (fieldName === "lastName") {
+        if (value === "" || value.length < 4 || value.length > 20) {
             errorElement.textContent = "Last name is required.";
         } else {
             errorElement.textContent = "";
@@ -82,8 +82,8 @@ function validateField(input, type = 0) {
     }
 
     // Validate username
-    if (fieldName === "username" || value.length < 4 || value.length > 20) {
-        if (value === "") {
+    if (fieldName === "username") {
+        if (value === "" || value.length < 4 || value.length > 20) {
             errorElement.textContent = "Username is required.";
         } else {
             errorElement.textContent = "";
@@ -100,8 +100,8 @@ function validateField(input, type = 0) {
     }
 
     // Validate country
-    if (fieldName === "country" || value.length < 4 || value.length > 20) {
-        if (value === "") {
+    if (fieldName === "country") {
+        if (value === "" || value.length < 4 || value.length > 20) {
             errorElement.textContent = "Country is required.";
         } else {
             errorElement.textContent = "";

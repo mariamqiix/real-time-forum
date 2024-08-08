@@ -55,3 +55,40 @@ searchoutput.innerHTML = "";
 
 
 function EditPost() {}
+
+// // Fetch the JSON file
+// fetch('./countries.json')
+//   .then(response => response.json())
+//   .then(data => {
+//     const countrySelect = document.getElementById('countrySelect');
+
+//     // Populate the select element with options
+//     data.countries.forEach(country => {
+//       const option = document.createElement('option');
+//       option.text = country;
+//       option.value = country;
+//       countrySelect.add(option);
+//     });
+//   })
+//   .catch(error => console.error('Error loading countries:', error));
+
+
+// function loadCountries() {
+//     fetch('countries.json')
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Failed to load the JSON file.');
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             const countries = data.countries;
+//             console.log(countries); // You can process the countries array as needed
+//         })
+//         .catch(error => {
+//             console.error('Error loading countries:', error);
+//         });
+// }
+
+// // Call the function to load the countries
+// loadCountries();
