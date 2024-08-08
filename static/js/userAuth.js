@@ -66,7 +66,7 @@ async function submitForm() {
             console.log("Signup successful");
             GetUserLoggedIn();
             const loginSpan = document.getElementById("loginSpan");
-            loginSpan.innerHTML = "logout";
+            loginSpan.innerHTML = "Logout";
             HomePageRequest(); // Get the form values
             const firstName = document.getElementById("firstName");
             firstName.innerHTML = "";
@@ -121,7 +121,7 @@ async function GetUserLoggedIn() {
                 profileIcon.style.display = "none";
                 profileBtn.style.display = "none";
                 const loginSpan = document.getElementById("loginSpan");
-                loginSpan.innerHTML = "sign up";
+                loginSpan.innerHTML = "Sign up";
                 const replayPostButton = document.getElementById("replayPost-button");
                 replayPostButton.style.display = "none";
                 return;
@@ -134,7 +134,7 @@ async function GetUserLoggedIn() {
                 profileIcon.style.display = "block";
                 profileBtn.style.display = "block";
                 const loginSpan = document.getElementById("loginSpan");
-                loginSpan.innerHTML = "logout";
+                loginSpan.innerHTML = "Logout";
                 const replayPostButton = document.getElementById("replayPost-button");
                 replayPostButton.style.display = "block";
                 return text;

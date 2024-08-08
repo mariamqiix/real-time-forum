@@ -1,6 +1,6 @@
 socket = new WebSocket(`ws://localhost:8080/ws`);
 
-socket.onopen = function (event) {
+socket.onopen = function(event) {
     console.log("WebSocket is open now.");
 };
 
@@ -8,7 +8,7 @@ function initializeWebSocket() {
     location.reload();
 }
 
-socket.onmessage = function (event) {
+socket.onmessage = function(event) {
     console.log("WebSocket message received:", event.data);
     const messageData = JSON.parse(event.data);
 
@@ -71,11 +71,11 @@ socket.onmessage = function (event) {
     }
 };
 
-socket.onclose = function (event) {
+socket.onclose = function(event) {
     console.log("WebSocket is closed now.");
 };
 
-socket.onerror = function (error) {
+socket.onerror = function(error) {
     console.error("WebSocket error observed:", error);
 };
 
@@ -87,69 +87,71 @@ socket.onerror = function (error) {
 // });
 function SendMessage(ReceiverId) {
     const Messag = document.getElementById("msgType").value;
-    document.getElementById("msgType").value = "";
-    fetch(`http://localhost:8080/user`, {
-        method: "GET",
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Error: " + response.status);
-            }
-            return response.text(); // Get response as text
-        })
-        .then((text) => {
-            if (text != "null") {
-                // Clean the text by removing quotation marks and trimming whitespace
-                const cleanedText = text.replace(/['"]/g, "").trim();
-                const newcleanedText = cleanedText.replace("null", "");
+    if (Messag != "" && Messag.trim() != "") {
+        document.getElementById("msgType").value = "";
+        fetch(`http://localhost:8080/user`, {
+                method: "GET",
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error: " + response.status);
+                }
+                return response.text(); // Get response as text
+            })
+            .then((text) => {
+                if (text != "null") {
+                    // Clean the text by removing quotation marks and trimming whitespace
+                    const cleanedText = text.replace(/['"]/g, "").trim();
+                    const newcleanedText = cleanedText.replace("null", "");
 
-                const messageObject = {
-                    type: "message",
-                    SenderId: newcleanedText,
-                    ReceiverId: ReceiverId,
-                    Messag: Messag,
-                    Time: new Date().toISOString(),
-                };
-                console.log("Sending message:", messageObject);
-                socket.send(JSON.stringify(messageObject));
+                    const messageObject = {
+                        type: "message",
+                        SenderId: newcleanedText,
+                        ReceiverId: ReceiverId,
+                        Messag: Messag,
+                        Time: new Date().toISOString(),
+                    };
+                    console.log("Sending message:", messageObject);
+                    socket.send(JSON.stringify(messageObject));
 
-                // Create the new chat div
-                const chatDiv = document.createElement("div");
-                chatDiv.className = "fullMessage";
+                    // Create the new chat div
+                    const chatDiv = document.createElement("div");
+                    chatDiv.className = "fullMessage";
 
-                // Create the message div
-                const msgDiv = document.createElement("div");
-                msgDiv.className = "msg";
-                msgDiv.textContent = Messag;
+                    // Create the message div
+                    const msgDiv = document.createElement("div");
+                    msgDiv.className = "msg";
+                    msgDiv.textContent = Messag;
 
-                // Create the message time div
-                const msgTimeDiv = document.createElement("div");
-                msgTimeDiv.className = "msgTime";
-                msgTimeDiv.textContent = new Date(messageObject.Time).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                });
-                chatDiv.classList.add("receiver");
-                chatDiv.appendChild(msgTimeDiv);
-                chatDiv.appendChild(msgDiv);
+                    // Create the message time div
+                    const msgTimeDiv = document.createElement("div");
+                    msgTimeDiv.className = "msgTime";
+                    msgTimeDiv.textContent = new Date(messageObject.Time).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                    });
+                    chatDiv.classList.add("receiver");
+                    chatDiv.appendChild(msgTimeDiv);
+                    chatDiv.appendChild(msgDiv);
 
-                // Append the chat div to the msgUser chat container
+                    // Append the chat div to the msgUser chat container
 
-                const chats = document.getElementById("UserChat");
-                chats.appendChild(chatDiv);
-            }
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+                    const chats = document.getElementById("UserChat");
+                    chats.appendChild(chatDiv);
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
 }
 
 function checkUserOnline(userID) {
     fetch(`http://localhost:8080/checkUserOnline?userID=${userID}`, {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (response.ok) {
                 console.log(`User ${userID} is online`);
@@ -164,8 +166,8 @@ function checkUserOnline(userID) {
 
 function notifyTyping(Receiver) {
     fetch(`http://localhost:8080/user`, {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);

@@ -1362,3 +1362,15 @@ button:hover {
     margin-left: 10px;
     /* Optional: Add some space between the text and the button */
 }
+
+.addCategory-button {
+    padding: 10px 20px;
+    /* Add padding for better appearance */
+    cursor: pointer;
+    width: auto;
+    /* Ensure the button width adjusts to fit the text */
+    font-size: 16px;
+    /* Adjust font size if needed */
+    text-align: center;
+    /* Center the text inside the button */
+}
