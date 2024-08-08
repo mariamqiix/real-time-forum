@@ -675,27 +675,38 @@ function PromotionRequests() {
             return response.json();
         })
         .then((data) => {
-            const promotionRequestsList = document.querySelector("#promotion-requests ul");
-            promotionRequestsList.innerHTML = ""; // Clear existing list items
-
+            const promotionRequestsTable = document.querySelector("#promotion-requests table");
+            promotionRequestsTable.innerHTML = ""; // Clear existing table rows
+            
             data.forEach((request) => {
-                const listItem = document.createElement("li");
-                listItem.textContent = request.Username;
-                listItem.dataset.id = request.Id; // Set the moderator ID as a data attribute
-
+                const row = document.createElement("tr");
+            
+                const usernameCell = document.createElement("td");
+                usernameCell.textContent = request.Username;
+                usernameCell.dataset.id = request.Id; // Set the moderator ID as a data attribute
+                row.appendChild(usernameCell);
+            
+                const approveButtonCell = document.createElement("td");
                 const approveButton = document.createElement("button");
-                approveButton.classList.add("Show-button");
+
+                approveButton.classList.add("show-button");
                 approveButton.textContent = "Show";
                 approveButton.setAttribute("onclick", `ShowPromotion(${request.Id})`);
 
+                approveButtonCell.appendChild(approveButton);
+                row.appendChild(approveButtonCell);
+            
+                const rejectButtonCell = document.createElement("td");
                 const rejectButton = document.createElement("button");
+
                 rejectButton.classList.add("reject-button");
                 rejectButton.textContent = "Reject";
                 rejectButton.setAttribute("onclick", `RejectPromotion(${request.UserId})`);
 
-                listItem.appendChild(approveButton);
-                listItem.appendChild(rejectButton);
-                promotionRequestsList.appendChild(listItem);
+                rejectButtonCell.appendChild(rejectButton);
+                row.appendChild(rejectButtonCell);
+            
+                promotionRequestsTable.appendChild(row);
             });
         })
         .catch((error) => {

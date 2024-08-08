@@ -473,6 +473,7 @@
             <td class="error"><span id="confirmPasswordError2" class="error"></span></td>
         </tr>
     </table>
+    <br>
     <button type="button" id="save-btn" onclick="saveNewPassword()">Save</button>
 </div>
 
@@ -489,7 +490,7 @@
 
 <div id="list-moderators" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('list-moderators')"></div>
-    <h2>List of Moderators</h2>
+    <br>
     <ul>
         <li>
             Moderator 1 <button class="remove-button" onclick="confirmAction()">Remove</button>
@@ -502,17 +503,18 @@
 
 <div id="promotion-requests" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('promotion-requests')"></div>
-    <h2>Promotion Requests</h2>
-    <ul>
-        <li>
-            Request 1 <button class="reject-button">Remove</button>
-            <button class="show-button">show</button>
-        </li>
-        <li>
-            Request 1 <button class="reject-button">Remove</button>
-            <button class="show-button">show</button>
-        </li>
-    </ul>
+    <table>
+        <tr>
+          <td class="requestName">Request 1</td>
+          <td><button class="reject-button">Remove</button></td>
+          <td><button class="show-button">Show</button></td>
+        </tr>
+        <tr>
+          <td>Request 2</td>
+          <td><button class="reject-button">Remove</button></td>
+          <td><button class="show-button">Show</button></td>
+        </tr>
+    </table>
 </div>
 
 <div id="ShowPromotionRequest" class="popup" style="display: none">
@@ -525,14 +527,10 @@
 
 <div id="manage-categories" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('manage-categories')"></div>
-    <h2>Manage Categories</h2>
+    <br>
     <ul>
-        <li>
-            category 1 <button class="remove-button" onclick="confirmAction()">Remove</button>
-        </li>
-        <li>
-            category 1 <button class="remove-button" onclick="confirmAction()">Remove</button>
-        </li>
+        <li>category 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
+        <li>category 1 <button class="remove-button" onclick="confirmAction()">Remove</button></li>
     </ul>
     <button class="addCategory-button" onclick="toggleDiv('addCategory')">add category</button>
 </div>
