@@ -218,18 +218,11 @@ span.framer-text:not([data-text-fill]) {
 .postPageTitle {
     word-break: break-word;
     word-wrap: break-word;
-    float: left;
-    clear: left;
-    font-size: 20px;
     padding: 2%;
-    background-color: rgba(222, 221, 218, 0.7);
     width: auto;
     height: auto;
     max-width: 70%;
-    border-radius: 15px;
     color: #555;
-    margin: 2%;
-    margin-bottom: 0;
     font-weight: bolder;
 }
 
@@ -241,12 +234,12 @@ span.framer-text:not([data-text-fill]) {
     font-size: 20px;
     padding: 3%;
     background-color: rgba(251, 217, 152, 0.7);
-    width: auto;
     height: auto;
-    max-width: 70%;
+    width: 70%;
     border-radius: 15px;
     color: #555;
-    margin: 2%;
+    margin: 10%;
+    margin-bottom: 0;
 }
 
 .postPageComment {
@@ -262,7 +255,7 @@ span.framer-text:not([data-text-fill]) {
     max-width: 70%;
     border-radius: 10px;
     color: #555;
-    margin-left: 6%;
+    margin-left: 10%;
     margin-top: 1%;
 }
 
@@ -281,25 +274,17 @@ span.framer-text:not([data-text-fill]) {
 .postPageTime {
     font-size: 16px;
     font-weight: lighter;
-    color: #ccc;
     float: right;
-    width: auto;
-    height: auto;
-    margin-top: 5%;
+    clear: right;
 }
 
-.postPageCategories,
-.postPageReaction {
+.postPageCategories {
     float: left;
     clear: both;
     height: auto;
-    width: 100%;
-    margin: 2%;
-}
-
-.postPage {
-    padding: 3%;
-    padding-top: 10%;
+    width: 70%;
+    margin-top: 5%;
+    color: #555;
 }
 
 .hidden {
@@ -328,6 +313,26 @@ span.framer-text:not([data-text-fill]) {
     height: 10%;
     width: 60%;
     margin-right: 5%;
+}
+
+.postPageReaction{
+    float: left;
+    clear: both;
+    height: auto;
+    width: 70%;
+    margin: 2%;
+    margin-left: 10%;
+    padding: 3%;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.postPageCommentReaction{
+    float: right;
+    clear: both;
+    height: auto;
+    width: 100%;
+    margin-top: 5%;
 }
 
 .reactionCount {
@@ -1151,15 +1156,23 @@ button:hover {
 
 #promotion-requests table,
 #change-password table,
-#user-info table {
+#user-info table,
+#addCategory table {
     text-align: left;
     width: 60%;
     margin-left: 20%;
 }
 
+#change-password table,
+#addCategory table {
+    margin-top: 10%;
+}
+
 #ChangeGender,
 #user-info input,
-#change-password input {
+#change-password input,
+#addCategory input,
+#addCategory textarea {
     background-color: none;
     outline: none;
     border-radius: 10px;
@@ -1169,6 +1182,13 @@ button:hover {
     border: 1px solid #ccc;
     font-size: 16px;
     padding-left: 2%;
+}
+
+#addCategory textarea {
+    max-width: 300px;
+    min-width: 300px;
+    max-height: 100px;
+    min-height: 100px;
 }
 
 #promotion-requests button {
@@ -1374,3 +1394,4 @@ button:hover {
     text-align: center;
     /* Center the text inside the button */
 }
+

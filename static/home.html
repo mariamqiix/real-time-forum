@@ -23,8 +23,10 @@
                 <span class="framer-text">Home</span>
             </div>
 
-            <div class="bellIcon navigationBarIcons" id="bellIcon navigationBarIcons" onclick="toggleVisibility('notifications')"></div>
-            <div class="notificationsBtn navigationBarBtns" id="notificationsBtn navigationBarBtns" onclick="toggleVisibility('notifications')">
+            <div class="bellIcon navigationBarIcons" id="bellIcon navigationBarIcons"
+                onclick="toggleVisibility('notifications')"></div>
+            <div class="notificationsBtn navigationBarBtns" id="notificationsBtn navigationBarBtns"
+                onclick="toggleVisibility('notifications')">
                 <span class="framer-text">Notifications</span>
             </div>
 
@@ -151,7 +153,8 @@
                                     <label for="firstName">First Name:</label>
                                 </td>
                                 <td class="formReg-input">
-                                    <input type="text" id="firstName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="text" id="firstName" onfocus="validateField(this)"
+                                        onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error">
                                     <span id="firstNameError" class="error"></span>
@@ -160,23 +163,27 @@
                             <tr>
                                 <td class="formReg-label"><label for="lastName">Last Name:</label></td>
                                 <td class="formReg-input">
-                                    <input type="text" id="lastName" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="text" id="lastName" onfocus="validateField(this)"
+                                        onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error"><span id="lastNameError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="email">Email:</label></td>
-                                <td class="formReg-input"><input type="text" id="email" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" /></td>
+                                <td class="formReg-input"><input type="text" id="email" onfocus="validateField(this)"
+                                        onblur="validateField(this)" oninput="validateField(this)" /></td>
                                 <td class="error"><span id="emailError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="username">Username:</label></td>
-                                <td class="formReg-input"><input type="text" id="username" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" /></td>
+                                <td class="formReg-input"><input type="text" id="username" onfocus="validateField(this)"
+                                        onblur="validateField(this)" oninput="validateField(this)" /></td>
                                 <td class="error"><span id="usernameError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="dob">Date of Birth:</label></td>
-                                <td class="formReg-input"><input type="date" id="dob" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" /></td>
+                                <td class="formReg-input"><input type="date" id="dob" onfocus="validateField(this)"
+                                        onblur="validateField(this)" oninput="validateField(this)" /></td>
                                 <td class="error"><span id="dobError" class="error"></span></td>
                             </tr>
                             <tr>
@@ -185,18 +192,23 @@
                                     <!-- <select id="countrySelect">
                                         <option value="">Select a country...</option>
                                       </select> -->
-                                    <input type="text" id="country" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" />
+                                    <input type="text" id="country" onfocus="validateField(this)"
+                                        onblur="validateField(this)" oninput="validateField(this)" />
                                 </td>
                                 <td class="error"><span id="countryError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="password">Password:</label></td>
-                                <td class="formReg-input"><input type="password" id="password" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" /></td>
+                                <td class="formReg-input"><input type="password" id="password"
+                                        onfocus="validateField(this)" onblur="validateField(this)"
+                                        oninput="validateField(this)" /></td>
                                 <td class="error"><span id="passwordError" class="error"></span></td>
                             </tr>
                             <tr>
                                 <td class="formReg-label"><label for="confirmPassword">Re-enter Password:</label></td>
-                                <td class="formReg-input"><input type="password" id="confirmPassword" onfocus="validateField(this)" onblur="validateField(this)" oninput="validateField(this)" /></td>
+                                <td class="formReg-input"><input type="password" id="confirmPassword"
+                                        onfocus="validateField(this)" onblur="validateField(this)"
+                                        oninput="validateField(this)" /></td>
                                 <td class="error"><span id="confirmPasswordError" class="error"></span></td>
                             </tr>
                             <tr>
@@ -211,7 +223,8 @@
                             </tr>
                         </table>
 
-                        <button id="registerBtn" onclick="submitForm()" onblur="checkFormValidity()" onfocus="checkFormValidity()" disabled>Submit</button>
+                        <button id="registerBtn" onclick="submitForm()" onblur="checkFormValidity()"
+                            onfocus="checkFormValidity()" disabled>Submit</button>
 
                     </div>
                     <button class="RegChange" onclick="toggleVisibility('login')">Login</button>
@@ -230,7 +243,8 @@
                                     <label for="usernameLogin">Username or email:</label>
                                 </td>
                                 <td class="formLog-input">
-                                    <input type="text" id="usernameLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
+                                    <input type="text" id="usernameLogin" onfocus="validateLogInField(this)"
+                                        onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
                                 </td>
                                 <td class="errorLogin">
                                     <span id="usernameLoginError" class="error"></span>
@@ -241,7 +255,8 @@
                                     <label for="passwordLogin">Password:</label>
                                 </td>
                                 <td class="formLog-input">
-                                    <input type="password" id="passwordLogin" onfocus="validateLogInField(this)" onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
+                                    <input type="password" id="passwordLogin" onfocus="validateLogInField(this)"
+                                        onblur="validateLogInField(this)" oninput="validateLogInField(this)" />
                                 </td>
                                 <td class="errorLogin">
                                     <span id="passwordLoginError" class="error"></span>
@@ -259,15 +274,30 @@
 
                     <button id="editPost-button" class="editPost-button" onclick="EditPost()">Edit</button>
 
-                    <div class="postPageTime">12:00 - 21/August/2023</div>
-                    <div class="postPageTitle"> My First Post</div>
-                    <div class="postPageContent">Helllo, My First Post Helllo, My First Post Helllo, My First Post Helllo, My First Post</div>
-                    <div class="postPageReaction">likes. dislikses</div>
-                    <div class="postPageCategories">general, ...</div>
-
+                    <div class="postPageContent">
+                        <span class="postPageTime">12:00 - 21/August/2023</span>
+                        <h1 class="postPageTitle">My First Post</h1>
+                        <p>
+                            Helllo, My First Post Helllo, My First Post Helllo, My First Post Helllo, My First Post
+                        </p>
+                        <div class="postPageCategories">general, ...</div>
+                    </div>
+                    <div class="postPageReaction">
+                        <div class="postLike"></div>
+                        <div class="reactionCount"></div>
+                        <div class="postDislike"></div>
+                        <div class="reactionCount"></div>
+                    </div>
+                    
                     <div class="postPageComment">Fist Comment
                         <span class="postPageCommentUser">hdd</span>
                         <span class="postPageCommentTime">- 12:08</span>
+                        <div class="postPageCommentReaction">
+                            <div class="postLike"></div>
+                            <div class="reactionCount"></div>
+                            <div class="postDislike"></div>
+                            <div class="reactionCount"></div>
+                        </div>
                     </div>
 
                     <div class="postPageComment">Fist Comment</div>
@@ -308,7 +338,8 @@
                     <div id="typingIndicator" style="display: none;">User is typing...</div>
 
                     <div class="msgTypingBar">
-                        <input type="text" maxlength="50" placeholder="Typing..." id="msgType" name="msgType" oninput="notifyTyping()" />
+                        <input type="text" maxlength="50" placeholder="Typing..." id="msgType" name="msgType"
+                            oninput="notifyTyping()" />
                         <button id="sendMessage" onclick="sendMessage()">Send</button>
                     </div>
 
@@ -502,15 +533,17 @@
 
 <div id="addCategory" class="popup" style="display: none">
     <div class="exitButton" onclick="toggleDiv('addCategory')"></div>
-    <h2>add Category</h2>
-    <label for="categoryName">categoryName?</label>
-    <input id="categoryName" name="categoryName" /> <br /><br />
-
-    <label for="CategoryDescription">Category description</label>
-    <br /><br />
-    <textarea id="CategoryDescription" name="CategoryDescription" rows="5"></textarea>
-    <br /><br />
-
+    <table>
+        <tr>
+            <td><label for="categoryName">Category Name</label></td>
+            <td><input id="categoryName" name="categoryName" /></td>
+        </tr>
+        <tr>
+            <td><label for="CategoryDescription">Category Description</label></td>
+            <td><textarea id="CategoryDescription" name="CategoryDescription" rows="5"></textarea></td>
+        </tr>
+    </table>
+    <br>
     <button class="addCategory-button" onclick="addCategory()">add</button>
 </div>
 <script src="/js/userAuth.js"></script>
