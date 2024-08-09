@@ -358,15 +358,34 @@ function PostInfo(id) {
 // element.addEventListener("DOMSubtreeModified", function() {
 //     element.scrollTop = element.scrollHeight;
 // });
+function formatDateTime(dateTimeString) {
+    const date = new Date(dateTimeString);
+    const options = { hour: "2-digit", minute: "2-digit" };
+    const time = date.toLocaleTimeString([], options);
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "long" });
+    const year = date.getFullYear();
+
+    return `${time} - ${day}/${month}/${year}`;
+}
 
 function displayPostPage(data) {
     const postPageContent = document.querySelector(".postPageContent");
     postPageContent.innerHTML = ""; // Clear any existing content
+    let liskIsClicked = false;
+    let disliskIsClicked = false;
+    const replayButton = document.getElementById("SendReplay");
+    replayButton.setAttribute("onclick", `SendReplay(${data.Post.id})`);
 
     const postPageTime = document.createElement("span");
     postPageTime.classList.add("postPageTime");
-    postPageTime.textContent = data.Post.time;
+    postPageTime.textContent = formatDateTime(data.Post.created_at);
     postPageContent.appendChild(postPageTime);
+
+    const postPageUsername = document.createElement("span");
+    postPageUsername.classList.add("postPageUsername");
+    postPageUsername.textContent = data.Post.author.username;
+    postPageContent.appendChild(postPageUsername);
 
     const postPageTitle = document.createElement("h1");
     postPageTitle.classList.add("postPageTitle");
@@ -395,71 +414,128 @@ function displayPostPage(data) {
 
     reactions.forEach((reaction) => {
         if (reaction.type === "like") {
-            // liskIsClicked = reaction.did_react;
+            liskIsClicked = reaction.did_react;
 
             numOfLike = reaction.count;
         } else if (reaction.type === "dislike") {
             numOfDislike = reaction.count;
-            // disliskIsClicked = reaction.did_react;
+            disliskIsClicked = reaction.did_react;
         }
     });
-    const postLike = document.createElement("div");
-    postLike.classList.add("postLike");
-    postPageReaction.appendChild(postLike);
 
     const likeCount = document.createElement("div");
     likeCount.classList.add("reactionCount");
-
     likeCount.textContent = numOfLike;
     postPageReaction.appendChild(likeCount);
 
-    const postDislike = document.createElement("div");
-    postDislike.classList.add("postDislike");
-    postPageReaction.appendChild(postDislike);
+    const postLike = document.createElement("div");
+    postLike.classList.add("postLike");
+    postPageReaction.appendChild(postLike);
+    if (liskIsClicked) {
+        postLike.classList.toggle("clicked", liskIsClicked);
+    }
 
     const dislikeCount = document.createElement("div");
     dislikeCount.classList.add("reactionCount");
     dislikeCount.textContent = numOfDislike;
     postPageReaction.appendChild(dislikeCount);
 
+    const postDislike = document.createElement("div");
+    postDislike.classList.add("postDislike");
+    postPageReaction.appendChild(postDislike);
+    if (disliskIsClicked) {
+        postDislike.classList.toggle("clicked", disliskIsClicked);
+    }
+    postLike.addEventListener("click", (event) => {
+        // Prevent the click event on the button from bubbling up to the div
+        event.stopPropagation();
+        const profileIcon = document.querySelector(".profileIcon.navigationBarIcons");
+        if (profileIcon.style.display === "block") {
+            liskIsClicked = !liskIsClicked && !disliskIsClicked;
+            postLike.classList.toggle("clicked", liskIsClicked);
+            if (liskIsClicked) {
+                numOfLike++;
+                AddReaction(1, data.Post.id);
+            } else if (!disliskIsClicked) {
+                numOfLike--;
+                deleteReaction(1, data.Post.id);
+            }
+            likeCount.textContent = numOfLike;
+        }
+    });
+
+    postDislike.addEventListener("click", (event) => {
+        // Prevent the click event on the button from bubbling up to the div
+        event.stopPropagation();
+        const profileIcon = document.querySelector(".profileIcon.navigationBarIcons");
+        if (profileIcon.style.display === "block") {
+            disliskIsClicked = !disliskIsClicked && !liskIsClicked;
+            postDislike.classList.toggle("clicked", disliskIsClicked);
+            if (disliskIsClicked) {
+                numOfDislike++;
+                AddReaction(2, data.Post.id);
+            } else if (!liskIsClicked) {
+                numOfDislike--;
+                deleteReaction(2, data.Post.id);
+            }
+            dislikeCount.textContent = numOfDislike;
+        }
+    });
+}
+
+function createComments() {
     // data.comments.forEach((comment) => {
     //     const postPageComment = document.createElement("div");
     //     postPageComment.classList.add("postPageComment");
     //     postPageComment.textContent = comment.text;
-
     //     const postPageCommentUser = document.createElement("span");
     //     postPageCommentUser.classList.add("postPageCommentUser");
     //     postPageCommentUser.textContent = comment.user;
     //     postPageComment.appendChild(postPageCommentUser);
-
     //     const postPageCommentTime = document.createElement("span");
     //     postPageCommentTime.classList.add("postPageCommentTime");
     //     postPageCommentTime.textContent = `- ${comment.time}`;
     //     postPageComment.appendChild(postPageCommentTime);
-
     //     const postPageCommentReaction = document.createElement("div");
     //     postPageCommentReaction.classList.add("postPageCommentReaction");
-
     //     const commentLike = document.createElement("div");
     //     commentLike.classList.add("postLike");
     //     postPageCommentReaction.appendChild(commentLike);
-
     //     const commentLikeCount = document.createElement("div");
     //     commentLikeCount.classList.add("reactionCount");
     //     commentLikeCount.textContent = comment.reactions.like;
     //     postPageCommentReaction.appendChild(commentLikeCount);
-
     //     const commentDislike = document.createElement("div");
     //     commentDislike.classList.add("postDislike");
     //     postPageCommentReaction.appendChild(commentDislike);
-
     //     const commentDislikeCount = document.createElement("div");
     //     commentDislikeCount.classList.add("reactionCount");
     //     commentDislikeCount.textContent = comment.reactions.dislike;
     //     postPageCommentReaction.appendChild(commentDislikeCount);
-
     //     postPageComment.appendChild(postPageCommentReaction);
-
     //     postPageContent.appendChild(postPageComment);
     // });
+}
+
+function SendReplay(postId) {
+    const message = document.getElementById("PostReplay").value;
+    console.log(message);
+    const formData = new FormData();
+    formData.append("title", "Replay");
+    formData.append("content", message);
+    formData.append("post_id", postId);
+
+    fetch(`/post/comment`, {
+        method: "POST",
+        body: formData,
+    }).then((response) => {
+        if (response.ok) {
+            // Handle success (e.g., clear the input field, update the comments section)
+            document.getElementById("PostReplay").value = "";
+            // Optionally, you can refresh the comments section to show the new comment
+        } else {
+            // Handle error
+            console.error("Error:", data.error);
+        }
+    });
 }

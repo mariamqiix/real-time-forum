@@ -1074,7 +1074,7 @@ func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// check post actually exists
-	postId, err := strconv.Atoi(r.PathValue("post_id"))
+	postId, err := strconv.Atoi(r.FormValue("post_id"))
 	if err != nil {
 		errorServer(w, r, http.StatusBadRequest)
 		return
@@ -1085,47 +1085,44 @@ func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var pstReq structs.AddPostRequest
-	if !parsePostForm(&pstReq, r) {
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
+	title := r.FormValue("title")
+	content := r.FormValue("content")
 
-	if pstReq.Title == "" || pstReq.Content == "" {
-		log.Println("addCommentGetHandler: failed validation")
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
+	// if pstReq.Title == "" || pstReq.Content == "" {
+	// 	log.Println("addCommentGetHandler: failed validation")
+	// 	errorServer(w, r, http.StatusBadRequest)
+	// 	return
+	// }
 
 	dbPostAdd := structs.Post{
 		ParentId: &postId,
 		UserId:   sessionUser.Id,
-		Title:    pstReq.Title,
-		Message:  pstReq.Content,
+		Title:    title,
+		Message:  content,
 		ImageId:  -1,
 		Time:     time.Now().UTC(),
 	}
 
-	commentID, err := database.AddPost(dbPostAdd)
-	if err != nil {
-		log.Printf("addCommentPostHandler: %s\n", err.Error())
-		errorServer(w, r, http.StatusInternalServerError)
-		return
-	}
+	// _, err = database.AddPost(dbPostAdd)
+	// if err != nil {
+	// 	log.Printf("addCommentPostHandler: %s\n", err.Error())
+	// 	errorServer(w, r, http.StatusInternalServerError)
+	// 	return
+	// }
+	fmt.Println(dbPostAdd)
 
 	// Create a new notification for the comment
-	notification := structs.UserNotification{
-		CommentID: commentID,
-	}
+	// notification := structs.UserNotification{
+	// 	CommentID: commentID,
+	// }
 
-	// Add the notification to the database
-	_, err = database.AddNotification(notification)
-	if err != nil {
-		log.Printf("Failed to add notification: %v", err)
-		// Handle the error appropriately
-	}
+	// // Add the notification to the database
+	// _, err = database.AddNotification(notification)
+	// if err != nil {
+	// 	log.Printf("Failed to add notification: %v", err)
+	// 	// Handle the error appropriately
+	// }
 
-	http.Redirect(w, r, "/post/"+strconv.Itoa(postId), http.StatusSeeOther)
 }
 
 // same logic as addPostGetHandler
