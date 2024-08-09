@@ -93,6 +93,7 @@ async function submitForm() {
         console.error("Error:", error);
     }
 }
+var mediaQuery2 = window.matchMedia("(min-width: 1800px)");
 
 async function GetUserLoggedIn() {
     fetch("http://localhost:8080/user", {
@@ -128,11 +129,17 @@ async function GetUserLoggedIn() {
             } else {
                 setting.style.display = "block";
                 bellIcon.style.display = "block";
-                settingBtn.style.display = "block";
-                notificationsBtn.style.display = "block";
                 penIcon.style.display = "block";
                 profileIcon.style.display = "block";
-                profileBtn.style.display = "block";
+                if (mediaQuery2.matches) {
+                    notificationsBtn.style.display = "block";
+                    settingBtn.style.display = "block";
+                    profileBtn.style.display = "block";
+                } else {
+                    notificationsBtn.style.display = "none";
+                    settingBtn.style.display = "none";
+                    profileBtn.style.display = "none";
+                }
                 const loginSpan = document.getElementById("loginSpan");
                 loginSpan.innerHTML = "Logout";
                 const replayPostButton = document.getElementById("replayPost-button");

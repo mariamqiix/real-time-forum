@@ -520,22 +520,24 @@ function createComments() {
 function SendReplay(postId) {
     const message = document.getElementById("PostReplay").value;
     console.log(message);
-    const formData = new FormData();
-    formData.append("title", "Replay");
-    formData.append("content", message);
-    formData.append("post_id", postId);
+    if (message.trim() != "") {
+        const formData = new FormData();
+        formData.append("title", "Replay");
+        formData.append("content", message);
+        formData.append("post_id", postId);
 
-    fetch(`/post/comment`, {
-        method: "POST",
-        body: formData,
-    }).then((response) => {
-        if (response.ok) {
-            // Handle success (e.g., clear the input field, update the comments section)
-            document.getElementById("PostReplay").value = "";
-            // Optionally, you can refresh the comments section to show the new comment
-        } else {
-            // Handle error
-            console.error("Error:", data.error);
-        }
-    });
+        fetch(`/post/comment`, {
+            method: "POST",
+            body: formData,
+        }).then((response) => {
+            if (response.ok) {
+                // Handle success (e.g., clear the input field, update the comments section)
+                document.getElementById("PostReplay").value = "";
+                // Optionally, you can refresh the comments section to show the new comment
+            } else {
+                // Handle error
+                console.error("Error:", data.error);
+            }
+        });
+    }
 }
