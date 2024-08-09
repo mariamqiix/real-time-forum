@@ -135,7 +135,7 @@ function saveNewPassword() {
         const formData = new FormData();
         formData.append("password", newPassword);
 
-        fetch("h    ttp://localhost:8080/changePassword", {
+        fetch("http://localhost:8080/changePassword", {
                 method: "POST",
                 body: formData,
             })
@@ -314,7 +314,10 @@ function ManageCategories() {
         .then((data) => {
             // Iterate over the categories and append them to the container
             data.forEach((category) => {
-                appendCategoryToList(category.Name, category.Id);
+                if (category.Name != "") {
+                    appendCategoryToList(category.Name, category.Id);
+
+                }
             });
         })
         .catch((error) => {
@@ -480,7 +483,7 @@ function UpdateUserInformation() {
     formData.append("country", country);
     formData.append("gender", gender);
     if (confirm("Are you sure you want to proceed?")) {
-        fetch("h    ttp://localhost:8080/updateUserInfo", {
+        fetch("http://localhost:8080/updateUserInfo", {
                 method: "POST",
                 body: formData,
             })

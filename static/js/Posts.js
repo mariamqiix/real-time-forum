@@ -129,18 +129,18 @@ function deleteReaction(reaction, postId) {
     Form.append("reaction", reaction);
     Form.append("postId", postId);
     fetch(`/post/reaction/delete`, {
-        method: "POST",
-        body: Form,
-    })
+            method: "POST",
+            body: Form,
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
         })
 
-        .catch((error) => {
-            console.error("Error removing reaction:", error);
-        });
+    .catch((error) => {
+        console.error("Error removing reaction:", error);
+    });
 }
 
 function AddReaction(reaction, postId) {
@@ -148,16 +148,16 @@ function AddReaction(reaction, postId) {
     Form.append("reaction", reaction);
     Form.append("postId", postId);
     fetch(`/posts/AddReactions`, {
-        method: "POST",
-        body: Form,
-    })
+            method: "POST",
+            body: Form,
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
         })
 
-        .catch((error) => {
-            console.error("Error adding reaction:", error);
-        });
+    .catch((error) => {
+        console.error("Error adding reaction:", error);
+    });
 }

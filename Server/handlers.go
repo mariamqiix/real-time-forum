@@ -494,7 +494,7 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	postId, err := strconv.Atoi(r.PathValue("post_id"))
+	postId, err := strconv.Atoi(r.FormValue("post_id"))
 	if err != nil {
 		errorServer(w, r, http.StatusBadRequest)
 		return
@@ -505,12 +505,6 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}
-	if post.ParentId != nil {
-		newPath := "/post/" + strconv.Itoa(*post.ParentId) + "#" + r.PathValue("post_id")
-		http.Redirect(w, r, newPath, http.StatusFound)
-		return
-	}
-
 	view := discussionView{
 		User:     nil,
 		Post:     structs.PostResponse{},
