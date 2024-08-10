@@ -79,7 +79,6 @@ function displayPostOnProfile(Posts) {
     }
 }
 
-
 function ChatView() {
     const messagesBoxDiv = document.getElementById("messagesBoxDiv");
     if (messagesBoxDiv.style.display != "none") {
@@ -94,7 +93,7 @@ function ChatView() {
                 data.forEach((chat) => {
                     const messageBox = document.createElement("div");
                     messageBox.className = "messageBox";
-                    messageBox.id = chat.UserId;
+                    messageBox.id = `messageBox-${chat.UserId}`;
                     const chatUserPic = document.createElement("div");
                     chatUserPic.className = "chatUserPic";
                     chatUserPic.style.backgroundImage = `url(${chat.Image})`;
@@ -111,12 +110,12 @@ function ChatView() {
                     userNameP.textContent = chat.Username;
                     chatUserName.appendChild(userNameP);
 
-                    const newMessageIcon = document.createElement("div");
-                    newMessageIcon.className = "newMessageIcon";
-
                     messageBox.appendChild(chatUserPic);
                     messageBox.appendChild(chatUserName);
-                    messageBox.appendChild(newMessageIcon);
+                    const typingIcon = document.createElement("div");
+                    typingIcon.className = "typingIcon";
+                    typingIcon.style.display = "none";
+                    messageBox.appendChild(typingIcon);
                     messageBox.setAttribute(
                         "onclick",
                         `OpenMesages('${chat.Username}','${chat.UserId}')`

@@ -15,8 +15,8 @@ function toggleDiv(divName) {
 
 function toggleLogout(className) {
     fetch("http://localhost:8080/user", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -64,8 +64,8 @@ function OpenMesages(username, id) {
         mailIcon.style.display = "none";
     } else {
         fetch("http://localhost:8080/user", {
-            method: "GET",
-        })
+                method: "GET",
+            })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -77,7 +77,7 @@ function OpenMesages(username, id) {
                     sendMessageButton.setAttribute("onclick", `SendMessage('${username}')`);
                     msgType.setAttribute("oninput", `notifyTyping('${username}')`);
                     mailIcon.style.display = "block";
-                    mailIcon.onclick = function () {
+                    mailIcon.onclick = function() {
                         OpenMesages();
                     };
                     messagesBoxDiv.style.display = "none";
@@ -85,14 +85,6 @@ function OpenMesages(username, id) {
                     document.getElementById("messagesTitle").innerHTML = username;
                     msgDiv.setAttribute("data-id", id);
                     const messageBox = document.getElementById(id);
-
-                    if (messageBox) {
-                        const newMessageIcon = messageBox.querySelector(".newMessageIcon");
-                        if (newMessageIcon) {
-                            newMessageIcon.style.backgroundColor = "#fbd998";
-                        }
-                    }
-                    // Create the request body
                     const formData = new FormData();
                     formData.append("id", id);
                     const chats = document.getElementById("UserChat");
@@ -100,9 +92,9 @@ function OpenMesages(username, id) {
 
                     chats.innerHTML = "";
                     fetch(`http://localhost:8080/messages`, {
-                        method: "POST",
-                        body: formData,
-                    })
+                            method: "POST",
+                            body: formData,
+                        })
                         .then((response) => {
                             if (!response.ok) {
                                 throw new Error(`HTTP error! status: ${response.status}`);

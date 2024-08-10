@@ -11,19 +11,28 @@ function initializeWebSocket() {
 socket.onmessage = function(event) {
     console.log("WebSocket message received:", event.data);
     const messageData = JSON.parse(event.data);
+    // Assuming the received data is a JSON string representing a structs.Message
+    const messageBox = document.getElementById(`messageBox-${messageData.SenderId}`);
 
+    const OldmsgDiv = document.getElementById("msgDiv");
+    // Create the new chat div
+    const id = OldmsgDiv.getAttribute("data-id");
     if (messageData.type === "typing") {
-        const typingIndicator = document.getElementById("typingIndicator");
-        typingIndicator.style.display = "block";
+        if (id == messageData.SenderId) {
+            const typingIndicator = document.getElementById("typingIndicator");
+            typingIndicator.style.display = "block";
+            setTimeout(() => {
+                typingIndicator.style.display = "none";
+            }, 5000); // Hide after 2 seconds
+        }
+
+        const typingIcon = messageBox.querySelector(".typingIcon");
+        typingIcon.style.display = "block";
+        console.log("hello");
         setTimeout(() => {
-            typingIndicator.style.display = "none";
-        }, 2000); // Hide after 2 seconds
+            typingIcon.style.display = "none";
+        }, 5000); // H
     } else {
-        // Assuming the received data is a JSON string representing a structs.Message
-        const messageBox = document.getElementById(messageData.SenderId);
-        const OldmsgDiv = document.getElementById("msgDiv");
-        // Create the new chat div
-        const id = OldmsgDiv.getAttribute("data-id");
         if (id == messageData.SenderId) {
             const chatDiv = document.createElement("div");
             chatDiv.className = "fullMessage";
@@ -55,18 +64,7 @@ socket.onmessage = function(event) {
 
             const chats = document.getElementById("UserChat");
             chats.appendChild(chatDiv);
-            // Make the newMessageIcon green
-            if (messageBox) {
-                const newMessageIcon = messageBox.querySelector(".newMessageIcon");
-                if (newMessageIcon) {
-                    newMessageIcon.style.backgroundColor = "#fbd998";
-                }
-            }
-        } else if (messageBox) {
-            const newMessageIcon = messageBox.querySelector(".newMessageIcon");
-            if (newMessageIcon) {
-                newMessageIcon.style.backgroundColor = "lightgreen";
-            }
+            console.log(messageBox);
         }
     }
 };

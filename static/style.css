@@ -315,7 +315,7 @@ span.framer-text:not([data-text-fill]) {
     margin-right: 5%;
 }
 
-.postPageReaction{
+.postPageReaction {
     float: left;
     clear: both;
     height: auto;
@@ -327,7 +327,7 @@ span.framer-text:not([data-text-fill]) {
     padding-bottom: 0;
 }
 
-.postPageCommentReaction{
+.postPageCommentReaction {
     float: right;
     clear: both;
     height: auto;
@@ -584,23 +584,13 @@ span.framer-text:not([data-text-fill]) {
     width: 70px;
 }
 
-#typingIndicator{
+#typingIndicator {
     background-image: url(/images/typingIcon.gif);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     position: relative;
     height: 70px;
     width: 70px;
-}
-
-.newMessageIcon {
-    height: 25px;
-    position: absolute;
-    width: 25px;
-    margin-top: 15px;
-    margin-left: 10px;
-    background-color: #fbd998;
-    border-radius: 100%;
 }
 
 .messageBox:hover {
@@ -1412,4 +1402,3 @@ button:hover {
     text-align: center;
     /* Center the text inside the button */
 }
-
