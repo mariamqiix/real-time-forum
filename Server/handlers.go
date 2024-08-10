@@ -1103,13 +1103,47 @@ func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 		Time:     time.Now().UTC(),
 	}
 
-	// _, err = database.AddPost(dbPostAdd)
-	// if err != nil {
-	// 	log.Printf("addCommentPostHandler: %s\n", err.Error())
-	// 	errorServer(w, r, http.StatusInternalServerError)
-	// 	return
-	// }
-	fmt.Println(dbPostAdd)
+	commentID, err := database.AddPost(dbPostAdd)
+	if err != nil {
+		log.Printf("addCommentPostHandler: %s\n", err.Error())
+		errorServer(w, r, http.StatusInternalServerError)
+		return
+	}
+	post, err = database.GetPost(commentID)
+	if err != nil || post == nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	view := discussionView{
+		User:     nil,
+		Post:     structs.PostResponse{},
+		Comments: nil,
+	}
+
+	comments, err := database.GetCommentsForPost(post.Id, -1, 0)
+	if err != nil {
+		log.Printf("postsHandler: %s\n", err.Error())
+	}
+
+	if sessionUser != nil {
+		view.User = &structs.UserResponse{
+			Username:    sessionUser.Username,
+			FirstName:   sessionUser.FirstName,
+			LastName:    sessionUser.LastName,
+			DateOfBirth: sessionUser.DateOfBirth,
+			Location:    sessionUser.Country,
+			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			Type:        userTypeToResponse(sessionUser.Type),
+		}
+		view.Post = mapPosts([]structs.Post{*post}, sessionUser.Id)[0]
+		view.Comments = mapPosts(comments, sessionUser.Id)
+	} else {
+		view.Post = mapPosts([]structs.Post{*post}, -1)[0]
+		view.Comments = mapPosts(comments, -1)
+
+	}
+
+	writeToJson(view, w)
 
 	// Create a new notification for the comment
 	// notification := structs.UserNotification{

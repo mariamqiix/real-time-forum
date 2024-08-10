@@ -481,40 +481,125 @@ function displayPostPage(data) {
             dislikeCount.textContent = numOfDislike;
         }
     });
+    const postPageCommentsContent = document.getElementById("comments");
+    postPageCommentsContent.innerHTML = ""; // Clear any existing content
+    data.Comments.forEach((comment) => {
+        console.log(comment);
+        createComments(comment);
+    });
 }
 
-function createComments() {
-    // data.comments.forEach((comment) => {
-    //     const postPageComment = document.createElement("div");
-    //     postPageComment.classList.add("postPageComment");
-    //     postPageComment.textContent = comment.text;
-    //     const postPageCommentUser = document.createElement("span");
-    //     postPageCommentUser.classList.add("postPageCommentUser");
-    //     postPageCommentUser.textContent = comment.user;
-    //     postPageComment.appendChild(postPageCommentUser);
-    //     const postPageCommentTime = document.createElement("span");
-    //     postPageCommentTime.classList.add("postPageCommentTime");
-    //     postPageCommentTime.textContent = `- ${comment.time}`;
-    //     postPageComment.appendChild(postPageCommentTime);
-    //     const postPageCommentReaction = document.createElement("div");
-    //     postPageCommentReaction.classList.add("postPageCommentReaction");
-    //     const commentLike = document.createElement("div");
-    //     commentLike.classList.add("postLike");
-    //     postPageCommentReaction.appendChild(commentLike);
-    //     const commentLikeCount = document.createElement("div");
-    //     commentLikeCount.classList.add("reactionCount");
-    //     commentLikeCount.textContent = comment.reactions.like;
-    //     postPageCommentReaction.appendChild(commentLikeCount);
-    //     const commentDislike = document.createElement("div");
-    //     commentDislike.classList.add("postDislike");
-    //     postPageCommentReaction.appendChild(commentDislike);
-    //     const commentDislikeCount = document.createElement("div");
-    //     commentDislikeCount.classList.add("reactionCount");
-    //     commentDislikeCount.textContent = comment.reactions.dislike;
-    //     postPageCommentReaction.appendChild(commentDislikeCount);
-    //     postPageComment.appendChild(postPageCommentReaction);
-    //     postPageContent.appendChild(postPageComment);
-    // });
+function createComments(comment) {
+    let liskIsClicked = false;
+    let disliskIsClicked = false;
+    const postPageContent = document.getElementById("comments");
+
+    const postPageComment = document.createElement("div");
+    postPageComment.classList.add("postPageComment");
+    postPageComment.textContent = comment.message;
+
+    const postPageCommentUser = document.createElement("span");
+    postPageCommentUser.classList.add("postPageCommentUser");
+    postPageCommentUser.textContent = `    ${comment.author.username}`;
+    postPageComment.appendChild(postPageCommentUser);
+
+    const postPageCommentTime = document.createElement("span");
+    postPageCommentTime.classList.add("postPageCommentTime");
+    postPageCommentTime.textContent = `- ${comment.created_at}`;
+    postPageComment.appendChild(postPageCommentTime);
+    const postPageCommentReaction = document.createElement("div");
+    postPageCommentReaction.classList.add("postPageCommentReaction");
+    // const commentLike = document.createElement("div");
+    // commentLike.classList.add("postLike");
+    // postPageCommentReaction.appendChild(commentLike);
+    // const commentLikeCount = document.createElement("div");
+    // commentLikeCount.classList.add("reactionCount");
+    // commentLikeCount.textContent = comment.reactions.like;
+    // postPageCommentReaction.appendChild(commentLikeCount);
+    // const commentDislike = document.createElement("div");
+    // commentDislike.classList.add("postDislike");
+    // postPageCommentReaction.appendChild(commentDislike);
+    // const commentDislikeCount = document.createElement("div");
+    // commentDislikeCount.classList.add("reactionCount");
+    // commentDislikeCount.textContent = comment.reactions.dislike;
+    // postPageCommentReaction.appendChild(commentDislikeCount);
+    // postPageComment.appendChild(postPageCommentReaction);
+
+    var numOfLike = 0;
+    var numOfDislike = 0;
+    const reactions = comment.reactions; // This should be an array of `structs.PostReactionResponse`
+
+    reactions.forEach((reaction) => {
+        if (reaction.type === "like") {
+            liskIsClicked = reaction.did_react;
+
+            numOfLike = reaction.count;
+        } else if (reaction.type === "dislike") {
+            numOfDislike = reaction.count;
+            disliskIsClicked = reaction.did_react;
+        }
+    });
+
+    const likeCount = document.createElement("div");
+    likeCount.classList.add("reactionCount");
+    likeCount.textContent = numOfLike;
+    postPageCommentReaction.appendChild(likeCount);
+
+    const postLike = document.createElement("div");
+    postLike.classList.add("postLike");
+    postPageCommentReaction.appendChild(postLike);
+    if (liskIsClicked) {
+        postLike.classList.toggle("clicked", liskIsClicked);
+    }
+
+    const dislikeCount = document.createElement("div");
+    dislikeCount.classList.add("reactionCount");
+    dislikeCount.textContent = numOfDislike;
+    postPageCommentReaction.appendChild(dislikeCount);
+
+    const postDislike = document.createElement("div");
+    postDislike.classList.add("postDislike");
+    postPageCommentReaction.appendChild(postDislike);
+    if (disliskIsClicked) {
+        postDislike.classList.toggle("clicked", disliskIsClicked);
+    }
+    postPageComment.appendChild(postPageCommentReaction);
+    postLike.addEventListener("click", (event) => {
+        // Prevent the click event on the button from bubbling up to the div
+        event.stopPropagation();
+        const profileIcon = document.querySelector(".profileIcon.navigationBarIcons");
+        if (profileIcon.style.display === "block") {
+            liskIsClicked = !liskIsClicked && !disliskIsClicked;
+            postLike.classList.toggle("clicked", liskIsClicked);
+            if (liskIsClicked) {
+                numOfLike++;
+                AddReaction(1, comment.id);
+            } else if (!disliskIsClicked) {
+                numOfLike--;
+                deleteReaction(1, comment.id);
+            }
+            likeCount.textContent = numOfLike;
+        }
+    });
+
+    postDislike.addEventListener("click", (event) => {
+        // Prevent the click event on the button from bubbling up to the div
+        event.stopPropagation();
+        const profileIcon = document.querySelector(".profileIcon.navigationBarIcons");
+        if (profileIcon.style.display === "block") {
+            disliskIsClicked = !disliskIsClicked && !liskIsClicked;
+            postDislike.classList.toggle("clicked", disliskIsClicked);
+            if (disliskIsClicked) {
+                numOfDislike++;
+                AddReaction(2, comment.id);
+            } else if (!liskIsClicked) {
+                numOfDislike--;
+                deleteReaction(2, comment.id);
+            }
+            dislikeCount.textContent = numOfDislike;
+        }
+    });
+    postPageContent.appendChild(postPageComment);
 }
 
 function SendReplay(postId) {
@@ -527,17 +612,26 @@ function SendReplay(postId) {
         formData.append("post_id", postId);
 
         fetch(`/post/comment`, {
-            method: "POST",
-            body: formData,
-        }).then((response) => {
-            if (response.ok) {
-                // Handle success (e.g., clear the input field, update the comments section)
-                document.getElementById("PostReplay").value = "";
-                // Optionally, you can refresh the comments section to show the new comment
-            } else {
-                // Handle error
-                console.error("Error:", data.error);
-            }
-        });
+                method: "POST",
+                body: formData,
+            })
+            .then((response) => {
+                if (response.ok) {
+                    // Handle success (e.g., clear the input field, update the comments section)
+                    document.getElementById("PostReplay").value = "";
+                    return response.json();
+                    // Optionally, you can refresh the comments section to show the new comment
+                } else {
+                    // Handle error
+                    console.error("Error:", data.error);
+                }
+            })
+            .then((data) => {
+                console.log(data);
+                createComments(data.Post);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
     }
 }
