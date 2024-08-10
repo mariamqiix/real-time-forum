@@ -539,16 +539,6 @@ span.framer-text:not([data-text-fill]) {
     background-image: url(/images/settingIcon.png);
 }
 
-.newMessageIcon {
-    height: 25px;
-    position: absolute;
-    width: 25px;
-    margin-top: 15px;
-    margin-left: 10px;
-    background-color: #fbd998;
-    border-radius: 100%;
-}
-
 .mailIcon {
     height: 50px;
     width: 50px;
@@ -583,6 +573,34 @@ span.framer-text:not([data-text-fill]) {
     position: relative;
     top: 20px;
     width: 382px;
+}
+
+.typingIcon {
+    background-image: url(/images/typingIcon.gif);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    height: 70px;
+    width: 70px;
+}
+
+#typingIndicator{
+    background-image: url(/images/typingIcon.gif);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    height: 70px;
+    width: 70px;
+}
+
+.newMessageIcon {
+    height: 25px;
+    position: absolute;
+    width: 25px;
+    margin-top: 15px;
+    margin-left: 10px;
+    background-color: #fbd998;
+    border-radius: 100%;
 }
 
 .messageBox:hover {
