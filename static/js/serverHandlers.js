@@ -32,6 +32,11 @@ async function submitSelection(divName) {
             toggleDiv(divName); // Hide the content div after submission
             document.getElementById("newPostTitle").value = "";
             document.getElementById("topic").value = "";
+
+            // Loop through each checked checkbox and uncheck it
+            categoryCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+            });
         } else {
             const error = await response.text();
             console.error("Post addition failed:", error);
@@ -78,8 +83,8 @@ function HomePageRequest() {
     GetUserLoggedIn();
     // Send the form data to the Go server
     fetch("http://localhost:8080/homePageDataHuncler", {
-            method: "GET",
-        })
+        method: "GET",
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -96,7 +101,7 @@ function HomePageRequest() {
             sortElement.setAttribute("data-sort", "new");
 
             // Put the data in its onclick function
-            sortElement.onclick = function() {
+            sortElement.onclick = function () {
                 sortPosts(data);
             };
             toggleVisibility("home");
@@ -121,12 +126,12 @@ function PostsByCategories() {
     }
 
     fetch("http://localhost:8080/postsByCategories", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ categories: selectedOptions }), // Ensure the key matches the server's expected key
-        })
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ categories: selectedOptions }), // Ensure the key matches the server's expected key
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -143,7 +148,7 @@ function PostsByCategories() {
             sortElement.setAttribute("data-sort", "new");
 
             // Put the data in its onclick function
-            sortElement.onclick = function() {
+            sortElement.onclick = function () {
                 sortPosts(data);
             };
             toggleDiv("categoryFilter");
@@ -242,9 +247,9 @@ function Search() {
     formData.append("search", search);
 
     fetch("http://localhost:8080/search", {
-            method: "POST",
-            body: formData,
-        })
+        method: "POST",
+        body: formData,
+    })
         .then((response) => response.json())
         .then((data) => {
             displaySearchPosts(data);
@@ -301,8 +306,8 @@ function PostPageHandler(data) {
     toggleVisibility("postPage");
     if (editPostButton) {
         fetch("http://localhost:8080/user", {
-                method: "GET",
-            })
+            method: "GET",
+        })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Error: " + response.status);
@@ -331,16 +336,16 @@ function PostPageHandler(data) {
     PostInfo(data.id);
 }
 
-function EditPostHandler() {}
+function EditPostHandler() { }
 
 function PostInfo(id) {
     const formData = new FormData();
     formData.append("post_id", id);
 
     fetch(`http://localhost:8080/post/${id}`, {
-            method: "POST",
-            body: formData,
-        })
+        method: "POST",
+        body: formData,
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -612,9 +617,9 @@ function SendReplay(postId) {
         formData.append("post_id", postId);
 
         fetch(`/post/comment`, {
-                method: "POST",
-                body: formData,
-            })
+            method: "POST",
+            body: formData,
+        })
             .then((response) => {
                 if (response.ok) {
                     // Handle success (e.g., clear the input field, update the comments section)
@@ -635,3 +640,15 @@ function SendReplay(postId) {
             });
     }
 }
+
+// Function to scroll the chat container to the bottom
+function scrollToBottom() {
+    console.log("fhfh")
+    var chatContainer = document.getElementById("UserChat");
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Call the function to scroll to the bottom when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    scrollToBottom();
+});

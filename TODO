@@ -1,13 +1,12 @@
-front (Ruqaya) :
-
--   edit post page : to edit only the title and the content
--   add comments example for the profile page
-
 back (Maryam) :
 
 -   notification
 -   ~link post page with the back~~
 -   double check the website functionality (registration, login, chat, post, like, dislike .... etc)
+-   add validation function to the check list of create new post div (like what i did in title and topic)
+-   sing-up in registration page idk how to make it inside the button (the word)
+-   chat should be scroll to the buttom
+-   comments in profile page (same as post Page)
 -   add report button on the post page like the edit and make it visible only if the user is moderator (if user click on it open div like (why u want to be moderator, later i'll fix it))
 -   ~~still the user can send empty messages~~
 -   ~~do typing -websocket~~

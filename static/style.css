@@ -293,18 +293,25 @@ span.framer-text:not([data-text-fill]) {
 
 #inputBox {
     float: left;
-    clear: both;
+    margin-left: 4%;
+    margin-top: 1%;
+}
+
+#PostReplay {
+    max-width: 80%;
+}
+
+#SendReplay {
+    max-width: 20%;
 }
 
 .replayPost {
     float: left;
     clear: both;
-    background-color: transparent;
-}
-
-.replayPost:hover {
-    background-color: transparent;
-    color: red;
+    margin-top: 2%;
+    margin-left: 10%;
+    margin-bottom: 2%;
+    width: 300px
 }
 
 .postReaction {
@@ -738,6 +745,8 @@ span.framer-text:not([data-text-fill]) {
     height: 50px;
     font-size: 20px;
     border-radius: 30px;
+    cursor: pointer;
+    opacity: 1;
 }
 
 .disabled {
@@ -751,36 +760,41 @@ span.framer-text:not([data-text-fill]) {
     /* overflow: scroll; */
     overflow-x: hidden;
     overflow-y: auto;
+    padding-bottom: 50px;
 }
 
 
 /* Hide the scrollbar for a specific div */
-
+#messagesBoxDiv::-webkit-scrollbar,
+#UserChat::-webkit-scrollbar,
 .navigationContent::-webkit-scrollbar,
 .popup::-webkit-scrollbar {
     width: 0.5em;
     border-radius: 30px;
-    /* Set the width of the scrollbar (adjust as needed) */
 }
 
-
 /* Optional: Style the scrollbar track */
-
+#UserChat::-webkit-scrollbar-track,
+#messagesBoxDiv::-webkit-scrollbar-track,
 .navigationContent::-webkit-scrollbar-track,
 .popup::-webkit-scrollbar-track {
     background-color: #f1f1f1;
     border-radius: 30px;
-    /* Change the background color as desired */
 }
 
-
 /* Optional: Style the scrollbar thumb */
-
+#messagesBoxDiv::-webkit-scrollbar-thumb,
+#UserChat::-webkit-scrollbar-thumb,
 .navigationContent::-webkit-scrollbar-thumb,
 .popup::-webkit-scrollbar-thumb {
     background-color: #888;
     border-radius: 30px;
     /* Change the thumb color as desired */
+}
+
+#UserChat::-webkit-scrollbar-thumb:hover,
+#messagesBoxDiv::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .error,
@@ -1227,6 +1241,7 @@ button:hover {
     margin: 1%;
 }
 
+#PostReplay,
 #formLog input {
     margin: 1%;
     padding: 2%;
@@ -1238,6 +1253,7 @@ button:hover {
     width: 350px;
     max-width: 95%;
     text-align: left;
+    outline: none;
 }
 
 #formLog button {
@@ -1285,31 +1301,6 @@ button:hover {
     width: 100%;
 }
 
-
-/* Customize the scrollbar for #messagesBoxDiv */
-
-#messagesBoxDiv::-webkit-scrollbar {
-    width: 8px;
-    /* Set the width of the scrollbar */
-}
-
-#messagesBoxDiv::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    /* Set the background of the scrollbar track */
-}
-
-#messagesBoxDiv::-webkit-scrollbar-thumb {
-    background: #888;
-    /* Set the color of the scrollbar thumb */
-    border-radius: 4px;
-    /* Optional: Add rounded corners to the scrollbar thumb */
-}
-
-#messagesBoxDiv::-webkit-scrollbar-thumb:hover {
-    background: #555;
-    /* Change the color of the scrollbar thumb on hover */
-}
-
 .fullMessage {
     display: flex;
     align-items: center;
@@ -1336,28 +1327,6 @@ button:hover {
     margin-left: 10px;
 }
 
-#UserChat::-webkit-scrollbar {
-    width: 0.5em;
-    border-radius: 30px;
-    /* Set the width of the scrollbar */
-}
-
-#UserChat::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    /* Set the background of the scrollbar track */
-}
-
-#UserChat::-webkit-scrollbar-thumb {
-    background: #888;
-    /* Set the color of the scrollbar thumb */
-    border-radius: 20px;
-    /* Optional: Add rounded corners to the scrollbar thumb */
-}
-
-#UserChat::-webkit-scrollbar-thumb:hover {
-    background: #555;
-    /* Change the color of the scrollbar thumb on hover */
-}
 
 #list-moderators ul li {
     display: flex;

@@ -289,8 +289,7 @@
                     <button id="replayPost-button" class="replayPost" onclick="toggleInputBox()">Replay?</button>
 
                     <div id="inputBox" class="hidden">
-                        <input type="text" id="PostReplay">
-                        <button id="SendReplay" onclick="">Send</button>
+                        <input type="text" id="PostReplay"><button id="SendReplay" onclick="">Send</button>
                     </div>
 
                 </div>
@@ -319,7 +318,6 @@
                         </div>
                     </div>
                     <div id="typingIndicator" style="display: none;">User is typing...</div>
-
                     <div class="msgTypingBar">
                         <input type="text" maxlength="50" placeholder="Typing..." id="msgType" name="msgType" oninput="notifyTyping()" />
                         <button id="sendMessage" onclick="sendMessage()">Send</button>
@@ -375,12 +373,12 @@
     <table>
         <tr>
             <td><label for="newPostTitle">Title:</label></td>
-            <td><input type="text" id="newPostTitle" name="title" /></td>
+            <td><input type="text" id="newPostTitle" name="title" onfocus="validateCreatePost(this)" onblur="validateCreatePost(this)" oninput="validateCreatePost(this)" /></td>
         </tr>
 
         <tr>
             <td><label for="topic">Topic:</label></td>
-            <td><textarea type="text" id="topic" name="topic" rows="4" cols="50"></textarea></td>
+            <td><textarea type="text" id="topic" name="topic" rows="4" cols="50" onfocus="validateCreatePost(this)" onblur="validateCreatePost(this)" oninput="validateCreatePost(this)"></textarea></td>
         </tr>
 
         <tr>
@@ -390,9 +388,7 @@
             </td>
         </tr>
     </table>
-    <button class="submitBtn disabled" id="submitBtn" onclick="submitSelection('newPostForm')">
-        Post
-    </button>
+    <button class="submitBtn disabled" id="submitBtn" onclick="submitSelection('newPostForm')">Post</button>
 </div>
 
 <div id="user-info" class="popup" style="display: none">

@@ -1,23 +1,21 @@
-var textField = document.getElementById("newPostTitle");
-var submitButton = document.getElementById("submitBtn");
+function validateCreatePost(input) {
+    var title = document.getElementById('newPostTitle').value;
+    var topic = document.getElementById('topic').value;
+    var submitButton = document.getElementById('submitBtn');
+    const categoryCheckboxes = document.querySelectorAll(
+        '.categoriesList input[type="checkbox"]:checked'
+    );
 
-textField.addEventListener("input", function() {
-    if (textField.value.trim() !== "") {
-        submitButton.style.cursor = "pointer";
-    } else {
-        submitButton.style.cursor = "not-allowed";
-    }
-});
-
-textField.addEventListener("keyup", function() {
-    if (textField.value.trim() !== "") {
+    if (title.trim() !== '' && topic.trim() !== '' && categoryCheckboxes.length > 0) {
         submitButton.style.cursor = "pointer";
         submitButton.style.opacity = "1";
+        console.log('abled');
     } else {
         submitButton.style.cursor = "not-allowed";
         submitButton.style.opacity = "0.5";
+        console.log('Disabled');
     }
-});
+}
 
 function validateLogInField(input) {
     const fieldName = input.id;
