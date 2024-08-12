@@ -32,6 +32,11 @@ async function submitSelection(divName) {
             toggleDiv(divName); // Hide the content div after submission
             document.getElementById("newPostTitle").value = "";
             document.getElementById("topic").value = "";
+
+            // Loop through each checked checkbox and uncheck it
+            categoryCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
         } else {
             const error = await response.text();
             console.error("Post addition failed:", error);
@@ -325,6 +330,10 @@ function PostPageHandler(data) {
 
     PostInfo(data.id);
 }
+
+
+function EditPostHandler() {}
+
 
 function PostInfo(id) {
     const formData = new FormData();
@@ -629,6 +638,8 @@ function SendReplay(postId) {
     }
 }
 
+
+
 function editPost(Id) {
     toggleDiv("newPostForm");
 
@@ -676,3 +687,15 @@ function editPost(Id) {
 }
 
 function updatePost(id) {}
+
+// Function to scroll the chat container to the bottom
+function scrollToBottom() {
+    console.log("fhfh")
+    var chatContainer = document.getElementById("UserChat");
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Call the function to scroll to the bottom when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    scrollToBottom();
+});
