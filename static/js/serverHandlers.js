@@ -34,7 +34,7 @@ async function submitSelection(divName) {
             document.getElementById("topic").value = "";
 
             // Loop through each checked checkbox and uncheck it
-            categoryCheckboxes.forEach(function (checkbox) {
+            categoryCheckboxes.forEach(function(checkbox) {
                 checkbox.checked = false;
             });
         } else {
@@ -83,8 +83,8 @@ function HomePageRequest() {
     GetUserLoggedIn();
     // Send the form data to the Go server
     fetch("http://localhost:8080/homePageDataHuncler", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -101,7 +101,7 @@ function HomePageRequest() {
             sortElement.setAttribute("data-sort", "new");
 
             // Put the data in its onclick function
-            sortElement.onclick = function () {
+            sortElement.onclick = function() {
                 sortPosts(data);
             };
             toggleVisibility("home");
@@ -126,12 +126,12 @@ function PostsByCategories() {
     }
 
     fetch("http://localhost:8080/postsByCategories", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ categories: selectedOptions }), // Ensure the key matches the server's expected key
-    })
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ categories: selectedOptions }), // Ensure the key matches the server's expected key
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -148,7 +148,7 @@ function PostsByCategories() {
             sortElement.setAttribute("data-sort", "new");
 
             // Put the data in its onclick function
-            sortElement.onclick = function () {
+            sortElement.onclick = function() {
                 sortPosts(data);
             };
             toggleDiv("categoryFilter");
@@ -247,9 +247,9 @@ function Search() {
     formData.append("search", search);
 
     fetch("http://localhost:8080/search", {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => response.json())
         .then((data) => {
             displaySearchPosts(data);
@@ -293,21 +293,13 @@ function displaySearchPosts(data) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    GetUserLoggedIn();
-    const editPostButton = document.getElementById("editPost-button");
-    if (editPostButton) {
-        editPostButton.style.display = "none";
-    }
-});
-
 function PostPageHandler(data) {
     const editPostButton = document.getElementById("editPost-button");
     toggleVisibility("postPage");
     if (editPostButton) {
         fetch("http://localhost:8080/user", {
-            method: "GET",
-        })
+                method: "GET",
+            })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Error: " + response.status);
@@ -320,7 +312,9 @@ function PostPageHandler(data) {
                     const cleanedText = text.replace(/null$/, "").trim();
                     const data1 = JSON.parse(cleanedText); // Parse the cleaned text as JSON
                     if (data1 === data.author.username) {
+                        console.log("User is the author of the post.");
                         editPostButton.style.display = "block";
+                        editPostButton.setAttribute("onclick", `editPost(${data.id})`);
                     } else {
                         editPostButton.style.display = "none";
                     }
@@ -333,19 +327,20 @@ function PostPageHandler(data) {
                 console.error("Error:", error);
             });
     }
+
     PostInfo(data.id);
 }
 
-function EditPostHandler() { }
+function EditPostHandler() {}
 
 function PostInfo(id) {
     const formData = new FormData();
     formData.append("post_id", id);
 
     fetch(`http://localhost:8080/post/${id}`, {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -380,7 +375,10 @@ function displayPostPage(data) {
     let liskIsClicked = false;
     let disliskIsClicked = false;
     const replayButton = document.getElementById("SendReplay");
-    replayButton.setAttribute("onclick", `SendReplay(${data.Post.id})`);
+    replayButton.setAttribute(
+        "onclick",
+        `SendReplay(${data.Post.id}, '${data.Post.author.username}')`
+    );
 
     const postPageTime = document.createElement("span");
     postPageTime.classList.add("postPageTime");
@@ -403,7 +401,6 @@ function displayPostPage(data) {
 
     const postPageCategories = document.createElement("div");
     postPageCategories.classList.add("postPageCategories");
-    console.log(data.Post.categories);
     postPageCategories.textContent = Array.isArray(data.Post.categories) ?
         data.Post.categories.map((category) => category.name).join(", ") // Extract and join category names
         :
@@ -414,7 +411,6 @@ function displayPostPage(data) {
     postPageReaction.innerHTML = ""; // Clear any existing content
     var numOfLike = 0;
     var numOfDislike = 0;
-    console.log(data);
     const reactions = data.Post.reactions; // This should be an array of `structs.PostReactionResponse`
 
     reactions.forEach((reaction) => {
@@ -489,7 +485,6 @@ function displayPostPage(data) {
     const postPageCommentsContent = document.getElementById("comments");
     postPageCommentsContent.innerHTML = ""; // Clear any existing content
     data.Comments.forEach((comment) => {
-        console.log(comment);
         createComments(comment);
     });
 }
@@ -607,19 +602,18 @@ function createComments(comment) {
     postPageContent.appendChild(postPageComment);
 }
 
-function SendReplay(postId) {
+function SendReplay(postId, Username) {
     const message = document.getElementById("PostReplay").value;
-    console.log(message);
     if (message.trim() != "") {
         const formData = new FormData();
-        formData.append("title", "Replay");
+        formData.append("title", `Replay to (${Username})`);
         formData.append("content", message);
         formData.append("post_id", postId);
 
         fetch(`/post/comment`, {
-            method: "POST",
-            body: formData,
-        })
+                method: "POST",
+                body: formData,
+            })
             .then((response) => {
                 if (response.ok) {
                     // Handle success (e.g., clear the input field, update the comments section)
@@ -632,7 +626,6 @@ function SendReplay(postId) {
                 }
             })
             .then((data) => {
-                console.log(data);
                 createComments(data.Post);
             })
             .catch((error) => {
@@ -641,14 +634,139 @@ function SendReplay(postId) {
     }
 }
 
-// Function to scroll the chat container to the bottom
+function toggleNewPostForm() {
+    const EditBtn = document.getElementById("EditBtn");
+    const deletePostBtn = document.getElementById("deletePostBtn");
+    EditBtn.style.display = "none";
+    deletePostBtn.style.display = "none";
+    const submitBtn = document.getElementById("submitBtn");
+    submitBtn.style.display = "block";
+    // Populate the form fields with the data
+    document.getElementById("newPostTitle").value = "";
+    document.getElementById("topic").value = "";
+    submitBtn.style.display = "block";
+    // Select the categories
+    const categoriesList = document.querySelectorAll('.categoriesList input[type="checkbox"]');
+    categoriesList.forEach((checkbox) => {
+        checkbox.checked = false;
+    });
+    toggleDiv("newPostForm");
+}
+
+function editPost(Id) {
+    toggleDiv("newPostForm");
+    fetch(`http://localhost:8080/post/${Id}/edit`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error: " + response.status);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // Populate the form fields with the data
+            document.getElementById("newPostTitle").value = data.Post.title;
+            document.getElementById("topic").value = data.Post.message;
+            const EditBtn = document.getElementById("EditBtn");
+            const deletePostBtn = document.getElementById("deletePostBtn");
+            EditBtn.style.display = "block";
+            deletePostBtn.style.display = "block";
+            const submitBtn = document.getElementById("submitBtn");
+            submitBtn.style.display = "none";
+            // Select the categories
+            const categoriesList = document.querySelectorAll(
+                '.categoriesList input[type="checkbox"]'
+            );
+            categoriesList.forEach((checkbox) => {
+                checkbox.checked = data.Post.categories.some(
+                    (category) => category.name === checkbox.name
+                );
+            });
+            deletePostBtn.setAttribute("onclick", `deletePost(${data.Post.id})`);
+
+            // Set the submit button's onclick function
+            document.getElementById("EditBtn").onclick = function() {
+                updatePost(data.Post.id);
+            };
+            // Toggle the newPostForm div
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
+function updatePost(id) {
+    const title = document.getElementById("newPostTitle").value;
+    const topic = document.getElementById("topic").value;
+    const categoryCheckboxes = document.querySelectorAll(
+        '.categoriesList input[type="checkbox"]:checked'
+    );
+    const selectedCategories = Array.from(categoryCheckboxes).map((checkbox) => checkbox.value);
+    if (selectedCategories.length === 0) {
+        alert("Please select at least one category.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", topic);
+    formData.append("categories", JSON.stringify(selectedCategories));
+
+    fetch(`http://localhost:8080/post/${id}/edit`, {
+            method: "POST",
+            body: formData,
+        })
+        .then((response) => {
+            if (response.ok) {
+                console.log("Post updated successfully");
+                HomePageRequest();
+                toggleDiv("newPostForm");
+            } else {
+                const error = response.text();
+                console.error("Post update failed:", error);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
+function deletePost(id) {
+    fetch(`http://localhost:8080/post/${id}/delete`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            if (response.ok) {
+                console.log("Post deleted successfully");
+                toggleNewPostForm();
+                HomePageRequest();
+            } else {
+                const error = response.text();
+                console.error("Post deletion failed:", error);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+// Call scrollToBottom when the page loads
+window.onload = function() {
+    scrollToBottom();
+};
+
 function scrollToBottom() {
-    console.log("fhfh")
     var chatContainer = document.getElementById("UserChat");
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 // Call the function to scroll to the bottom when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function() {
     scrollToBottom();
 });

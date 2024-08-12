@@ -79,7 +79,7 @@ func GoLive(port string) {
 
 	http.HandleFunc("/user/{user_id}/report", reportUserHandler)
 	http.HandleFunc("/post/{post_id}/report", reportPostHandler)
-	http.HandleFunc("/post/{post_id}/{reaction_type}", postReactionHandler)
+	// http.HandleFunc("/post/{post_id}/{reaction_type}", postReactionHandler)
 	http.HandleFunc("/post/reaction/delete", deletePostReactionHandler)
 	http.HandleFunc("/post/{post_id}/comment", addCommentGetHandler)
 	http.HandleFunc("/post/comment", addCommentPostHandler)

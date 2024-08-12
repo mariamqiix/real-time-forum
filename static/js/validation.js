@@ -1,19 +1,25 @@
 function validateCreatePost(input) {
-    var title = document.getElementById('newPostTitle').value;
-    var topic = document.getElementById('topic').value;
-    var submitButton = document.getElementById('submitBtn');
+    var title = document.getElementById("newPostTitle").value;
+    var topic = document.getElementById("topic").value;
+    var submitButton = document.getElementById("submitBtn");
+    var EditButton = document.getElementById("EditBtn");
+
     const categoryCheckboxes = document.querySelectorAll(
         '.categoriesList input[type="checkbox"]:checked'
     );
 
-    if (title.trim() !== '' && topic.trim() !== '' && categoryCheckboxes.length > 0) {
+    if (title.trim() !== "" && topic.trim() !== "" && categoryCheckboxes.length > 0) {
         submitButton.style.cursor = "pointer";
         submitButton.style.opacity = "1";
-        console.log('abled');
+        EditButton.style.cursor = "pointer";
+        EditButton.style.opacity = "1";
+        console.log("abled");
     } else {
         submitButton.style.cursor = "not-allowed";
         submitButton.style.opacity = "0.5";
-        console.log('Disabled');
+        EditButton.style.cursor = "not-allowed";
+        EditButton.style.opacity = "0.5";
+        console.log("Disabled");
     }
 }
 

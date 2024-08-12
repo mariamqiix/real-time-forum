@@ -1,41 +1,11 @@
+Ruqaya :
+
+-   add validation function to the check list of create new post div (like what i did in title and topic)
+-   userPic
+    
+    
 back (Maryam) :
 
 -   notification
--   ~link post page with the back~~
 -   double check the website functionality (registration, login, chat, post, like, dislike .... etc)
--   add validation function to the check list of create new post div (like what i did in title and topic)
--   sing-up in registration page idk how to make it inside the button (the word)
--   chat should be scroll to the buttom
--   comments in profile page (same as post Page)
 -   add report button on the post page like the edit and make it visible only if the user is moderator (if user click on it open div like (why u want to be moderator, later i'll fix it))
--   ~~still the user can send empty messages~~
--   ~~do typing -websocket~~
--   ~~reciver message should be on right~~
--   ~~link profile page with the back~~
--   ~~the web should not allwo the user to post without choosing category!~~
--   ~~after the user click on submit sort by category (the div should dissapear)~~
--   ~~شيلي الاشياء الي تنطبع في الترمنل لان واجد فوضى~~
--   ~~there is an edit button in post page (make it visible only if the user is the owner of the post)~~
--   ~~add button at the end of post bage so the user can add comment (i'll handle the style later), make the button unvisible if user is guest~~
--   ~~user can't send empty string (disable the button until he write valid thing)~~
--   ~~if user not authenticated prvent him from clicking on the users to message them~~
--   ~~if user change the size of the screen and mesg bar disppear, the right side of the screen should be maxmuized~~
--   ~~the green dot should be shown only if there is a new message~~
--   ~~make backIcon on message go baack from chat to messages (and hide it on messages)~~
--   ~~make limit for username~~
--   ~~delete the long username user~~
--   ~~make log-out, sign un, captalize~~
--   ~~connect the sort to the backend~~
--   ~~connect tje categories to the backend~~
--   ~~search bar shold not take empty string (do validation)~~
--   ~~profile page should open directly to post page~~
--   ~~profile~~
--   ~~if user like, or dislick any post, make it red (in home, profile page)~~
--   ~~prevent guest from liking any post~~
--   ~~link the like, dislike with the back, also, handle the number (like/dislick count)~~
--   ~~connect reaction count to the post~~
-
-DATABASE (Ruqaya) :
-
--   ~~in user table , add gender~~
--   ~~reactions : only like and dislike~~

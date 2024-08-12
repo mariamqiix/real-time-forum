@@ -141,6 +141,8 @@ function OpenMesages(username, id) {
                                     `SendMessage('${username}')`
                                 );
                             });
+                            // Scroll to the bottom of the messagesBoxDiv
+                            scrollToBottom();
                         })
                         .catch((error) => {
                             console.error("Error:", error);

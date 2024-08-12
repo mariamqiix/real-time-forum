@@ -311,7 +311,7 @@ span.framer-text:not([data-text-fill]) {
     margin-top: 2%;
     margin-left: 10%;
     margin-bottom: 2%;
-    width: 300px
+    width: 300px;
 }
 
 .postReaction {
@@ -349,6 +349,11 @@ span.framer-text:not([data-text-fill]) {
     margin-right: 3%;
 }
 
+.postLike.clicked-like {
+    background-image: url(/images/likedIcon.png);
+    color: green;
+}
+
 .postLike {
     background-image: url(/images/likeIcon.png);
     background-repeat: no-repeat;
@@ -375,6 +380,18 @@ span.framer-text:not([data-text-fill]) {
     background-color: transparent;
     transform: scale(1.3);
     background-image: url(/images/dislikedIcon.png);
+}
+
+#deletePostBtn {
+    width: auto;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#deletePostBtn:hover {
+    background-color: #eac176;
 }
 
 .postLike:hover {
@@ -765,6 +782,7 @@ span.framer-text:not([data-text-fill]) {
 
 
 /* Hide the scrollbar for a specific div */
+
 #messagesBoxDiv::-webkit-scrollbar,
 #UserChat::-webkit-scrollbar,
 .navigationContent::-webkit-scrollbar,
@@ -773,7 +791,9 @@ span.framer-text:not([data-text-fill]) {
     border-radius: 30px;
 }
 
+
 /* Optional: Style the scrollbar track */
+
 #UserChat::-webkit-scrollbar-track,
 #messagesBoxDiv::-webkit-scrollbar-track,
 .navigationContent::-webkit-scrollbar-track,
@@ -782,7 +802,9 @@ span.framer-text:not([data-text-fill]) {
     border-radius: 30px;
 }
 
+
 /* Optional: Style the scrollbar thumb */
+
 #messagesBoxDiv::-webkit-scrollbar-thumb,
 #UserChat::-webkit-scrollbar-thumb,
 .navigationContent::-webkit-scrollbar-thumb,
@@ -1327,7 +1349,6 @@ button:hover {
     margin-left: 10px;
 }
 
-
 #list-moderators ul li {
     display: flex;
     justify-content: space-between;
@@ -1370,4 +1391,8 @@ button:hover {
     /* Adjust font size if needed */
     text-align: center;
     /* Center the text inside the button */
+}
+
+#RegChange {
+    width: auto;
 }

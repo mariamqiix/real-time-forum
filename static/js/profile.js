@@ -61,7 +61,7 @@ function posts(userId, caseString, column, element) {
         })
         .then((data) => {
             if (data && data.Posts) {
-                displayPostOnProfile(data.Posts);
+                displayPostOnProfile(data.Posts, caseString);
             } else {
                 console.error("Invalid data format. Expected profileView with Posts.");
             }
@@ -71,9 +71,9 @@ function posts(userId, caseString, column, element) {
         });
 }
 
-function displayPostOnProfile(Posts) {
+function displayPostOnProfile(Posts, caseString) {
     if (Array.isArray(Posts)) {
-        createPost(Posts, "profileContent");
+        createPost(Posts, "profileContent", caseString);
     } else {
         console.error("Invalid data format. Expected an array of posts.");
     }

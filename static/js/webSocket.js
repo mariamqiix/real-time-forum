@@ -9,7 +9,6 @@ function initializeWebSocket() {
 }
 
 socket.onmessage = function(event) {
-    console.log("WebSocket message received:", event.data);
     const messageData = JSON.parse(event.data);
     // Assuming the received data is a JSON string representing a structs.Message
     const messageBox = document.getElementById(`messageBox-${messageData.SenderId}`);
@@ -28,7 +27,6 @@ socket.onmessage = function(event) {
 
         const typingIcon = messageBox.querySelector(".typingIcon");
         typingIcon.style.display = "block";
-        console.log("hello");
         setTimeout(() => {
             typingIcon.style.display = "none";
         }, 5000); // H
@@ -64,7 +62,6 @@ socket.onmessage = function(event) {
 
             const chats = document.getElementById("UserChat");
             chats.appendChild(chatDiv);
-            console.log(messageBox);
         }
     }
 };
@@ -109,7 +106,6 @@ function SendMessage(ReceiverId) {
                         Messag: Messag,
                         Time: new Date().toISOString(),
                     };
-                    console.log("Sending message:", messageObject);
                     socket.send(JSON.stringify(messageObject));
 
                     // Create the new chat div

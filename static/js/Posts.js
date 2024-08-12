@@ -1,7 +1,6 @@
-function createPost(Posts, divName) {
+function createPost(Posts, divName, caseString) {
     const homeNavigationContent = document.getElementById(divName);
     homeNavigationContent.innerHTML = "";
-
     Posts.forEach((post) => {
         let numOfLike = 0;
         let numOfDislike = 0;
@@ -24,7 +23,31 @@ function createPost(Posts, divName) {
 
         const postBox = document.createElement("div");
         postBox.classList.add("postBox");
-        postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(post)})`);
+
+        if (caseString === "comments") {
+            const formData = new FormData();
+            formData.append("post_id", post.parent_id);
+
+            fetch(`http://localhost:8080/post/${post.parent_id}`, {
+                    method: "POST",
+                    body: formData,
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(data.Post)})`);
+                })
+                .catch((error) => {
+                    console.error("Error fetching post:", error);
+                });
+        } else {
+            postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(post)})`);
+        }
+
         postBox.setAttribute("id", `${post.id}`);
         const postUserPic = document.createElement("div");
         postUserPic.classList.add("postUserPic");

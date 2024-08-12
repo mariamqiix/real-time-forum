@@ -541,7 +541,7 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 func deletePostHandler(w http.ResponseWriter, r *http.Request) {
 	// Set CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	sessionUser := GetUser(r)
 	limiterUsername := "[GUESTS]"
@@ -554,6 +554,7 @@ func deletePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	postId, err := strconv.Atoi(r.PathValue("post_id"))
+	fmt.Print(postId)
 	if err != nil {
 		errorServer(w, r, http.StatusBadRequest)
 		return
@@ -598,16 +599,24 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 			errorServer(w, r, http.StatusBadRequest)
 			return
 		}
-
 		post, err := database.GetPost(postId)
 		if err != nil || post == nil {
 			errorServer(w, r, http.StatusNotFound)
 			return
 		}
+		view := discussionView{
+			User:     nil,
+			Post:     structs.PostResponse{},
+			Comments: nil,
+		}
 
-		// fill the view data
-		addPostView := addPostView{
-			User: &structs.UserResponse{
+		comments, err := database.GetCommentsForPost(post.Id, -1, 0)
+		if err != nil {
+			log.Printf("postsHandler: %s\n", err.Error())
+		}
+
+		if sessionUser != nil {
+			view.User = &structs.UserResponse{
 				Username:    sessionUser.Username,
 				FirstName:   sessionUser.FirstName,
 				LastName:    sessionUser.LastName,
@@ -615,15 +624,16 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 				Location:    sessionUser.Country,
 				ImageURL:    imageIdToUrl(sessionUser.ImageId),
 				Type:        userTypeToResponse(sessionUser.Type),
-			},
-			Categories: nil,
-			ParentId:   -1,
-			OriginalId: post.Id,
+			}
+			view.Post = mapPosts([]structs.Post{*post}, sessionUser.Id)[0]
+			view.Comments = mapPosts(comments, sessionUser.Id)
+		} else {
+			view.Post = mapPosts([]structs.Post{*post}, -1)[0]
+			view.Comments = mapPosts(comments, -1)
+
 		}
-		if post.ParentId != nil {
-			addPostView.ParentId = *post.ParentId
-		}
-		writeToJson(addPostView, w)
+
+		writeToJson(view, w)
 	} else if r.Method == "POST" {
 		sessionUser := GetUser(r)
 		limiterUsername := "[GUESTS]"
@@ -659,7 +669,7 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid form submitted", http.StatusBadRequest)
 			return
 		}
-
+		fmt.Print(newPostInfo)
 		if newPostInfo.Title == "" || newPostInfo.Content == "" {
 			log.Println("addPostPostHandler: failed validation")
 			http.Error(w, "Empty fields are not allowed", http.StatusBadRequest)
@@ -670,46 +680,46 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 		post.Title = newPostInfo.Title
 		post.Message = newPostInfo.Content
 
-		haveImage := newPostInfo.Image.Size != 0
-		if haveImage && newPostInfo.Image.Size > maxImageSize {
-			http.Error(w, "Image size too large", http.StatusBadRequest)
-			return
-		}
+		// haveImage := newPostInfo.Image.Size != 0
+		// if haveImage && newPostInfo.Image.Size > maxImageSize {
+		// 	http.Error(w, "Image size too large", http.StatusBadRequest)
+		// 	return
+		// }
 
-		if haveImage {
-			file, err := newPostInfo.Image.Open()
-			if err != nil {
-				log.Printf("editPostPostHandler: %s\n", err.Error())
-				http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
-				return
-			}
+		// if haveImage {
+		// 	file, err := newPostInfo.Image.Open()
+		// 	if err != nil {
+		// 		log.Printf("editPostPostHandler: %s\n", err.Error())
+		// 		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+		// 		return
+		// 	}
 
-			imageBuff, err := io.ReadAll(file)
-			if err != nil {
-				log.Printf("editPostPostHandler: %s\n", err.Error())
-				http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
-				return
-			}
+		// 	imageBuff, err := io.ReadAll(file)
+		// 	if err != nil {
+		// 		log.Printf("editPostPostHandler: %s\n", err.Error())
+		// 		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+		// 		return
+		// 	}
 
-			isImage, _ := IsDataImage(imageBuff)
-			if !isImage {
-				errorServer(w, r, http.StatusUnsupportedMediaType)
-				http.Error(w, "file type not allowed", http.StatusUnsupportedMediaType)
-				return
-			}
-			imageId, err := database.UploadImage(imageBuff)
-			if err != nil {
-				log.Printf("editPostPostHandler: %s\n", err.Error())
-				http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
-				return
-			}
-			post.ImageId = imageId
-		}
+		// 	isImage, _ := IsDataImage(imageBuff)
+		// 	if !isImage {
+		// 		errorServer(w, r, http.StatusUnsupportedMediaType)
+		// 		http.Error(w, "file type not allowed", http.StatusUnsupportedMediaType)
+		// 		return
+		// 	}
+		// 	imageId, err := database.UploadImage(imageBuff)
+		// 	if err != nil {
+		// 		log.Printf("editPostPostHandler: %s\n", err.Error())
+		// 		http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+		// 		return
+		// 	}
+		// 	post.ImageId = imageId
+		// }
 
 		database.UpdatePostInfo(post)
 
-		// redirect to the post
-		http.Redirect(w, r, "/post/"+strconv.Itoa(post.Id), http.StatusFound)
+		// // redirect to the post
+		// http.Redirect(w, r, "/post/"+strconv.Itoa(post.Id), http.StatusFound)
 	}
 }
 
@@ -970,87 +980,87 @@ func reportPostHandler(w http.ResponseWriter, r *http.Request) {
 	writeToJson(map[string]string{"message": "Operation performed successfully"}, w)
 }
 
-func postReactionHandler(w http.ResponseWriter, r *http.Request) {
-	// Set CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+// func postReactionHandler(w http.ResponseWriter, r *http.Request) {
+// 	// Set CORS headers
+// 	w.Header().Set("Access-Control-Allow-Origin", "*")
+// 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+// 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-	sessionUser := GetUser(r)
-	limiterUsername := "[GUESTS]"
-	if sessionUser != nil {
-		limiterUsername = sessionUser.Username
-	}
-	if !userLimiter.Allow(limiterUsername) {
-		errorServer(w, r, http.StatusTooManyRequests)
-		return
-	}
+// 	sessionUser := GetUser(r)
+// 	limiterUsername := "[GUESTS]"
+// 	if sessionUser != nil {
+// 		limiterUsername = sessionUser.Username
+// 	}
+// 	if !userLimiter.Allow(limiterUsername) {
+// 		errorServer(w, r, http.StatusTooManyRequests)
+// 		return
+// 	}
 
-	// get the post id and reaction type
-	postId := r.PathValue("post_id")
-	reactionType := r.PathValue("reaction_type")
+// 	// get the post id and reaction type
+// 	postId := r.PathValue("post_id")
+// 	reactionType := r.PathValue("reaction_type")
 
-	// validate the reaction type
-	if reactionType != string(structs.PostReactionTypeLike) && reactionType != string(structs.PostReactionTypeDislike) && reactionType != string(structs.PostReactionTypeLove) && reactionType != string(structs.PostReactionTypeHaha) && reactionType != string(structs.PostReactionTypeSkull) {
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
+// 	// validate the reaction type
+// 	if reactionType != string(structs.PostReactionTypeLike) && reactionType != string(structs.PostReactionTypeDislike) && reactionType != string(structs.PostReactionTypeLove) && reactionType != string(structs.PostReactionTypeHaha) && reactionType != string(structs.PostReactionTypeSkull) {
+// 		errorServer(w, r, http.StatusBadRequest)
+// 		return
+// 	}
 
-	// validate the post id and covert it to int
-	postIdInt, err := strconv.Atoi(postId)
-	if err != nil {
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
+// 	// validate the post id and covert it to int
+// 	postIdInt, err := strconv.Atoi(postId)
+// 	if err != nil {
+// 		errorServer(w, r, http.StatusBadRequest)
+// 		return
+// 	}
 
-	// get the post struct from the database
-	PostStructForRec, err := database.GetPost(postIdInt)
-	if err != nil || PostStructForRec == nil {
-		errorServer(w, r, http.StatusNotFound)
-		return
-	}
+// 	// get the post struct from the database
+// 	PostStructForRec, err := database.GetPost(postIdInt)
+// 	if err != nil || PostStructForRec == nil {
+// 		errorServer(w, r, http.StatusNotFound)
+// 		return
+// 	}
 
-	// get the user from the session
-	UsersPost := GetUser(r)
-	if UsersPost == nil {
-		errorServer(w, r, http.StatusUnauthorized)
-		return
-	}
+// 	// get the user from the session
+// 	UsersPost := GetUser(r)
+// 	if UsersPost == nil {
+// 		errorServer(w, r, http.StatusUnauthorized)
+// 		return
+// 	}
 
-	mappedReaction := mapReactionForPost(PostStructForRec, UsersPost.Id, structs.PostReactionType(reactionType), reactionType)
-	if mappedReaction == nil {
-		errorServer(w, r, http.StatusBadRequest)
-		return
-	}
-	reactionId, err2 := database.GetReactionId(mappedReaction.Type)
-	if err2 != nil || reactionId == 0 {
-		errorServer(w, r, http.StatusInternalServerError)
-		return
-	}
+// 	mappedReaction := mapReactionForPost(PostStructForRec, UsersPost.Id, structs.PostReactionType(reactionType), reactionType)
+// 	if mappedReaction == nil {
+// 		errorServer(w, r, http.StatusBadRequest)
+// 		return
+// 	}
+// 	reactionId, err2 := database.GetReactionId(mappedReaction.Type)
+// 	if err2 != nil || reactionId == 0 {
+// 		errorServer(w, r, http.StatusInternalServerError)
+// 		return
+// 	}
 
-	reaction := structs.PostReaction{
-		PostId:     PostStructForRec.Id,
-		UserId:     UsersPost.Id,
-		ReactionId: reactionId,
-	}
+// 	reaction := structs.PostReaction{
+// 		PostId:     PostStructForRec.Id,
+// 		UserId:     UsersPost.Id,
+// 		ReactionId: reactionId,
+// 	}
 
-	err3 := database.AddReactionToPost(reaction)
-	if err3 != nil {
-		errorServer(w, r, http.StatusInternalServerError)
-		return
-	}
-	// add notification
-	// if the user is not the owner of the post
-	if UsersPost.Id != PostStructForRec.UserId {
-		notification := structs.UserNotification{
-			PostReactionID: reactionId,
-		}
-		_, err4 := database.AddNotification(notification)
-		if err4 != nil {
-			log.Printf("postReactionHandler: %s\n", err4.Error())
-		}
-	}
-}
+// 	err3 := database.AddReactionToPost(reaction)
+// 	if err3 != nil {
+// 		errorServer(w, r, http.StatusInternalServerError)
+// 		return
+// 	}
+// 	// add notification
+// 	// if the user is not the owner of the post
+// 	if UsersPost.Id != PostStructForRec.UserId {
+// 		notification := structs.UserNotification{
+// 			PostReactionID: reactionId,
+// 		}
+// 		_, err4 := database.AddNotification(notification)
+// 		if err4 != nil {
+// 			log.Printf("postReactionHandler: %s\n", err4.Error())
+// 		}
+// 	}
+// }
 
 // same logic as addPostPostHandler
 func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
@@ -1143,19 +1153,18 @@ func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	writeToJson(view, w)
-
 	// Create a new notification for the comment
-	// notification := structs.UserNotification{
-	// 	CommentID: commentID,
-	// }
+	notification := structs.UserNotification{
+		CommentID: commentID,
+	}
 
 	// // Add the notification to the database
-	// _, err = database.AddNotification(notification)
-	// if err != nil {
-	// 	log.Printf("Failed to add notification: %v", err)
-	// 	// Handle the error appropriately
-	// }
+	_, err = database.AddNotification(notification)
+	if err != nil {
+		log.Printf("Failed to add notification: %v", err)
+		// Handle the error appropriately
+	}
+	writeToJson(view, w)
 
 }
 
@@ -1826,15 +1835,31 @@ func addReactionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add the reaction to the database
-	err = database.AddReactionToPost(reaction)
+	reactionId, err := database.AddReactionToPost(reaction)
 	if err != nil {
 		http.Error(w, "Failed to add reaction", http.StatusInternalServerError)
 		return
 	}
 
+	// get the post struct from the database
+	post, err := database.GetPost(postId)
+	if err != nil || post == nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	if sessionUser.Id != post.UserId {
+		notification := structs.UserNotification{
+			PostReactionID: int(reactionId),
+		}
+		_, err4 := database.AddNotification(notification)
+		if err4 != nil {
+			log.Printf("postReactionHandler: %s\n", err4.Error())
+		}
+	}
 	// Send a success response
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Reaction added successfully"})
+
 }
 
 func deletePostReactionHandler(w http.ResponseWriter, r *http.Request) {

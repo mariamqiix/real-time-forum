@@ -187,49 +187,54 @@ func AddPost(post structs.Post) (int, error) {
 
 	return int(postId), nil
 }
-
-func AddReactionToPost(reactionPost structs.PostReaction) error {
+func AddReactionToPost(reactionPost structs.PostReaction) (int64, error) {
 	// Lock the mutex before accessing the database
 	mutex.Lock()
 	defer mutex.Unlock()
 
 	tx, err := db.Begin()
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	// Remove any existing reaction by the user on the post
 	_, err = tx.Exec("DELETE FROM PostReaction WHERE post_id = ? AND user_id = ?", reactionPost.PostId, reactionPost.UserId)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return 0, err
 	}
 
 	// Insert the new reaction post into the PostReaction table
 	stmt, err := tx.Prepare("INSERT INTO PostReaction (post_id, user_id, reaction_id) VALUES (?, ?, ?);")
 	if err != nil {
 		tx.Rollback()
-		return err
+		return 0, err
 	}
 
 	defer stmt.Close()
 
-	_, err = stmt.Exec(
+	result, err := stmt.Exec(
 		reactionPost.PostId,
 		reactionPost.UserId,
 		reactionPost.ReactionId)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return 0, err
+	}
+
+	reactionId, err := result.LastInsertId()
+	if err != nil {
+		tx.Rollback()
+		return 0, err
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		return err
+		return 0, err
 	}
 
-	return nil
+	return reactionId, nil
 }
 
 // stores a Report struct in the Report table of the database and takes a report as Report-struct

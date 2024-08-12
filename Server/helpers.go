@@ -163,10 +163,10 @@ func parsePostForm(data *structs.AddPostRequest, r *http.Request) bool {
 	data.Content = r.FormValue("content")
 	data.Categories = r.Form["categories"]
 
-	_, fh, err := r.FormFile("image")
-	if err == nil {
-		data.Image = *fh
-	}
+	// _, fh, err := r.FormFile("image")
+	// if err == nil {
+	// 	data.Image = *fh
+	// }
 	return true
 }
 

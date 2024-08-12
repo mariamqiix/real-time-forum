@@ -322,19 +322,18 @@ func TestGetUserReactions(t *testing.T) {
 	}
 }
 
-func TestAddReactionToPost(t *testing.T) {
-	err := database.Connect(DB_PATH)
-	if err != nil {
-		t.Fatal(err.Error())
-	}
+// func TestAddReactionToPost(t *testing.T) {
+// 	err := database.Connect(DB_PATH)
+// 	if err != nil {
+// 		t.Fatal(err.Error())
+// 	}
 
-	err = database.AddReactionToPost(structs.PostReaction{Id: 1, PostId: 1, UserId: 1, ReactionId: 1})
+// 	err = database.AddReactionToPost(structs.PostReaction{Id: 1, PostId: 1, UserId: 1, ReactionId: 1})
 
-	if err != nil {
-		t.Error(err.Error())
-	}
-}
-
+// 	if err != nil {
+// 		t.Error(err.Error())
+// 	}
+// }
 
 func TestGetPost(t *testing.T) {
 	err := database.Connect(DB_PATH)

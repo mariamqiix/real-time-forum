@@ -1,25 +1,44 @@
 package database
 
 // Remove reaction from Post by taking ReactionPost ID
-func RemoveReactionFromPost(postId, reactionTypeId, reacterId int) error {
+func RemoveReactionFromPost(postId, reactionTypeId, reacterId int) ( error) {
 	// Lock the mutex before accessing the database
 	mutex.Lock()
 	defer mutex.Unlock()
 
 	tx, err := db.Begin()
 	if err != nil {
-		return err
+		return  err
 	}
-	_, err = tx.Exec("DELETE FROM PostReaction WHERE post_id = ? AND user_id = ?;", postId, reactionTypeId, reacterId)
+
+	// Retrieve the reaction ID before deleting it
+	var reactionId int64
+	err = tx.QueryRow("SELECT id FROM PostReaction WHERE post_id = ? AND user_id = ? AND reaction_id = ?", postId, reacterId, reactionTypeId).Scan(&reactionId)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return  err
 	}
+
+	// Delete the reaction from the PostReaction table
+	_, err = tx.Exec("DELETE FROM PostReaction WHERE id = ?", reactionId)
+	if err != nil {
+		tx.Rollback()
+		return  err
+	}
+
+	// Delete the corresponding notification from the UserNotification table
+	_, err = tx.Exec("DELETE FROM UserNotification WHERE PostReaction_id = ?", reactionId)
+	if err != nil {
+		tx.Rollback()
+		return  err
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		return err
+		return  err
 	}
+
 	return nil
 }
 
