@@ -288,14 +288,6 @@ function displaySearchPosts(data) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    GetUserLoggedIn();
-    const editPostButton = document.getElementById("editPost-button");
-    if (editPostButton) {
-        editPostButton.style.display = "none";
-    }
-});
-
 function PostPageHandler(data) {
     const editPostButton = document.getElementById("editPost-button");
     toggleVisibility("postPage");
@@ -315,7 +307,9 @@ function PostPageHandler(data) {
                     const cleanedText = text.replace(/null$/, "").trim();
                     const data1 = JSON.parse(cleanedText); // Parse the cleaned text as JSON
                     if (data1 === data.author.username) {
+                        console.log("User is the author of the post.");
                         editPostButton.style.display = "block";
+                        editPostButton.setAttribute("onclick", `editPost(${data.id})`);
                     } else {
                         editPostButton.style.display = "none";
                     }
@@ -328,10 +322,9 @@ function PostPageHandler(data) {
                 console.error("Error:", error);
             });
     }
+
     PostInfo(data.id);
 }
-
-function EditPostHandler() {}
 
 function PostInfo(id) {
     const formData = new FormData();
@@ -635,3 +628,51 @@ function SendReplay(postId) {
             });
     }
 }
+
+function editPost(Id) {
+    toggleDiv("newPostForm");
+
+    console.log("brpPlz ");
+
+    fetch(`http://localhost:8080/post/${Id}/edit`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error: " + response.status);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // Process the data received from the server
+            console.log(data);
+
+            // Populate the form fields with the data
+            document.getElementById("newPostTitle").value = data.Post.title;
+            document.getElementById("topic").value = data.Post.message;
+
+            // Select the categories
+            const categoriesList = document.querySelectorAll(
+                '.categoriesList input[type="checkbox"]'
+            );
+            categoriesList.forEach((checkbox) => {
+                checkbox.checked = data.Post.categories.some(
+                    (category) => category.name === checkbox.name
+                );
+            });
+
+            // Set the submit button's onclick function
+            document.getElementById("submitBtn").onclick = function() {
+                updatePost(data.Post.Id);
+            };
+            // Toggle the newPostForm div
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
+function updatePost(id) {}

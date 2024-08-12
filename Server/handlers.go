@@ -598,16 +598,24 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 			errorServer(w, r, http.StatusBadRequest)
 			return
 		}
-
 		post, err := database.GetPost(postId)
 		if err != nil || post == nil {
 			errorServer(w, r, http.StatusNotFound)
 			return
 		}
+		view := discussionView{
+			User:     nil,
+			Post:     structs.PostResponse{},
+			Comments: nil,
+		}
 
-		// fill the view data
-		addPostView := addPostView{
-			User: &structs.UserResponse{
+		comments, err := database.GetCommentsForPost(post.Id, -1, 0)
+		if err != nil {
+			log.Printf("postsHandler: %s\n", err.Error())
+		}
+
+		if sessionUser != nil {
+			view.User = &structs.UserResponse{
 				Username:    sessionUser.Username,
 				FirstName:   sessionUser.FirstName,
 				LastName:    sessionUser.LastName,
@@ -615,15 +623,16 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 				Location:    sessionUser.Country,
 				ImageURL:    imageIdToUrl(sessionUser.ImageId),
 				Type:        userTypeToResponse(sessionUser.Type),
-			},
-			Categories: nil,
-			ParentId:   -1,
-			OriginalId: post.Id,
+			}
+			view.Post = mapPosts([]structs.Post{*post}, sessionUser.Id)[0]
+			view.Comments = mapPosts(comments, sessionUser.Id)
+		} else {
+			view.Post = mapPosts([]structs.Post{*post}, -1)[0]
+			view.Comments = mapPosts(comments, -1)
+
 		}
-		if post.ParentId != nil {
-			addPostView.ParentId = *post.ParentId
-		}
-		writeToJson(addPostView, w)
+
+		writeToJson(view, w)
 	} else if r.Method == "POST" {
 		sessionUser := GetUser(r)
 		limiterUsername := "[GUESTS]"
