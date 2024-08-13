@@ -77,6 +77,7 @@ func mapPosts(oldArr []structs.Post, loggedUserId int) []structs.PostResponse {
 			author.Username = "[Unknown]"
 			author.Type = userTypeToResponse(structs.UserTypeIdUser)
 		} else {
+			author.Id = user.Id
 			author.Username = user.Username
 			author.FirstName = user.FirstName
 			author.LastName = user.LastName
@@ -208,7 +209,9 @@ func mapReactionForPost(post *structs.Post, loggedUserId int, reactionType struc
 	}
 
 	reactionResp.Count = len(reactersIds)
-	reactionResp.DidReact = slices.Contains(reactersIds, loggedUserId)
+	if loggedUserId != -1 {
+		reactionResp.DidReact = slices.Contains(reactersIds, loggedUserId)
+	}
 
 	return reactionResp
 }
@@ -295,7 +298,7 @@ func ConvertToReportRequestResponse(reports []structs.Report) ([]structs.ReportR
 			ReportedPostTitle: post.Title, // Assuming you need to fetch the post title separately if required
 			Time:              report.Time,
 			Reason:            report.Reason,
-			IsReported:        report.IsPostReport,
+			IsPostReported:    report.IsPostReport,
 			IsPending:         report.IsPending,
 			ReportResponse:    report.ReportResponse,
 		}

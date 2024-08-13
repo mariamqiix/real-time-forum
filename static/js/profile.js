@@ -20,7 +20,12 @@ function profile(userId, caseString) {
     fetch(url, {
             method: "GET",
         })
-        .then((response) => response.json())
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then((data) => {
             const profileUsername = document.getElementById("profileUsername");
             profileUsername.innerHTML = data.UserProfile.username;
@@ -33,10 +38,34 @@ function profile(userId, caseString) {
 
             const userPic = document.getElementById("userPic");
             userPic.style.backgroundImage = `url(${data.UserProfile.image_url})`;
-            const postsThElement = document.querySelector(
-                "th[onclick=\"posts(-1,'Posts','Posts', event.target)\"]"
+            // Update the onclick attributes with the userId
+
+            // Update the onclick attributes with the userId
+            const postsThElement = document.getElementById("PostsTh");
+            postsThElement.setAttribute(
+                "onclick",
+                `posts(${userId},'Posts','Posts', event.target)`
             );
-            posts(-1, "Posts", "Posts", postsThElement);
+
+            const commentsThElement = document.getElementById("commentsTh");
+            commentsThElement.setAttribute(
+                "onclick",
+                `posts(${userId},'comments','comments', event.target)`
+            );
+
+            const likesThElement = document.getElementById("likesTh");
+            likesThElement.setAttribute(
+                "onclick",
+                `posts(${userId},'likes','likes', event.target)`
+            );
+
+            const dislikesThElement = document.getElementById("dislikesTh");
+            dislikesThElement.setAttribute(
+                "onclick",
+                `posts(${userId},'dislikes','dislikes', event.target)`
+            );
+
+            posts(userId, "Posts", "Posts", postsThElement);
         })
         .catch((error) => {
             console.error("Error fetching profile:", error);

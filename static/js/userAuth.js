@@ -162,6 +162,7 @@ async function logout() {
         if (response.ok) {
             console.log("Logout successful");
             GetUserLoggedIn();
+            initializeWebSocket();
             // Perform any additional actions needed after successful logout
             HomePageRequest();
         } else {

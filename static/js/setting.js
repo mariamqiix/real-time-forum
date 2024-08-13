@@ -1,8 +1,8 @@
 function settingsHandler() {
     // Send the form data to the Go server
     fetch("http://localhost:8080/userType", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -58,8 +58,8 @@ function settingsHandler() {
 function fetchAndAppendModerators() {
     // Fetch the list of moderators from the server
     fetch("http://localhost:8080/Moderator", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -104,9 +104,9 @@ function RemoveModerator(id) {
     formData.append("Id", id);
 
     fetch("http://localhost:8080/RemoveModerator", {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (response.ok) {
                 alert("Moderator removed successfully");
@@ -139,9 +139,9 @@ function saveNewPassword() {
         formData.append("password", newPassword);
 
         fetch("http://localhost:8080/changePassword", {
-            method: "POST",
-            body: formData,
-        })
+                method: "POST",
+                body: formData,
+            })
             .then((response) => {
                 if (response.ok) {
                     alert("Password changed successfully!");
@@ -159,8 +159,8 @@ function PromotionRequests() {
     const promotionRequestsTable = document.querySelector("#promotion-requests table");
     promotionRequestsTable.innerHTML = ""; // Clear existing table rows
     fetch("http://localhost:8080/PromotionRequests", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -218,9 +218,9 @@ function ShowPromotion(Id) {
     formData.append("id", Id);
 
     fetch("http://localhost:8080/ShowUserPromotion", {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -263,9 +263,9 @@ function RejectPromotion(userId) {
     formData.append("userId", userId);
 
     fetch("http://localhost:8080/RejectPromotion", {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (response.ok) {
                 alert("Promotion request rejected successfully");
@@ -288,9 +288,9 @@ function ApprovePromotion(userId) {
     formData.append("userId", userId);
 
     fetch("http://localhost:8080/ApprovePromotion", {
-        method: "POST",
-        body: formData,
-    })
+            method: "POST",
+            body: formData,
+        })
         .then((response) => {
             if (response.ok) {
                 alert("Promotion request approved successfully");
@@ -359,9 +359,9 @@ function removeCategory(id) {
 
     if (confirm("Are you sure you want to proceed?")) {
         fetch("http://localhost:8080/removeCategory", {
-            method: "POST",
-            body: formData,
-        })
+                method: "POST",
+                body: formData,
+            })
             .then((response) => {
                 if (response.ok) {
                     alert("Category removed successfully");
@@ -421,8 +421,8 @@ async function addCategory() {
 
 function ChangeUserInformation() {
     fetch("http://localhost:8080/getUserInfo", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -486,9 +486,9 @@ function UpdateUserInformation() {
     formData.append("gender", gender);
     if (confirm("Are you sure you want to proceed?")) {
         fetch("http://localhost:8080/updateUserInfo", {
-            method: "POST",
-            body: formData,
-        })
+                method: "POST",
+                body: formData,
+            })
             .then((response) => {
                 if (response.ok) {
                     alert("User information updated successfully");
@@ -514,8 +514,8 @@ function ManageReports() {
     reportRequestsList.innerHTML = ""; // Clear existing list items
 
     fetch("http://localhost:8080/Reports", {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -551,7 +551,10 @@ function ManageReports() {
                     const rejectButton = document.createElement("button");
                     rejectButton.classList.add("reject-button");
                     rejectButton.textContent = "Reject";
-                    rejectButton.setAttribute("onclick", `RejectReport(${request.reporter_id})`);
+                    rejectButton.setAttribute(
+                        "onclick",
+                        `reportUserOrPost(${JSON.stringify(request)}, "Report Rejected", true)`
+                    );
                     listItem.appendChild(rejectButton);
 
                     reportRequestsList.appendChild(listItem);
@@ -585,9 +588,15 @@ function showReportRequest(report) {
         { title: "Time", info: new Date(report.time).toLocaleString() },
         { title: "Reason", info: report.reason },
     ];
+    const replyButton = document.createElement("button");
+    replyButton.textContent = "Report";
+    replyButton.classList.add("reply-button");
+    replyButton.disabled = true; // Disable the button initially
 
-    if (report.reported_post_id !== -1) {
+    console.log(report);
+    if (report.reported_post_id !== -1 || report.is_post_reported) {
         fields.push({ title: "Reported Post Title", info: report.reported_post_title });
+        replyButton.textContent = "Delete Post";
     }
 
     fields.forEach((field) => {
@@ -616,22 +625,90 @@ function showReportRequest(report) {
     const replyInput = document.createElement("textarea");
     replyInput.id = "replyInput";
     replyInput.classList.add("reply-input");
-
-    const replyButton = document.createElement("button");
-    replyButton.textContent = "Reply";
-    replyButton.classList.add("reply-button");
-    replyButton.onclick = function () {
+    replyInput.onfocus = replyInput.oninput = function() {
+        replyButton.disabled = replyInput.value.trim() === "";
+    };
+    replyButton.onclick = function() {
         const replyText = document.getElementById("replyInput").value;
+        reportUserOrPost(report, replyText, false);
+        document.getElementById("replyInput").innerHTML = "";
         console.log("Reply:", replyText);
         // Add your reply handling logic here
     };
-
     replyLi.appendChild(replyLabel);
     replyLi.appendChild(replyInput);
     ul.appendChild(replyLi);
 
+    const rejectButton = document.createElement("button");
+    rejectButton.textContent = "Reject";
+    rejectButton.classList.add("rejectReport-button");
+    rejectButton.onclick = function() {
+        reportUserOrPost(report, "Report Rejected", true);
+    };
     reportDetailsDiv.appendChild(ul);
     reportDetailsDiv.appendChild(replyButton);
+    reportDetailsDiv.appendChild(rejectButton);
 
     toggleDiv("ReportDetails");
+}
+
+function reportUserOrPost(report, replyText, rejected) {
+    const reportInfo = {
+        report_id: report.id,
+        response: replyText,
+    };
+
+    fetch("/updateReport", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(reportInfo),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                return response.text().then((errorText) => {
+                    throw new Error("Failed to update report: " + errorText);
+                });
+            }
+            return response.json();
+        })
+        .then((result) => {
+            console.log(result.message);
+
+            if (report.is_post_reported && !rejected) {
+                deletePost(report.id);
+            } else if (!rejected) {
+                banUser(report.reported_id);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+    toggleDiv("Report-requests");
+}
+
+function banUser(userId) {
+    fetch(`/banUser?userId=${userId}`, {
+            method: "GET", // or 'POST' if you prefer
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            if (!response.ok) {
+                return response.text().then((errorText) => {
+                    throw new Error(`Failed to ban user: ${errorText}`);
+                });
+            }
+            return response.text();
+        })
+        .then((result) => {
+            console.log(result); // "User banned successfully"
+            alert(result);
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert(`Error: ${error.message}`);
+        });
 }

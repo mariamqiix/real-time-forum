@@ -13,6 +13,7 @@ func errorServer(w http.ResponseWriter, r *http.Request, code int) {
 	sessionUser := GetUser(r)
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
+			Id:          sessionUser.Id,
 			Username:    sessionUser.Username,
 			FirstName:   sessionUser.FirstName,
 			LastName:    sessionUser.LastName,

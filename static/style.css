@@ -239,8 +239,8 @@ span.framer-text:not([data-text-fill]) {
     border-radius: 15px;
     color: #555;
     margin: 10%;
+    top: 5%;
     margin-bottom: 0;
-    margin-top: 0;
 }
 
 .postPageComment {
@@ -1062,7 +1062,7 @@ span.framer-text:not([data-text-fill]) {
     background-color: #f2f2f2;
     border: 2px solid #ccc;
     border-radius: 40px;
-    text-align: center;
+    /* text-align: center; */
     z-index: 10000;
     font-size: 30px;
     height: 50%;
@@ -1249,6 +1249,14 @@ button:hover {
     margin-left: 20%;
 }
 
+#ShowPromotionRequest {
+    text-align: center;
+}
+
+#ShowPromotionRequest h2 {
+    right: auto;
+}
+
 #change-password table,
 #addCategory table,
 #Report-requests table {
@@ -1300,11 +1308,48 @@ button:hover {
 }
 
 #ReportDiv-button,
-.reply-button {
+.accept-button,
+.reply-button,
+.UpdateUserInformation-button,
+#save-btn,
+#send-btn,
+.rejectReport-button,
+.addCategory-button,
+.ShowPromotionRequestApprove-button,
+.ShowPromotionRequestReject-button {
     position: absolute;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
+}
+
+#ShowPromotionRequestUser {
+    align-self: center;
+    position: relative;
+    right: 800%;
+    /* float: left; */
+}
+
+.ShowPromotionRequestApprove-button,
+.ShowPromotionRequestReject-button,
+.reply-button,
+.rejectReport-button {
+    left: 30%;
+    margin: 10px;
+    width: auto;
+}
+
+.ShowPromotionRequestApprove-button,
+.rejectReport-button {
+    left: 65%;
+}
+
+.rejectReport-button {
+    bottom: 25px;
+}
+
+.UpdateUserInformation-button {
+    position: relative;
 }
 
 .reply-button {

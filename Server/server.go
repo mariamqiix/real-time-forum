@@ -75,7 +75,8 @@ func GoLive(port string) {
 	http.HandleFunc("/addCategory", addCategoryHandler)
 	http.HandleFunc("/ChatView", ChatViewHandler)
 	http.HandleFunc("/Reports", ReportsHandler)
-
+	http.HandleFunc("/banUser", BanUserHandler)
+	http.HandleFunc("/updateReport", updateReportHandler)
 	// http.HandleFunc("GET /notifications/", notificationsHandler)
 	// http.HandleFunc("POST /notifications/{notification_id}/read", markNotificationReadHandler)
 
@@ -139,6 +140,7 @@ func homePageDataHuncler(w http.ResponseWriter, r *http.Request) {
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
+			Id:          sessionUser.Id,
 			Username:    sessionUser.Username,
 			FirstName:   sessionUser.FirstName,
 			LastName:    sessionUser.LastName,

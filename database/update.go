@@ -2,8 +2,10 @@ package database
 
 import (
 	"RealTimeForum/structs"
+	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 )
 
 func UpdateRepor(reportID int, atype, value string) error {
@@ -173,6 +175,68 @@ func UpdateUserPassword(userID int, newPasswordHash string) error {
 
 	if rowsAffected == 0 {
 		return errors.New("no rows affected, user not found")
+	}
+
+	return nil
+}
+
+// BanUser bans a user for a week and removes their session if they are logged in
+func BanUser(userId int) error {
+	// Calculate the ban end date (one week from now)
+	banEndDate := time.Now().AddDate(0, 0, 7)
+
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Begin a transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+
+	// Update the user's BannedUntil field
+	stmt, err := tx.Prepare("UPDATE User SET banned_until = ? WHERE id = ?")
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(banEndDate, userId)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Remove the user's session
+	err = removeSession(tx, userId)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return nil
+}
+
+// removeSession removes the user's session
+func removeSession(tx *sql.Tx, userId int) error {
+	stmt, err := tx.Prepare("DELETE FROM UserSession WHERE user_id = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(userId)
+	if err != nil {
+		return err
 	}
 
 	return nil

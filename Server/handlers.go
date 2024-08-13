@@ -128,10 +128,15 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusTooManyRequests)
 		return
 	}
-	userId, _ := strconv.Atoi(r.FormValue("user_id"))
+	userId, err := strconv.Atoi(r.FormValue("user_id"))
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
 	var dbUser *structs.User
+
 	if userId != -1 {
-		dbUser, err := database.GetUserById(userId)
+		dbUser, err = database.GetUserById(userId)
 		if err != nil {
 			log.Printf("profileHandler: %s\n", err.Error())
 			errorServer(w, r, http.StatusInternalServerError)
@@ -143,33 +148,36 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-	} else {
+	} else if limiterUsername != "[GUESTS]" {
 		dbUser = sessionUser
 	}
+
 	// Fetch the user from the database
 
-	// Prepare the view data
 	view := profileView{}
-	view.UserProfile = structs.UserResponse{
-		Username:    dbUser.Username,
-		FirstName:   dbUser.FirstName,
-		LastName:    dbUser.LastName,
-		DateOfBirth: sessionUser.DateOfBirth,
-		Location:    sessionUser.Country,
-		ImageURL:    imageIdToUrl(dbUser.ImageId),
-		Type:        userTypeToResponse(dbUser.Type),
-	}
+	if dbUser != nil {
+		fmt.Println("lolllll\n\n\n")
 
+		view.UserProfile = structs.UserResponse{
+			Id:          dbUser.Id,
+			Username:    dbUser.Username,
+			FirstName:   dbUser.FirstName,
+			LastName:    dbUser.LastName,
+			DateOfBirth: dbUser.DateOfBirth,
+			Location:    dbUser.Country,
+			ImageURL:    imageIdToUrl(dbUser.ImageId),
+			Type:        userTypeToResponse(dbUser.Type),
+		}
+	}
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
+			Id:          sessionUser.Id,
 			Username:    sessionUser.Username,
 			FirstName:   sessionUser.FirstName,
 			LastName:    sessionUser.LastName,
 			DateOfBirth: sessionUser.DateOfBirth,
-			Location:    sessionUser.Country,
-			ImageURL:    imageIdToUrl(sessionUser.ImageId),
-			Type:        userTypeToResponse(sessionUser.Type),
 		}
+
 	} else {
 		sessionUser = &structs.User{Id: -1}
 	}
@@ -194,7 +202,9 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 			view.Posts = mapPosts(filterdPosts, sessionUser.Id)
 		}
 	default:
+		fmt.Println(dbUser)
 		posts, err := database.GetPostsByUser(dbUser.Id, -1, 0, false)
+		fmt.Print(err)
 		if err == nil {
 			view.Posts = mapPosts(posts, sessionUser.Id)
 		}
@@ -466,6 +476,7 @@ func categoryPostsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
+			Id:          sessionUser.Id,
 			Username:    sessionUser.Username,
 			FirstName:   sessionUser.FirstName,
 			LastName:    sessionUser.LastName,
@@ -518,6 +529,7 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
+			Id:          sessionUser.Id,
 			Username:    sessionUser.Username,
 			FirstName:   sessionUser.FirstName,
 			LastName:    sessionUser.LastName,
@@ -617,6 +629,7 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 
 		if sessionUser != nil {
 			view.User = &structs.UserResponse{
+				Id:          sessionUser.Id,
 				Username:    sessionUser.Username,
 				FirstName:   sessionUser.FirstName,
 				LastName:    sessionUser.LastName,
@@ -743,6 +756,7 @@ func addPostHandlerGet(w http.ResponseWriter, r *http.Request) {
 		// fill the view data
 		addPostView := addPostView{
 			User: &structs.UserResponse{
+				Id:          sessionUser.Id,
 				Username:    sessionUser.Username,
 				FirstName:   sessionUser.FirstName,
 				LastName:    sessionUser.LastName,
@@ -964,11 +978,12 @@ func reportPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Add error handling for post not found
 	report := structs.Report{
-		ReporterId: sessionUser.Id,
-		ReportedId: post.UserId,
-		PostId:     reportRequest.PostID,
-		Reason:     reportRequest.Reason,
-		Time:       time.Now(),
+		ReporterId:   sessionUser.Id,
+		ReportedId:   post.UserId,
+		PostId:       reportRequest.PostID,
+		Reason:       reportRequest.Reason,
+		IsPostReport: true,
+		Time:         time.Now(),
 	}
 
 	err2 := database.AddReport(report)
@@ -1144,6 +1159,7 @@ func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
+			Id:          sessionUser.Id,
 			Username:    sessionUser.Username,
 			FirstName:   sessionUser.FirstName,
 			LastName:    sessionUser.LastName,
@@ -1207,6 +1223,7 @@ func addCommentGetHandler(w http.ResponseWriter, r *http.Request) {
 	// fill the view data
 	addPostView := addPostView{
 		User: &structs.UserResponse{
+			Id:          sessionUser.Id,
 			Username:    sessionUser.Username,
 			FirstName:   sessionUser.FirstName,
 			LastName:    sessionUser.LastName,
@@ -1269,6 +1286,7 @@ func searchPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
+			Id:          sessionUser.Id,
 			Username:    sessionUser.Username,
 			FirstName:   sessionUser.FirstName,
 			LastName:    sessionUser.LastName,
@@ -1907,7 +1925,7 @@ func deletePostReactionHandler(w http.ResponseWriter, r *http.Request) {
 
 func ReportsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	sessionUser := GetUser(r)
 	if sessionUser == nil {
@@ -1925,4 +1943,55 @@ func ReportsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeToJson(convertedR, w)
+}
+
+func BanUserHandler(w http.ResponseWriter, r *http.Request) {
+	userIdStr := r.URL.Query().Get("userId")
+	if userIdStr == "" {
+		http.Error(w, "User ID is required", http.StatusBadRequest)
+		return
+	}
+
+	userId, err := strconv.Atoi(userIdStr)
+	if err != nil {
+		http.Error(w, "Invalid User ID", http.StatusBadRequest)
+		return
+	}
+
+	err = database.BanUser(userId)
+	if err != nil {
+		http.Error(w, "Failed to ban user: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("User banned successfully"))
+}
+
+func updateReportHandler(w http.ResponseWriter, r *http.Request) {
+	// Parse the request body
+	var request struct {
+		ReportID int    `json:"report_id"`
+		Response string `json:"response"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	// Update the report status
+	if err := database.UpdateReportStatus(request.ReportID); err != nil {
+		http.Error(w, "Failed to update report status", http.StatusInternalServerError)
+		return
+	}
+
+	// Update the report response
+	if err := database.UpdateReportResponse(request.ReportID, request.Response); err != nil {
+		http.Error(w, "Failed to update report response", http.StatusInternalServerError)
+		return
+	}
+
+	// Send a success response
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"message": "Report updated successfully"}`))
 }

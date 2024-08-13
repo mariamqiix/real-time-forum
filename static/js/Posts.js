@@ -39,7 +39,10 @@ function createPost(Posts, divName, caseString) {
                     return response.json();
                 })
                 .then((data) => {
-                    postBox.setAttribute("onclick", `PostPageHandler(${JSON.stringify(data.Post)})`);
+                    postBox.setAttribute(
+                        "onclick",
+                        `PostPageHandler(${JSON.stringify(data.Post)})`
+                    );
                 })
                 .catch((error) => {
                     console.error("Error fetching post:", error);
@@ -64,7 +67,11 @@ function createPost(Posts, divName, caseString) {
         postUserName.classList.add("postUserName");
 
         postUserName.textContent = post.author.username;
-
+        postUserName.addEventListener("click", (event) => {
+            event.stopPropagation(); // Prevent the click event from bubbling up to the postBox
+            console.log(post.author);
+            profile(post.author.id, "Posts");
+        });
         const postContent = document.createElement("span");
         postContent.classList.add("postContent");
 

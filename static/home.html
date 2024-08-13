@@ -71,10 +71,10 @@
 
                     <table>
                         <tr>
-                            <th onclick="posts(-1,'Posts','Posts', event.target)">Posts</th>
-                            <th onclick="posts(-1,'comments','comments', event.target)">Comments</th>
-                            <th onclick="posts(-1,'likes','likes', event.target)">Likes</th>
-                            <th onclick="posts(-1,'dislikes','dislikes', event.target)">Dislikes</th>
+                            <th id="PostsTh" nclick="posts(-1,'Posts','Posts', event.target)">Posts</th>
+                            <th id="commentsTh" onclick="posts(-1,'comments','comments', event.target)">Comments</th>
+                            <th id="likesTh" onclick="posts(-1,'likes','likes', event.target)">Likes</th>
+                            <th id="dislikesTh" onclick="posts(-1,'dislikes','dislikes', event.target)">Dislikes</th>
                         </tr>
                     </table>
 
@@ -260,7 +260,7 @@
 
                 <div class="postPage navigationContent">
 
-                    <button id="editPost-button" class="editPost-button">Edit</button>
+                    <button id="editPost-button" class="editPost-button" style="display: none;">Edit</button>
                     <button id="Report-button" class="Report-button">Report</button>
 
                     <div class="postPageContent">

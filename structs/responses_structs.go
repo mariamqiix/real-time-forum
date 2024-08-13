@@ -55,6 +55,7 @@ type UserTypeResponse struct {
 }
 
 type UserResponse struct {
+	Id          int              `json:"id"`
 	Username    string           `json:"username"`
 	FirstName   string           `json:"first_name"`
 	LastName    string           `json:"last_name"`
@@ -101,7 +102,7 @@ type ReportRequestResponse struct {
 	ReportedPostTitle string    `json:"reported_post_title"`
 	Time              time.Time `json:"time"`
 	Reason            string    `json:"reason"`
-	IsReported        bool      `json:"is_reported"`
+	IsPostReported    bool      `json:"is_post_reported"`
 	IsPending         bool      `json:"is_pending"`
 	ReportResponse    string    `json:"report_response"`
 }
