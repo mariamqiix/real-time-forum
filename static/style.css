@@ -240,6 +240,7 @@ span.framer-text:not([data-text-fill]) {
     color: #555;
     margin: 10%;
     margin-bottom: 0;
+    margin-top: 0;
 }
 
 .postPageComment {
@@ -1069,7 +1070,7 @@ span.framer-text:not([data-text-fill]) {
     overflow-x: hidden;
     overflow-y: auto;
     opacity: 0.9;
-    min-width: 800px;
+    /* min-width: 800px; */
 }
 
 .setting ul {
@@ -1128,6 +1129,11 @@ span.framer-text:not([data-text-fill]) {
     background-color: transparent;
     font-size: 16px;
     color: rgb(239, 103, 103);
+}
+
+.editPost-button {
+    margin-top: 5%;
+    margin-right: 5%;
 }
 
 .remove-button:hover,

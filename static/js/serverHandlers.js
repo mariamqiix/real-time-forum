@@ -822,18 +822,19 @@ function ReportPostHandler(id) {
         });
 }
 
+var chatContainer = document.getElementById('UserChat');
 
-// Call scrollToBottom when the page loads
-window.onload = function() {
-    scrollToBottom();
-};
-
+// Function to scroll the chat container to the bottom
 function scrollToBottom() {
-    var chatContainer = document.getElementById("UserChat");
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 // Call the function to scroll to the bottom when the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function() {
+    scrollToBottom();
+});
+
+// Auto scroll to bottom when content is added
+chatContainer.addEventListener('DOMSubtreeModified', function() {
     scrollToBottom();
 });

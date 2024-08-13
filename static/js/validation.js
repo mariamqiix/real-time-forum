@@ -13,13 +13,11 @@ function validateCreatePost(input) {
         submitButton.style.opacity = "1";
         EditButton.style.cursor = "pointer";
         EditButton.style.opacity = "1";
-        console.log("abled");
     } else {
         submitButton.style.cursor = "not-allowed";
         submitButton.style.opacity = "0.5";
         EditButton.style.cursor = "not-allowed";
         EditButton.style.opacity = "0.5";
-        console.log("Disabled");
     }
 }
 
