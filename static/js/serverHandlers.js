@@ -294,6 +294,28 @@ function displaySearchPosts(data) {
 }
 
 function PostPageHandler(data) {
+    const ReporBtutton = document.getElementById("Report-button");
+    // Send the form data to the Go server
+    fetch("http://localhost:8080/userType", {
+            method: "GET",
+        })
+        .then((response) => {
+            if (!response.ok) {
+                ReporBtutton.style.display = "none";
+            }
+            return response.json();
+        })
+        .then((type) => {
+            if (type.name === "Guest" || type.name === "User") {
+                ReporBtutton.style.display = "none";
+            } else {
+                ReporBtutton.style.display = "block";
+            }
+        })
+        .catch((error) => {
+            ReporBtutton.style.display = "none";
+        });
+
     const editPostButton = document.getElementById("editPost-button");
     toggleVisibility("postPage");
     if (editPostButton) {
@@ -315,8 +337,10 @@ function PostPageHandler(data) {
                         console.log("User is the author of the post.");
                         editPostButton.style.display = "block";
                         editPostButton.setAttribute("onclick", `editPost(${data.id})`);
+                        ReporBtutton.style.display = "none";
                     } else {
                         editPostButton.style.display = "none";
+                        ReporBtutton.setAttribute("onclick", `ReportPost(${data.id})`);
                     }
                 } catch (error) {
                     console.error("JSON parsing error:", error);
@@ -756,6 +780,49 @@ function deletePost(id) {
             console.error("Error:", error);
         });
 }
+
+function ReportPost(id) {
+    toggleDiv("ReportDiv");
+    const ReportBtn = document.getElementById("ReportDiv-button");
+    ReportBtn.onclick = function() {
+        ReportPostHandler(id);
+    };
+}
+
+function ReportPostHandler(id) {
+    const reportDescription = document.getElementById("ReportDescription").value;
+    console.log(reportDescription);
+    const postReportRequest = {
+        post_id: id,
+        reason: reportDescription,
+    };
+
+    fetch(`http://localhost:8080/post/${id}/report`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(postReportRequest),
+        })
+        .then((response) => {
+            if (response.ok) {
+                const reportDescription2 = document.getElementById("ReportDescription");
+                reportDescription2.innerHTML = "";
+                toggleDiv("ReportDiv");
+                HomePageRequest();
+                console.log("Post reported successfully");
+            } else {
+                response.text().then((error) => {
+                    console.error("Post reporting failed:", error);
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
+
 // Call scrollToBottom when the page loads
 window.onload = function() {
     scrollToBottom();

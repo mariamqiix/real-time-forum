@@ -4,6 +4,7 @@ import (
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"regexp"
@@ -260,4 +261,46 @@ func SortChatsByOnline(chats []structs.Chats) []structs.Chats {
 		return chats[i].Online && !chats[j].Online
 	})
 	return chats
+}
+
+func ConvertToReportRequestResponse(reports []structs.Report) ([]structs.ReportRequestResponse, error) {
+	var responses []structs.ReportRequestResponse
+
+	for _, report := range reports {
+		reporter, err := database.GetUserById(report.ReporterId)
+		if err != nil {
+			return nil, err
+		}
+		reported, err := database.GetUserById(report.ReportedId)
+		if err != nil {
+			return nil, err
+		}
+		fmt.Print("reported: ", reporter)
+
+		var post *structs.Post
+		if report.PostId != -1 {
+			post, err = database.GetPost(report.PostId)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		response := structs.ReportRequestResponse{
+			Id:                report.Id,
+			ReporterId:        report.ReporterId,
+			ReporterUsername:  reporter.Username,
+			ReportedId:        report.ReportedId,
+			ReportedUsername:  reported.Username,
+			ReportedPostId:    report.PostId,
+			ReportedPostTitle: post.Title, // Assuming you need to fetch the post title separately if required
+			Time:              report.Time,
+			Reason:            report.Reason,
+			IsReported:        report.IsPostReport,
+			IsPending:         report.IsPending,
+			ReportResponse:    report.ReportResponse,
+		}
+		responses = append(responses, response)
+	}
+
+	return responses, nil
 }

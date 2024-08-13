@@ -945,28 +945,35 @@ func reportPostHandler(w http.ResponseWriter, r *http.Request) {
 	var reportRequest structs.PostReportRequest
 
 	if !ParseBody(&reportRequest, r) {
-		writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
+		writeToJson(map[string]string{"message": "1Could not perform operation, please try again later"}, w)
 		errorServer(w, r, http.StatusBadRequest)
 		return
 	}
-
-	// Add error handling for user not logged in
-	session, ok := LoggedOrNot(w, r)
-	if !ok || session == nil {
-		writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
-		errorServer(w, r, http.StatusUnauthorized)
+	post, err := database.GetPost(reportRequest.PostID)
+	if err != nil {
+		log.Printf("reportPostHandler: %s\n", err.Error())
 		return
 	}
+	// // Add error handling for user not logged in
+	// session, ok := LoggedOrNot(w, r)
+	// if !ok || session == nil {
+	// 	writeToJson(map[string]string{"message": "2Could not perform operation, please try again later"}, w)
+	// 	errorServer(w, r, http.StatusUnauthorized)
+	// 	return
+	// }
 
 	// Add error handling for post not found
 	report := structs.Report{
-		PostId: reportRequest.PostID,
-		Reason: reportRequest.Reason,
+		ReporterId: sessionUser.Id,
+		ReportedId: post.UserId,
+		PostId:     reportRequest.PostID,
+		Reason:     reportRequest.Reason,
+		Time:       time.Now(),
 	}
 
 	err2 := database.AddReport(report)
 	if err2 != nil {
-		writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
+		writeToJson(map[string]string{"message": "3Could not perform operation, please try again later"}, w)
 		errorServer(w, r, http.StatusInternalServerError)
 		return
 	}
@@ -1896,4 +1903,26 @@ func deletePostReactionHandler(w http.ResponseWriter, r *http.Request) {
 	// Send a success response
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Reaction removed successfully"})
+}
+
+func ReportsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+	reports, err := database.GetReports(false)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	convertedR, err := ConvertToReportRequestResponse(reports)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	writeToJson(convertedR, w)
 }

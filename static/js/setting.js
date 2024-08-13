@@ -1,8 +1,8 @@
 function settingsHandler() {
     // Send the form data to the Go server
     fetch("http://localhost:8080/userType", {
-            method: "GET",
-        })
+        method: "GET",
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -15,7 +15,8 @@ function settingsHandler() {
                     if (
                         li.innerHTML.includes("List of Moderators") ||
                         li.innerHTML.includes("Promotion Requests") ||
-                        li.innerHTML.includes("Manage Categories")
+                        li.innerHTML.includes("Manage Categories") ||
+                        li.innerHTML.includes("Manage Reports")
                     ) {
                         li.style.display = "none";
                     }
@@ -25,7 +26,8 @@ function settingsHandler() {
                     if (
                         li.innerHTML.includes("List of Moderators") ||
                         li.innerHTML.includes("Promotion Requests") ||
-                        li.innerHTML.includes("Manage Categories")
+                        li.innerHTML.includes("Manage Categories") ||
+                        li.innerHTML.includes("Manage Reports")
                     ) {
                         li.style.display = "block";
                     } else if (li.innerHTML.includes("Request to be Moderator")) {
@@ -38,7 +40,8 @@ function settingsHandler() {
                         li.innerHTML.includes("List of Moderators") ||
                         li.innerHTML.includes("Promotion Requests") ||
                         li.innerHTML.includes("Manage Categories") ||
-                        li.innerHTML.includes("Request to be Moderator")
+                        li.innerHTML.includes("Request to be Moderator") ||
+                        li.innerHTML.includes("Manage Reports")
                     ) {
                         li.style.display = "none";
                     }
@@ -55,8 +58,8 @@ function settingsHandler() {
 function fetchAndAppendModerators() {
     // Fetch the list of moderators from the server
     fetch("http://localhost:8080/Moderator", {
-            method: "GET",
-        })
+        method: "GET",
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -101,9 +104,9 @@ function RemoveModerator(id) {
     formData.append("Id", id);
 
     fetch("http://localhost:8080/RemoveModerator", {
-            method: "POST",
-            body: formData,
-        })
+        method: "POST",
+        body: formData,
+    })
         .then((response) => {
             if (response.ok) {
                 alert("Moderator removed successfully");
@@ -136,9 +139,9 @@ function saveNewPassword() {
         formData.append("password", newPassword);
 
         fetch("http://localhost:8080/changePassword", {
-                method: "POST",
-                body: formData,
-            })
+            method: "POST",
+            body: formData,
+        })
             .then((response) => {
                 if (response.ok) {
                     alert("Password changed successfully!");
@@ -156,8 +159,8 @@ function PromotionRequests() {
     const promotionRequestsTable = document.querySelector("#promotion-requests table");
     promotionRequestsTable.innerHTML = ""; // Clear existing table rows
     fetch("http://localhost:8080/PromotionRequests", {
-            method: "GET",
-        })
+        method: "GET",
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -215,9 +218,9 @@ function ShowPromotion(Id) {
     formData.append("id", Id);
 
     fetch("http://localhost:8080/ShowUserPromotion", {
-            method: "POST",
-            body: formData,
-        })
+        method: "POST",
+        body: formData,
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Error: " + response.status);
@@ -260,9 +263,9 @@ function RejectPromotion(userId) {
     formData.append("userId", userId);
 
     fetch("http://localhost:8080/RejectPromotion", {
-            method: "POST",
-            body: formData,
-        })
+        method: "POST",
+        body: formData,
+    })
         .then((response) => {
             if (response.ok) {
                 alert("Promotion request rejected successfully");
@@ -285,9 +288,9 @@ function ApprovePromotion(userId) {
     formData.append("userId", userId);
 
     fetch("http://localhost:8080/ApprovePromotion", {
-            method: "POST",
-            body: formData,
-        })
+        method: "POST",
+        body: formData,
+    })
         .then((response) => {
             if (response.ok) {
                 alert("Promotion request approved successfully");
@@ -316,7 +319,6 @@ function ManageCategories() {
             data.forEach((category) => {
                 if (category.Name != "") {
                     appendCategoryToList(category.Name, category.Id);
-
                 }
             });
         })
@@ -357,9 +359,9 @@ function removeCategory(id) {
 
     if (confirm("Are you sure you want to proceed?")) {
         fetch("http://localhost:8080/removeCategory", {
-                method: "POST",
-                body: formData,
-            })
+            method: "POST",
+            body: formData,
+        })
             .then((response) => {
                 if (response.ok) {
                     alert("Category removed successfully");
@@ -419,8 +421,8 @@ async function addCategory() {
 
 function ChangeUserInformation() {
     fetch("http://localhost:8080/getUserInfo", {
-            method: "GET",
-        })
+        method: "GET",
+    })
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -484,9 +486,9 @@ function UpdateUserInformation() {
     formData.append("gender", gender);
     if (confirm("Are you sure you want to proceed?")) {
         fetch("http://localhost:8080/updateUserInfo", {
-                method: "POST",
-                body: formData,
-            })
+            method: "POST",
+            body: formData,
+        })
             .then((response) => {
                 if (response.ok) {
                     alert("User information updated successfully");
@@ -505,4 +507,131 @@ function UpdateUserInformation() {
         // User clicked "Cancel" or closed the dialog
         console.log("Action canceled.");
     }
+}
+
+function ManageReports() {
+    const reportRequestsList = document.querySelector("#Report-requests ul");
+    reportRequestsList.innerHTML = ""; // Clear existing list items
+
+    fetch("http://localhost:8080/Reports", {
+        method: "GET",
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error: " + response.status);
+            }
+            return response.text(); // Read the response as text
+        })
+        .then((text) => {
+            try {
+                const data = JSON.parse(text); // Attempt to parse the text as JSON
+
+                data.forEach((request) => {
+                    const listItem = document.createElement("li");
+
+                    const reporterUsernameSpan = document.createElement("span");
+                    reporterUsernameSpan.classList.add("ReporterUsername");
+                    reporterUsernameSpan.textContent = request.reporter_username;
+                    listItem.appendChild(reporterUsernameSpan);
+
+                    const reportedUsernameSpan = document.createElement("span");
+                    reportedUsernameSpan.classList.add("ReportedUsername");
+                    reportedUsernameSpan.textContent = request.reported_username;
+                    listItem.appendChild(reportedUsernameSpan);
+
+                    const showButton = document.createElement("button");
+                    showButton.classList.add("show-button");
+                    showButton.textContent = "Show";
+                    showButton.setAttribute(
+                        "onclick",
+                        `showReportRequest(${JSON.stringify(request)})`
+                    );
+                    listItem.appendChild(showButton);
+
+                    const rejectButton = document.createElement("button");
+                    rejectButton.classList.add("reject-button");
+                    rejectButton.textContent = "Reject";
+                    rejectButton.setAttribute("onclick", `RejectReport(${request.reporter_id})`);
+                    listItem.appendChild(rejectButton);
+
+                    reportRequestsList.appendChild(listItem);
+                });
+            } catch (error) {
+                const paragraph = document.createElement("p");
+                paragraph.textContent = "No requests found.";
+                reportRequestsList.appendChild(paragraph);
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching promotion requests:", error);
+        });
+
+    toggleDiv("Report-requests");
+}
+
+function showReportRequest(report) {
+    toggleDiv("Report-requests");
+
+    console.log("Report:", report); // Debugging line
+
+    const reportDetailsDiv = document.getElementById("ShowReportDetails");
+    reportDetailsDiv.innerHTML = ""; // Clear existing content
+
+    const ul = document.createElement("ul");
+
+    const fields = [
+        { title: "Reporter Username", info: report.reporter_username },
+        { title: "Reported Username", info: report.reported_username },
+        { title: "Time", info: new Date(report.time).toLocaleString() },
+        { title: "Reason", info: report.reason },
+    ];
+
+    if (report.reported_post_id !== -1) {
+        fields.push({ title: "Reported Post Title", info: report.reported_post_title });
+    }
+
+    fields.forEach((field) => {
+        const li = document.createElement("li");
+
+        const titleSpan = document.createElement("span");
+        titleSpan.textContent = field.title + ": ";
+        titleSpan.classList.add("title-span");
+
+        const infoSpan = document.createElement("span");
+        infoSpan.textContent = field.info;
+        infoSpan.classList.add("info-span");
+
+        li.appendChild(titleSpan);
+        li.appendChild(infoSpan);
+        ul.appendChild(li);
+    });
+
+    // Add reply label, input, and button in a new li
+    const replyLi = document.createElement("li");
+
+    const replyLabel = document.createElement("label");
+    replyLabel.textContent = "Response :";
+    replyLabel.classList.add("reply-label");
+
+    const replyInput = document.createElement("textarea");
+    replyInput.id = "replyInput";
+    replyInput.classList.add("reply-input");
+
+    const replyButton = document.createElement("button");
+    replyButton.textContent = "Reply";
+    replyButton.classList.add("reply-button");
+    replyButton.onclick = function () {
+        const replyText = document.getElementById("replyInput").value;
+        console.log("Reply:", replyText);
+        // Add your reply handling logic here
+    };
+
+    replyLi.appendChild(replyLabel);
+    replyLi.appendChild(replyInput);
+    ul.appendChild(replyLi);
+
+    reportDetailsDiv.appendChild(ul);
+    reportDetailsDiv.appendChild(replyButton);
+
+    toggleDiv("ReportDetails");
 }

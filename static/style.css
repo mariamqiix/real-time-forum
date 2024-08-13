@@ -819,6 +819,31 @@ span.framer-text:not([data-text-fill]) {
     background: #555;
 }
 
+
+/* Hide the scrollbar for the .popup div */
+
+.popup::-webkit-scrollbar {
+    width: 2px;
+    /* Very thin scrollbar */
+}
+
+
+/* Optional: Style the scrollbar track */
+
+.popup::-webkit-scrollbar-track {
+    background-color: transparent;
+    /* Make the track transparent */
+}
+
+
+/* Optional: Style the scrollbar thumb */
+
+.popup::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    /* Make the thumb transparent */
+    border-radius: 30px;
+}
+
 .error,
 .errorLogin {
     color: red;
@@ -1044,6 +1069,7 @@ span.framer-text:not([data-text-fill]) {
     overflow-x: hidden;
     overflow-y: auto;
     opacity: 0.9;
+    min-width: 800px;
 }
 
 .setting ul {
@@ -1093,7 +1119,10 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .remove-button,
+.reject-button,
+.show-button,
 .editPost-button,
+.Report-button,
 .accept-button {
     float: right;
     background-color: transparent;
@@ -1102,13 +1131,18 @@ span.framer-text:not([data-text-fill]) {
 }
 
 .remove-button:hover,
-.editPost-button:hover {
+.editPost-button:hover,
+.Report-button:hover,
+.reject-button:hover,
+.show-button:hover {
     cursor: pointer;
     color: #ccc;
     background-color: transparent;
 }
 
-#list-moderators ul {
+#list-moderators ul,
+#Report-requests ul,
+#ReportDetails ul {
     list-style-type: none;
     padding: 0;
     float: left;
@@ -1118,7 +1152,8 @@ span.framer-text:not([data-text-fill]) {
     margin-right: 10%;
 }
 
-#list-moderators li {
+#list-moderators li,
+#Report-requests li {
     margin: 1%;
     border-bottom: 1px solid rgb(143, 135, 135);
 }
@@ -1201,14 +1236,16 @@ button:hover {
 #promotion-requests table,
 #change-password table,
 #user-info table,
-#addCategory table {
+#addCategory table,
+#Report-requests table {
     text-align: left;
     width: 60%;
     margin-left: 20%;
 }
 
 #change-password table,
-#addCategory table {
+#addCategory table,
+#Report-requests table {
     margin-top: 10%;
 }
 
@@ -1216,7 +1253,8 @@ button:hover {
 #user-info input,
 #change-password input,
 #addCategory input,
-#addCategory textarea {
+#addCategory textarea,
+.report-textarea {
     background-color: none;
     outline: none;
     border-radius: 10px;
@@ -1226,6 +1264,45 @@ button:hover {
     border: 1px solid #ccc;
     font-size: 16px;
     padding-left: 2%;
+}
+
+.centered-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align items to the top */
+    height: 100%;
+    /* Adjust as needed */
+    text-align: center;
+    /* Center text horizontally */
+}
+
+.report-label {
+    margin: 50px;
+    margin-bottom: 1px;
+    /* Adjust as needed */
+}
+
+.report-textarea {
+    width: 70%;
+    height: 40%;
+}
+
+#ReportDiv {
+    position: relative;
+}
+
+#ReportDiv-button,
+.reply-button {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.reply-button {
+    margin-bottom: 15px;
 }
 
 #addCategory textarea {
@@ -1349,7 +1426,8 @@ button:hover {
     margin-left: 10px;
 }
 
-#list-moderators ul li {
+#list-moderators ul li,
+#Report-requests ul li {
     display: flex;
     justify-content: space-between;
     /* Ensures the button is on the right */
@@ -1357,7 +1435,8 @@ button:hover {
     margin-bottom: 10px;
 }
 
-#list-moderators .remove-button {
+#list-moderators .remove-button,
+#Report-requests .reject-button .show-button {
     background-color: transparent;
     font-size: 16px;
     color: rgb(239, 103, 103);
@@ -1373,7 +1452,9 @@ button:hover {
     margin-bottom: 10px;
 }
 
-.remove-button {
+.remove-button,
+.reject-button,
+.show-button {
     background-color: transparent;
     font-size: 16px;
     color: rgb(239, 103, 103);
@@ -1395,4 +1476,58 @@ button:hover {
 
 #RegChange {
     width: auto;
+}
+
+.title-span {
+    margin-right: 8px;
+}
+
+.info-span {
+    color: #333;
+}
+
+#ReportDetails {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#ReportDetails li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    font-size: 18px;
+    border-bottom: 1px solid #ccc;
+}
+
+#replyInput {
+    padding: 8px;
+    margin-top: 0;
+    background-color: transparent;
+    width: 50%;
+    box-sizing: border-box;
+    align-self: center;
+    margin-left: auto;
+    border: none;
+    outline: none;
+    resize: none;
+    border-radius: 20px;
+}
+
+#replyInput:focus {
+    background-color: #f2f2f2;
+}
+
+#replyInput::-webkit-scrollbar {
+    width: 8px;
+}
+
+#replyInput::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+#replyInput::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
 }

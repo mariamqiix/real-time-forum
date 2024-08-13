@@ -90,3 +90,18 @@ type PromoteRequestResponse struct {
 	Reason    string
 	IsPending bool
 }
+
+type ReportRequestResponse struct {
+	Id                int       `json:"id"`
+	ReporterId        int       `json:"reporter_id"`
+	ReporterUsername  string    `json:"reporter_username"`
+	ReportedId        int       `json:"reported_id"`
+	ReportedUsername  string    `json:"reported_username"`
+	ReportedPostId    int       `json:"reported_post_id"`
+	ReportedPostTitle string    `json:"reported_post_title"`
+	Time              time.Time `json:"time"`
+	Reason            string    `json:"reason"`
+	IsReported        bool      `json:"is_reported"`
+	IsPending         bool      `json:"is_pending"`
+	ReportResponse    string    `json:"report_response"`
+}
