@@ -2,6 +2,11 @@ Ruqaya :
 
 -   add validation function to the check list of create new post div (like what i did in title and topic)
 -   userPic
+-   post report-button css (but a 3 dots if the modretor or the user clicked oon them the reoprt || editPage Appear)
+-   add 3 dots in the profile page for the report
+-   typing style
+-   post page style
+-   add "shoe reports" div for the modretor , on it i will show all the reports , it should have 2 button for each report "delete" and "show" , the hsow willl toggle another div that will show the report
 
 back (Maryam) :
 
