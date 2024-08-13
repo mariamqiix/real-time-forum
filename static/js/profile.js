@@ -36,6 +36,7 @@ function profile(userId, caseString) {
             const profileAge = document.getElementById("userInfo");
             profileAge.innerHTML = `Age: ${age},  location: ${data.UserProfile.location}`;
 
+            // console.log('userPic', data.UserProfile.image_url)
             const userPic = document.getElementById("userPic");
             userPic.style.backgroundImage = `url(${data.UserProfile.image_url})`;
             // Update the onclick attributes with the userId

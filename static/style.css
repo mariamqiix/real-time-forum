@@ -179,6 +179,8 @@ span.framer-text:not([data-text-fill]) {
 
 .postUserPic {
     background: linear-gradient(180deg, #d9d3c6 0%, rgba(115, 112, 105, 1) 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
     border-radius: 100%;
     height: 55px;
     margin: 5%;
@@ -604,9 +606,10 @@ span.framer-text:not([data-text-fill]) {
     background-image: url(/images/typingIcon.gif);
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    left: -50;
     position: relative;
-    height: 70px;
-    width: 70px;
+    height: 100px;
+    width: 100px;
 }
 
 #typingIndicator {
@@ -990,6 +993,8 @@ span.framer-text:not([data-text-fill]) {
 
 .userPic {
     background: linear-gradient(180deg, #935b5b 0%, rgba(45, 28, 28, 1) 100%);
+    border-radius: 100%;
+    background-size: 100% 100%;
     border-radius: 100%;
     flex: none;
     height: 123px;
