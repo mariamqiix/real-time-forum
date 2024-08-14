@@ -606,7 +606,6 @@ span.framer-text:not([data-text-fill]) {
     background-image: url(/images/typingIcon.gif);
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    left: -50;
     position: relative;
     height: 100px;
     width: 100px;
@@ -616,8 +615,9 @@ span.framer-text:not([data-text-fill]) {
     background-image: url(/images/typingIcon.gif);
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    position: relative;
-    height: 70px;
+    float: left;
+    clear: both;
+    height: 60px;
     width: 70px;
 }
 
@@ -1449,9 +1449,17 @@ button:hover {
 }
 
 #UserChat {
-    height: 80%;
+    height: 75%;
     overflow-y: scroll;
     overflow-x: hidden;
+    float: left;
+    clear: left;
+    width: 100%;
+}
+
+.typingIndicatorContainer {
+    height: 7%;
+    float: left;
     clear: left;
     width: 100%;
 }

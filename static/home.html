@@ -326,7 +326,11 @@
                             <div class="msgTime">12:00pm</div>
                         </div>
                     </div>
-                    <div id="typingIndicator" style="display: none;"></div>
+                
+                    <div class="typingIndicatorContainer">
+                        <div id="typingIndicator" style="display: none;"></div>
+                    </div>
+
                     <div class="msgTypingBar">
                         <input type="text" maxlength="50" placeholder="Typing..." id="msgType" name="msgType" oninput="notifyTyping()" />
                         <button id="sendMessage" onclick="sendMessage()">Send</button>
