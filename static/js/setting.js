@@ -597,7 +597,9 @@ function showReportRequest(report) {
     replyButton.disabled = true; // Disable the button initially
 
     console.log(report);
-    if (report.reported_post_id !== -1 || report.is_post_reported) {
+    console.log(report);
+    if (report.is_post_reported) {
+        console.log;
         fields.push({ title: "Reported Post Title", info: report.reported_post_title });
         replyButton.textContent = "Delete Post";
     }

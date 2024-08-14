@@ -826,7 +826,7 @@ function ReportPostHandler(id, user, post) {
             username: id,
             reason: reportDescription,
         };
-
+        console.log(user);
         fetch(`http://localhost:8080/user/${id}/report`, {
                 method: "POST",
                 headers: {
@@ -843,7 +843,7 @@ function ReportPostHandler(id, user, post) {
                     console.log("Post reported successfully");
                 } else {
                     response.text().then((error) => {
-                        console.error("Post reporting failed:", error);
+                        console.error("user reporting failed:", error);
                     });
                 }
             })

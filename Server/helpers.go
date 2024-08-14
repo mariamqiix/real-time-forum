@@ -281,16 +281,25 @@ func ConvertToReportRequestResponse(reports []structs.Report) ([]structs.ReportR
 		if err != nil {
 			return nil, err
 		}
-		fmt.Print("reported: ", reporter)
 
 		var post *structs.Post
-		if report.PostId != -1 {
+		if report.PostId != -1 && report.IsPostReport {
 			post, err = database.GetPost(report.PostId)
 			if err != nil {
 				return nil, err
 			}
+		} else {
+			report.PostId = 0
 		}
 
+		// Check if post is nil before accessing its fields
+		var postTitle string
+		if post != nil {
+			postTitle = post.Title
+		} else {
+			postTitle = ""
+		}
+		fmt.Print(report.IsPostReport)
 		response := structs.ReportRequestResponse{
 			Id:                report.Id,
 			ReporterId:        report.ReporterId,
@@ -298,13 +307,14 @@ func ConvertToReportRequestResponse(reports []structs.Report) ([]structs.ReportR
 			ReportedId:        report.ReportedId,
 			ReportedUsername:  reported.Username,
 			ReportedPostId:    report.PostId,
-			ReportedPostTitle: post.Title, // Assuming you need to fetch the post title separately if required
+			ReportedPostTitle: postTitle, // Assuming you need to fetch the post title separately if required
 			Time:              report.Time,
 			Reason:            report.Reason,
 			IsPostReported:    report.IsPostReport,
 			IsPending:         report.IsPending,
 			ReportResponse:    report.ReportResponse,
 		}
+		fmt.Println(response)
 		responses = append(responses, response)
 	}
 

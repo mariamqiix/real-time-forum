@@ -793,7 +793,7 @@ func GetReport(reportID int) (structs.Report, error) {
 
 // retrieves either the history of resolved reports (isPending set to false) or the active reports awaiting
 // resolution (isPending set to true) from the database, based on the provided isPending parameter.
-func GetReports(isPendding bool) ([]structs.Report, error) {
+func GetReports(isPendding int) ([]structs.Report, error) {
 	// Lock the mutex before accessing the database
 	mutex.Lock()
 	defer mutex.Unlock()

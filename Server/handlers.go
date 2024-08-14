@@ -2002,8 +2002,10 @@ func ReportsHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusUnauthorized)
 		return
 	}
-	reports, err := database.GetReports(false)
+	fmt.Println("hello")
+	reports, err := database.GetReports(0)
 	if err != nil {
+		fmt.Println("hi")
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}
