@@ -355,3 +355,6 @@ func ImageURLToBytes(imagePath string) ([]byte, error) {
 
 	return imageData, nil
 }
+
+
+ConvertToNotificationResponse

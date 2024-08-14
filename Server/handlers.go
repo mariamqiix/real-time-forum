@@ -2091,3 +2091,26 @@ func ReportsByUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	writeToJson(convertedR, w)
 }
+
+
+func notificationsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+	notifications, err := database.GetUserNotifications(sessionUser.Id)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	convertedN, err := ConvertToNotificationResponse(notifications)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	writeToJson(convertedN, w)
+}
