@@ -69,6 +69,7 @@ CREATE TABLE Report (
     FOREIGN KEY (reported_user_id) REFERENCES User(id),
     FOREIGN KEY (reported_post_id) REFERENCES Post(id),
     FOREIGN KEY (reporter_user_id) REFERENCES User(id)
+    
 );
 
 -- Create the PromoteRequest table
@@ -102,12 +103,17 @@ CREATE TABLE UserNotification (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     comment_id VARCHAR(10),
-    PostReaction_id VARCHAR(150),
-    messages VARCHAR(150), -- "accept promotion, depromtion, report accepted, not accepted (replay)"
+    post_reaction_id VARCHAR(150),
+    report_id VARCHAR(150),
+    promote_request_id VARCHAR(150), -- "accept promotion, depromtion, report accepted, not accepted (replay)"
     read BOOLEAN DEFAULT FALSE, -- Add this line
     FOREIGN KEY (comment_id) REFERENCES Post(id),
     FOREIGN KEY (user_id) REFERENCES User(id),
-    FOREIGN KEY (PostReaction_id) REFERENCES PostReaction(id)
+    FOREIGN KEY (post_reaction_id) REFERENCES PostReaction(id),
+    FOREIGN KEY (report_id) REFERENCES Report(id),
+    FOREIGN KEY (promote_request_id) REFERENCES PromoteRequest(id)
+
+
 );
 
 -- Create the Category table
@@ -164,6 +170,7 @@ CREATE TABLE UserMessage (
     FOREIGN KEY (receiver_id) REFERENCES User(id)
 );
 
+
 -- Insert the default user roles
 INSERT INTO UserRole 
     (id, role_name, description, can_post, can_react, can_manage_category, can_delete, can_report, can_promote)
@@ -193,5 +200,18 @@ INSERT INTO ReactionType
 INSERT INTO UploadedImage (id, data)
 VALUES (
     0,
-    (SELECT readfile('/home/xlvk/Reboot/forum/www/static/imgs/UserPic.png'))
+    (SELECT readfile('/home/mariam/mm/real-time-forum/static/images/user.png'))
 );
+
+
+
+INSERT INTO User
+    (type_id, username, first_name, last_name, country, date_of_birth, email, hashed_password, image_id, banned_until, github_name, linkedin_name, twitter_name, bio, gender) 
+    VALUES
+    (1, 'johnny_doe', 'John', 'Smith', 'USA', '1992-03-21', 'john.smith@example.com', '$2a$10$yMwcWmnuJKVvHwDR4zRmQO0DmyWzt0wwU2BqdwGAOEcM0MIKjSZ/O', 0, NULL, 'john_smith', 'johnsmith', 'john_smith', 'Software engineer passionate about coding and technology.', 'Male'),
+    (1, 'jane_smith', 'Jane', 'Johnson', 'Canada', '1987-08-15', 'jane.johnson@example.com', '$2a$10$yMwcWmnuJKVvHwDR4zRmQO0DmyWzt0wwU2BqdwGAOEcM0MIKjSZ/O', 0, NULL, 'jane_johnson', 'janejohnson', 'jane_johnson', 'Marketing professional with a love for creativity and innovation.', 'Female'),
+    (1, 'alex_brown', 'Alex', 'Brown', 'UK', '1990-05-10', 'alex.brown@example.com', '$2a$10$yMwcWmnuJKVvHwDR4zRmQO0DmyWzt0wwU2BqdwGAOEcM0MIKjSZ/O', 0, NULL, 'alexbrown', 'alexbrown', 'alex_brown', 'Art enthusiast and aspiring designer exploring the world.', 'Male'),
+    (3, 'rhelal', 'Ruqaya', 'Helal', 'Bahrain', '1998-03-21', 'ruqayahhelal@example.com', '$2a$10$yMwcWmnuJKVvHwDR4zRmQO0DmyWzt0wwU2BqdwGAOEcM0MIKjSZ/O', 0, NULL, 'rhelal', 'rhelal', 'rhelal', 'Travel blogger with a passion for photography and storytelling.', 'Female'),
+    (3, 'maabbas', 'mariam', 'Abbas', 'Bahrain', '2004-12-15', 'maiam.abbas@example.com', '$2a$10$yMwcWmnuJKVvHwDR4zRmQO0DmyWzt0wwU2BqdwGAOEcM0MIKjSZ/O', 0, NULL, 'maiam.abbas', 'maiam.abbas', 'maiam.abbas', 'Fitness enthusiast and wellness advocate.', 'Female');
+
+

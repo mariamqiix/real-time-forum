@@ -21,7 +21,7 @@ function profile(userId, caseString) {
         })
         .then((response) => {
             if (!response.ok) {
-                ReporBtutton.style.display = "none";
+                handleErrorResponse(response);
             }
             return response.json();
         })
@@ -45,7 +45,7 @@ function profile(userId, caseString) {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                handleErrorResponse(response);
             }
             return response.json();
         })
@@ -116,7 +116,7 @@ function posts(userId, caseString, column, element) {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                handleErrorResponse(response);
             }
             return response.json();
         })

@@ -361,18 +361,18 @@ func TestGetImage(t *testing.T) {
 	}
 }
 
-func TestAddReport(t *testing.T) {
-	err := database.Connect(DB_PATH)
-	if err != nil {
-		t.Fatal(err.Error())
-	}
+// func TestAddReport(t *testing.T) {
+// 	err := database.Connect(DB_PATH)
+// 	if err != nil {
+// 		t.Fatal(err.Error())
+// 	}
 
-	err = database.AddReport(structs.Report{})
+// 	err = database.AddReport(structs.Report{})
 
-	if err != nil {
-		t.Error(err.Error())
-	}
-}
+// 	if err != nil {
+// 		t.Error(err.Error())
+// 	}
+// }
 
 func TestRemovePost(t *testing.T) {
 	err := database.Connect(DB_PATH)

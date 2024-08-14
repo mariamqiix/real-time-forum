@@ -1,14 +1,14 @@
 package database
 
 // Remove reaction from Post by taking ReactionPost ID
-func RemoveReactionFromPost(postId, reactionTypeId, reacterId int) ( error) {
+func RemoveReactionFromPost(postId, reactionTypeId, reacterId int) error {
 	// Lock the mutex before accessing the database
 	mutex.Lock()
 	defer mutex.Unlock()
 
 	tx, err := db.Begin()
 	if err != nil {
-		return  err
+		return err
 	}
 
 	// Retrieve the reaction ID before deleting it
@@ -16,33 +16,31 @@ func RemoveReactionFromPost(postId, reactionTypeId, reacterId int) ( error) {
 	err = tx.QueryRow("SELECT id FROM PostReaction WHERE post_id = ? AND user_id = ? AND reaction_id = ?", postId, reacterId, reactionTypeId).Scan(&reactionId)
 	if err != nil {
 		tx.Rollback()
-		return  err
+		return err
 	}
 
 	// Delete the reaction from the PostReaction table
 	_, err = tx.Exec("DELETE FROM PostReaction WHERE id = ?", reactionId)
 	if err != nil {
 		tx.Rollback()
-		return  err
+		return err
 	}
 
 	// Delete the corresponding notification from the UserNotification table
-	_, err = tx.Exec("DELETE FROM UserNotification WHERE PostReaction_id = ?", reactionId)
+	_, err = tx.Exec("DELETE FROM UserNotification WHERE post_reaction_id = ?", reactionId)
 	if err != nil {
 		tx.Rollback()
-		return  err
+		return err
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		return  err
+		return err
 	}
 
 	return nil
 }
-
-// removes a post, along with its associated reactions and categories, from the database.
 func RemovePost(postID int) error {
 	// Lock the mutex before accessing the database
 	mutex.Lock()
@@ -50,6 +48,13 @@ func RemovePost(postID int) error {
 
 	tx, err := db.Begin()
 	if err != nil {
+		return err
+	}
+
+	// Delete the notifications associated with the post reactions from the UserNotification table
+	_, err = tx.Exec("DELETE FROM UserNotification WHERE post_reaction_id IN (SELECT id FROM PostReaction WHERE post_id = ?)", postID)
+	if err != nil {
+		tx.Rollback()
 		return err
 	}
 
@@ -221,38 +226,36 @@ func RemovePostCategory(categoryId int) error {
 	return nil
 }
 
-
-
 // RemoveUser removes a user by their ID
 func RemoveUser(userID int) error {
-    // Lock the mutex before accessing the database
-    mutex.Lock()
-    defer mutex.Unlock()
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
 
-    tx, err := db.Begin()
-    if err != nil {
-        return err
-    }
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
 
-    // Prepare the SQL statement to delete a user
-    stmt, err := tx.Prepare("DELETE FROM User WHERE id = ?")
-    if err != nil {
-        tx.Rollback()
-        return err
-    }
-    defer stmt.Close()
+	// Prepare the SQL statement to delete a user
+	stmt, err := tx.Prepare("DELETE FROM User WHERE id = ?")
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	defer stmt.Close()
 
-    // Execute the SQL statement to delete the user
-    _, err = stmt.Exec(userID)
-    if err != nil {
-        tx.Rollback()
-        return err
-    }
+	// Execute the SQL statement to delete the user
+	_, err = stmt.Exec(userID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
 
-    err = tx.Commit()
-    if err != nil {
-        tx.Rollback()
-        return err
-    }
-    return nil
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	return nil
 }

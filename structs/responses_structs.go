@@ -78,10 +78,38 @@ type UserProfileResponse struct {
 }
 
 type NotificationResponse struct {
-	Id    int    `json:"id"` // passed to `/notifications/{notification_id}/read` to mark as read
-	Title string `json:"title"`
-	Body  string `json:"body"`
-	Link  string `json:"link"` // link to be opened when the notification is clicked
+	IsReact              bool                       `json:"is_react"`
+	IsComment            bool                       `json:"is_comment"`
+	IsReport             bool                       `json:"is_report"`
+	IsPromoteRequest     bool                       `json:"is_promote_request"`
+	ReactionNotifi       ReactionNotification       `json:"ReactionNotifi"`
+	PromoteRequestNotifi PromoteRequestNotification `json:"PromoteRequestNotification"`
+	CommentNotifi        CommentNotification        `json:"CommentNotifi"`
+	ReportRequestNotifi  ReportRequestNotification  `json:"ReportRequestNotifi"`
+}
+
+type CommentNotification struct {
+	ParentId int          `json:"parent_id"`
+	Username string       `json:"username"`
+	Post     PostResponse `json:"PostResponse"`
+}
+
+type ReactionNotification struct {
+	PostId   int          `json:"post_id"`
+	Username string       `json:"username"`
+	Post     PostResponse `json:"PostResponse"`
+	Reaction string       `json:"reaction"`
+}
+type ReportRequestNotification struct {
+	Reason            string `json:"reason"`
+	Accepted          bool   `json:"accepted"`
+	ReportedUsername  string `json:"reported_username"`
+	ReportedPostTitle string `json:"reported_post_id"`
+}
+
+type PromoteRequestNotification struct {
+	Reason   string `json:"reason"`
+	Accepted bool   `json:"accepted"`
 }
 
 type PromoteRequestResponse struct {

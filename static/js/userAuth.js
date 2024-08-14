@@ -105,7 +105,7 @@ async function GetUserLoggedIn() {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.text(); // Get response as text
         })

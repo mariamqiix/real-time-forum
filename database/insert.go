@@ -238,23 +238,23 @@ func AddReactionToPost(reactionPost structs.PostReaction) (int64, error) {
 }
 
 // stores a Report struct in the Report table of the database and takes a report as Report-struct
-func AddReport(report structs.Report) error {
+func AddReport(report structs.Report) (int64, error) {
 	// Lock the mutex before accessing the database
 	mutex.Lock()
 	defer mutex.Unlock()
 
 	// Prepare the INSERT statement
 	stmt, err := db.Prepare(`INSERT INTO Report (reporter_user_id, reported_user_id, report_message, 
-		reported_post_id, time, is_post_report, is_pending, report_response) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
+        reported_post_id, time, is_post_report, is_pending, report_response) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	defer stmt.Close()
 
 	// Execute the INSERT statement with the values from the Report struct
-	_, err = stmt.Exec(
+	result, err := stmt.Exec(
 		report.ReporterId,
 		report.ReportedId,
 		report.Reason,
@@ -265,10 +265,16 @@ func AddReport(report structs.Report) error {
 		report.ReportResponse)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	// Retrieve the generated ID of the inserted report
+	reportId, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return reportId, nil
 }
 
 // adds a new category to the Category table in the database based on the provided structs.Category object
@@ -322,25 +328,25 @@ func AddNotification(notification structs.UserNotification) (int, error) {
 	defer mutex.Unlock()
 
 	// Prepare the SQL statement
-	stmt, err := db.Prepare("INSERT INTO UserNotification (comment_id, PostReaction_id) VALUES (?, ?)")
+	stmt, err := db.Prepare("INSERT INTO UserNotification (user_id, comment_id, post_reaction_id, report_id, promote_request_id) VALUES (?, ?, ?, ?, ?)")
 	if err != nil {
 		return 0, err
 	}
 	defer stmt.Close()
 
 	// Execute the SQL statement
-	result, err := stmt.Exec(notification.CommentID, notification.PostReactionID)
+	result, err := stmt.Exec(notification.UserId, notification.CommentID, notification.PostReactionID, notification.ReportID, notification.PromoteRequestID)
 	if err != nil {
 		return 0, err
 	}
 
 	// Retrieve the generated ID of the inserted notification
-	NotificationId, err := result.LastInsertId()
+	notificationId, err := result.LastInsertId()
 	if err != nil {
 		return 0, err
 	}
 
-	return int(NotificationId), nil
+	return int(notificationId), nil
 }
 
 // AddMessage adds a new message to the UserMessage table in the database

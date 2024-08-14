@@ -118,11 +118,13 @@ type PromoteRequest struct {
 }
 
 type UserNotification struct {
-	ID             int
-	CommentID      int
-	PostReactionID int
-	UserId         int
-	Read           bool // Add this line
+	ID               int
+	UserId           int
+	CommentID        int
+	PostReactionID   int
+	ReportID         int
+	PromoteRequestID int
+	Read             bool // Add this line
 }
 
 type UserMessage struct {

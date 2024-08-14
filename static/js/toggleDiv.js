@@ -19,7 +19,7 @@ function toggleLogout(className) {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.text(); // Get response as text
         })
@@ -68,7 +68,7 @@ function OpenMesages(username, id) {
             })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    handleErrorResponse(response);
                 }
                 return response.text(); // Get response as text
             })
@@ -97,7 +97,7 @@ function OpenMesages(username, id) {
                         })
                         .then((response) => {
                             if (!response.ok) {
-                                throw new Error(`HTTP error! status: ${response.status}`);
+                                handleErrorResponse(response);
                             }
                             return response.json();
                         })

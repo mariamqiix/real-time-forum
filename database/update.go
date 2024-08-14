@@ -101,6 +101,68 @@ func UpdateRequestStatus(requestID int) error {
 	return nil
 }
 
+// updates the IsPending status of all requests for a specific user to false in the PromoteRequest table
+// and removes every UserNotification that has PromoteRequestID and UserId == userID.
+// returns the ID of the last PromoteRequestID for the user.
+func UpdateRequestStatusByUserID(userID int) (int, error) {
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Begin a transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return 0, err
+	}
+
+	// Prepare the SQL statement to update the IsPending status
+	stmt, err := tx.Prepare("UPDATE PromoteRequest SET is_pending = ? WHERE user_id = ?")
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+	defer stmt.Close()
+
+	// Execute the SQL statement to update the IsPending status
+	_, err = stmt.Exec(false, userID)
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	// Prepare the SQL statement to delete the UserNotifications
+	stmt, err = tx.Prepare("DELETE FROM UserNotification WHERE promote_request_id IN (SELECT id FROM PromoteRequest WHERE user_id = ?)")
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+	defer stmt.Close()
+
+	// Execute the SQL statement to delete the UserNotifications
+	_, err = stmt.Exec(userID)
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	// Fetch the last PromoteRequestID for the user
+	var lastPromoteRequestID int
+	err = tx.QueryRow("SELECT id FROM PromoteRequest WHERE user_id = ? ORDER BY id DESC LIMIT 1", userID).Scan(&lastPromoteRequestID)
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	return lastPromoteRequestID, nil
+}
+
 // updates the information of a post in the Post table.
 func UpdatePostInfo(newpost *structs.Post) error {
 	// Lock the mutex before accessing the database

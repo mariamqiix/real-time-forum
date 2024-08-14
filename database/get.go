@@ -4,6 +4,7 @@ import (
 	"RealTimeForum/structs"
 	"database/sql"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 )
@@ -654,52 +655,51 @@ func GetReactionId(reactionType structs.PostReactionType) (int, error) {
 }
 
 func GetPost(postID int) (*structs.Post, error) {
-	// Lock the mutex before accessing the database
-	mutex.Lock()
-	defer mutex.Unlock()
+    // Lock the mutex before accessing the database
+    mutex.Lock()
+    defer mutex.Unlock()
 
-	// Prepare the query statement
-	stmt, err := db.Prepare(`SELECT id, user_id, parent_id, title, message, image_id, time
-							FROM Post 
-							WHERE id = ?`)
+    // Prepare the query statement
+    stmt, err := db.Prepare(`SELECT id, user_id, parent_id, title, message, image_id, time
+                            FROM Post 
+                            WHERE id = ?`)
 
-	if err != nil {
-		return nil, err
-	}
+    if err != nil {
+        return nil, err
+    }
 
-	defer stmt.Close()
+    defer stmt.Close()
 
-	// Execute the query with the provided postID as a parameter
-	row := stmt.QueryRow(postID)
+    // Execute the query with the provided postID as a parameter
+    row := stmt.QueryRow(postID)
 
-	// Initialize a new Post structure
-	post := &structs.Post{}
+    // Initialize a new Post structure
+    post := &structs.Post{}
 
-	// Scan the retrieved values into the Post structure
-	err = row.Scan(
-		&post.Id,
-		&post.UserId,
-		&post.ParentId,
-		&post.Title,
-		&post.Message,
-		&post.ImageId,
-		&post.Time)
+    // Scan the retrieved values into the Post structure
+    err = row.Scan(
+        &post.Id,
+        &post.UserId,
+        &post.ParentId,
+        &post.Title,
+        &post.Message,
+        &post.ImageId,
+        &post.Time)
 
-	if err != nil {
-		if err == sql.ErrNoRows {
-			// Post with the given ID not found
-			return nil, nil
-		}
-		return nil, err
-	}
+    if err != nil {
+        if err == sql.ErrNoRows {
+            // Post with the given ID not found
+            return nil, nil
+        }
+        return nil, err
+    }
 
-	post.CategoriesIDs, err = getPostCategories(post.Id)
+    post.CategoriesIDs, err = getPostCategories(post.Id)
+    if err != nil {
+        return nil, err
+    }
 
-	if err != nil {
-		return nil, err
-	}
-
-	return post, nil
+    return post, nil
 }
 
 func GetImage(imageID int) ([]byte, error) {
@@ -1019,15 +1019,14 @@ func GetUserNotifications(userId int) ([]structs.UserNotification, error) {
 	defer mutex.Unlock()
 
 	// Prepare the SQL query to retrieve the UserNotification by ID
-	query := `SELECT id, comment_id, PostReaction_id, read 
-	FROM UserNotification
-	WHERE (comment_id IN (SELECT id FROM Post WHERE parent_id IN (SELECT id FROM Post WHERE user_id = ?))
-	OR PostReaction_id IN (SELECT id FROM PostReaction WHERE post_id IN (SELECT id FROM Post WHERE user_id = ?)))
-	AND read = FALSE` // Exclude read notifications
+	query := `SELECT id, user_id, comment_id, post_reaction_id, report_id, promote_request_id, read 
+    FROM UserNotification
+    WHERE user_id = ?`
 
 	// Execute the query to retrieve UserNotifications
-	rows, err := db.Query(query, userId, userId)
+	rows, err := db.Query(query, userId)
 	if err != nil {
+		log.Printf("Error executing query: %v", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -1039,8 +1038,9 @@ func GetUserNotifications(userId int) ([]structs.UserNotification, error) {
 	for rows.Next() {
 		var notification structs.UserNotification
 
-		err := rows.Scan(&notification.ID, &notification.CommentID, &notification.PostReactionID, &notification.Read)
+		err := rows.Scan(&notification.ID, &notification.UserId, &notification.CommentID, &notification.PostReactionID, &notification.ReportID, &notification.PromoteRequestID, &notification.Read)
 		if err != nil {
+			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
 
@@ -1049,8 +1049,12 @@ func GetUserNotifications(userId int) ([]structs.UserNotification, error) {
 
 	// Check for any errors encountered during row iteration
 	if err = rows.Err(); err != nil {
+		log.Printf("Error during row iteration: %v", err)
 		return nil, err
 	}
+
+	// Log the number of notifications retrieved
+	log.Printf("Retrieved %d notifications for user ID %d", len(notifications), userId)
 
 	// Return the retrieved UserNotifications and no error
 	return notifications, nil
@@ -1284,4 +1288,28 @@ func GetPostsByCategories(categoryNames []string, count, offset int, sortType st
 	defer rows.Close()
 
 	return getPostsHelper(rows)
+}
+
+// GetReactionById retrieves a reaction by its ID from the PostReaction table
+func GetReactionById(reactionId int) (*structs.PostReaction, error) {
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	stmt, err := db.Prepare("SELECT id, post_id, user_id, reaction_id FROM PostReaction WHERE id = ?")
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	var reaction structs.PostReaction
+	err = stmt.QueryRow(reactionId).Scan(&reaction.Id, &reaction.PostId, &reaction.UserId, &reaction.ReactionId)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil // No reaction found with the given ID
+		}
+		return nil, err
+	}
+
+	return &reaction, nil
 }

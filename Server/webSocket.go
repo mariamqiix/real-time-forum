@@ -71,22 +71,18 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if SenderId == nil {
-			log.Println("Sender not found")
 			continue
 		}
 
 		ReceiverId, err := database.GetUserByUsername(MessageRequest.ReceiverId)
 		if err != nil {
-			log.Println("Error getting user by username:", err)
 			return
 		}
 		if ReceiverId == nil {
-			log.Println("Receiver not found")
 			continue
 		}
 		parsedTime, err := convertMessageRequestTime(MessageRequest.Time)
 		if err != nil {
-			fmt.Println("Error:", err)
 		}
 		message := structs.UserMessage{
 			SenderId:   SenderId.Id,
@@ -149,7 +145,6 @@ func BodyToMessage(body []byte) *structs.MessageRequest {
 	var message structs.MessageRequest
 	err := json.Unmarshal(body, &message)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
 		return nil
 	}
 

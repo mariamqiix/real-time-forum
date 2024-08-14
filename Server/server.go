@@ -41,7 +41,6 @@ func GoLive(port string) {
 	http.HandleFunc("/", homepageHandler)
 	http.HandleFunc("/homePageDataHuncler", homePageDataHuncler)
 	http.HandleFunc("/posts/AddReactions", addReactionHandler)
-	// http.HandleFunc("/static/", staticHandler)
 	http.HandleFunc("/uploads/{image_id}", uploadedContentServerHandler)
 	http.HandleFunc("/uploads/add", uploadHandler)
 	http.HandleFunc("/userProfile", profileHandler)
@@ -78,22 +77,14 @@ func GoLive(port string) {
 	http.HandleFunc("/banUser", BanUserHandler)
 	http.HandleFunc("/updateReport", updateReportHandler)
 	http.HandleFunc("/ReportsByUser", ReportsByUserHandler)
-	http.HandleFunc("/notifications/", notificationsHandler)
-
+	http.HandleFunc("/notifications", notificationsHandler)
 	http.HandleFunc("/user/{user_id}/report", reportUserHandler)
 	http.HandleFunc("/post/{post_id}/report", reportPostHandler)
-	// http.HandleFunc("/post/{post_id}/{reaction_type}", postReactionHandler)
 	http.HandleFunc("/post/reaction/delete", deletePostReactionHandler)
 	http.HandleFunc("/post/{post_id}/comment", addCommentGetHandler)
 	http.HandleFunc("/post/comment", addCommentPostHandler)
 	http.HandleFunc("/userMessage", userMessageHandler)
-
-	// http.HandleFunc("GET /login/google", authentication.HandleGoogleLogin)
-	// http.HandleFunc("GET /login/github", authentication.HandleGitHubLogin)
-	// http.HandleFunc("GET /login/facebook", authentication.HandleFacebookLogin)
-	// http.HandleFunc("GET /login/google/callback", authentication.HandleGoogleCallback)
-	// http.HandleFunc("GET /github-callback", authentication.HandleGitHubCallback)
-	// http.HandleFunc("GET /facebook-callback", authentication.HandleFacebookCallback)
+	
 	fmt.Println("Server is running on http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 

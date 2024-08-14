@@ -4,7 +4,6 @@ import (
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -200,9 +199,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 			view.Posts = mapPosts(filterdPosts, sessionUser.Id)
 		}
 	default:
-		fmt.Println(dbUser)
 		posts, err := database.GetPostsByUser(dbUser.Id, -1, 0, false)
-		fmt.Print(err)
 		if err == nil {
 			view.Posts = mapPosts(posts, sessionUser.Id)
 		}
@@ -264,7 +261,6 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 	// Get the uploaded image file
 	file, fh, err := r.FormFile("image")
 	if err != nil {
-		fmt.Print(err)
 		http.Error(w, "No such file", http.StatusBadRequest)
 		return
 	}
@@ -393,7 +389,6 @@ func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid password", http.StatusConflict)
 		return
 	}
-fmt.Print(user.BannedUntil)
 	if user.BannedUntil.After(time.Now()) {
 		http.Error(w, "User is blocked", http.StatusForbidden)
 		return
@@ -594,7 +589,6 @@ func deletePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	postId, err := strconv.Atoi(r.PathValue("post_id"))
-	fmt.Print(postId)
 	if err != nil {
 		errorServer(w, r, http.StatusBadRequest)
 		return
@@ -710,7 +704,6 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid form submitted", http.StatusBadRequest)
 			return
 		}
-		fmt.Print(newPostInfo)
 		if newPostInfo.Title == "" || newPostInfo.Content == "" {
 			log.Println("addPostPostHandler: failed validation")
 			http.Error(w, "Empty fields are not allowed", http.StatusBadRequest)
@@ -953,12 +946,13 @@ func reportUserHandler(w http.ResponseWriter, r *http.Request) {
 		Reason:       reportRequest.Reason,
 	}
 
-	err2 := database.AddReport(report)
+	_, err2 := database.AddReport(report)
 	if err2 != nil {
 		writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
 		errorServer(w, r, http.StatusInternalServerError)
 		return
 	}
+
 
 	err2 = writeToJson(report, w)
 	if err2 != nil {
@@ -1017,12 +1011,25 @@ func reportPostHandler(w http.ResponseWriter, r *http.Request) {
 		Time:         time.Now(),
 	}
 
-	err2 := database.AddReport(report)
+	_, err2 := database.AddReport(report)
 	if err2 != nil {
 		writeToJson(map[string]string{"message": "3Could not perform operation, please try again later"}, w)
 		errorServer(w, r, http.StatusInternalServerError)
 		return
 	}
+
+	// // Create a new notification for the comment
+	// notification := structs.UserNotification{
+	// 	UserId:   sessionUser.Id,
+	// 	ReportID: int(reportId),
+	// }
+
+	// // // Add the notification to the database
+	// _, err = database.AddNotification(notification)
+	// if err != nil {
+	// 	log.Printf("Failed to add notification: %v", err)
+	// 	// Handle the error appropriately
+	// }
 
 	err2 = writeToJson(report, w)
 	if err2 != nil {
@@ -1142,8 +1149,8 @@ func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusBadRequest)
 		return
 	}
-	post, err := database.GetPost(postId)
-	if err != nil || post == nil {
+	ParentPost, err := database.GetPost(postId)
+	if err != nil || ParentPost == nil {
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}
@@ -1172,7 +1179,7 @@ func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusInternalServerError)
 		return
 	}
-	post, err = database.GetPost(commentID)
+	post, err := database.GetPost(commentID)
 	if err != nil || post == nil {
 		errorServer(w, r, http.StatusNotFound)
 		return
@@ -1206,18 +1213,21 @@ func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 		view.Comments = mapPosts(comments, -1)
 
 	}
-
-	// Create a new notification for the comment
-	notification := structs.UserNotification{
-		CommentID: commentID,
+	if sessionUser.Id != ParentPost.UserId {
+		// Create a new notification for the comment
+		notification := structs.UserNotification{
+			UserId:    ParentPost.UserId,
+			CommentID: commentID,
+		}
+		_, err = database.AddNotification(notification)
+		if err != nil {
+			log.Printf("Failed to add notification: %v", err)
+			// Handle the error appropriately
+		}
 	}
 
 	// // Add the notification to the database
-	_, err = database.AddNotification(notification)
-	if err != nil {
-		log.Printf("Failed to add notification: %v", err)
-		// Handle the error appropriately
-	}
+
 	writeToJson(view, w)
 
 }
@@ -1528,7 +1538,7 @@ func PromotionRequestsHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusTooManyRequests)
 		return
 	}
-	promotionRequests, err := database.GetPromoteRequests()
+	promotionRequests, err := database.GetRequests(true)
 	if err != nil {
 		errorServer(w, r, http.StatusNotFound)
 		return
@@ -1596,11 +1606,19 @@ func RejectPromotionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	id := r.FormValue("userId")
 	IntId, _ := strconv.Atoi(id)
-	err := database.ReomvePromoteRequest(IntId)
+	err := database.UpdateRequestStatus(IntId)
 	if err != nil {
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}
+	promoteRequest, _ := database.GetPromoteRequestByid(IntId)
+
+	notification := structs.UserNotification{
+		UserId:           promoteRequest.UserId,
+		PromoteRequestID: IntId,
+	}
+
+	database.AddNotification(notification)
 }
 
 func ApprovePromotionHandler(w http.ResponseWriter, r *http.Request) {
@@ -1625,11 +1643,20 @@ func ApprovePromotionHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}
-	err = database.ReomvePromoteRequest(IntId)
+	promoteID, err := database.UpdateRequestStatusByUserID(IntId)
 	if err != nil {
-		errorServer(w, r, http.StatusNotFound)
+		// errorServer(w, r, http.StatusNotFound)
 		return
 	}
+
+	promoteRequest, _ := database.GetPromoteRequestByid(promoteID)
+
+	notifications := structs.UserNotification{
+		UserId:           promoteRequest.UserId,
+		PromoteRequestID: promoteID,
+	}
+
+	database.AddNotification(notifications)
 }
 
 func removeCategoryHandler(w http.ResponseWriter, r *http.Request) {
@@ -1772,7 +1799,6 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 	// Get the uploaded image file
 	file, fh, err := r.FormFile("image")
 	if err != nil {
-		fmt.Print(err)
 		http.Error(w, "No such file", http.StatusBadRequest)
 		return
 	}
@@ -1898,7 +1924,6 @@ func messagesHandler(w http.ResponseWriter, r *http.Request) {
 	IntId, _ := strconv.Atoi(userId)
 	messages, err := database.GetMessages(sessionUser.Id, IntId)
 	if err != nil {
-		fmt.Println("Ggggggggggggg")
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}
@@ -1944,6 +1969,7 @@ func addReactionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if sessionUser.Id != post.UserId {
 		notification := structs.UserNotification{
+			UserId:         post.UserId,
 			PostReactionID: int(reactionId),
 		}
 		_, err4 := database.AddNotification(notification)
@@ -2002,10 +2028,8 @@ func ReportsHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusUnauthorized)
 		return
 	}
-	fmt.Println("hello")
 	reports, err := database.GetReports(0)
 	if err != nil {
-		fmt.Println("hi")
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}
@@ -2063,6 +2087,13 @@ func updateReportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	Report, _ := database.GetReport(request.ReportID)
+	notification := structs.UserNotification{
+		UserId:   Report.ReporterId,
+		ReportID: Report.Id,
+	}
+	database.AddNotification(notification)
+
 	// Send a success response
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"message": "Report updated successfully"}`))
@@ -2077,10 +2108,8 @@ func ReportsByUserHandler(w http.ResponseWriter, r *http.Request) {
 		errorServer(w, r, http.StatusUnauthorized)
 		return
 	}
-	fmt.Println("hello")
 	reports, err := database.GetReportsByUserId(sessionUser.Id)
 	if err != nil {
-		fmt.Println("hi")
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}
@@ -2091,7 +2120,6 @@ func ReportsByUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	writeToJson(convertedR, w)
 }
-
 
 func notificationsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")

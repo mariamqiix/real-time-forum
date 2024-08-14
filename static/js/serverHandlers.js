@@ -87,7 +87,7 @@ function HomePageRequest() {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.json();
         })
@@ -134,7 +134,7 @@ function PostsByCategories() {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.json();
         })
@@ -324,7 +324,7 @@ function PostPageHandler(data) {
             })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error("Error: " + response.status);
+                    handleErrorResponse(response);
                 }
                 return response.text(); // Get response as text
             })
@@ -367,7 +367,7 @@ function PostInfo(id) {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                handleErrorResponse(response);
             }
             return response.json();
         })
@@ -687,7 +687,7 @@ function editPost(Id) {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.json();
         })
@@ -869,3 +869,21 @@ document.addEventListener("DOMContentLoaded", function() {
 chatContainer.addEventListener("DOMSubtreeModified", function() {
     scrollToBottom();
 });
+
+function handleErrorResponse(response) {
+    if (!response.ok) {
+        response
+            .json()
+            .then((error) => {
+                console.error("Error:", error.message);
+                // if (error.user) {
+                //     alert("User Info:", error.user);
+                // }
+                // Display the error message to the user
+                alert(`Error: ${error.message}`);
+            })
+            .catch((err) => {
+                alert("Failed to parse error response:", err);
+            });
+    }
+}

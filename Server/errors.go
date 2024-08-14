@@ -2,14 +2,21 @@ package Server
 
 import (
 	"RealTimeForum/structs"
+	"encoding/json"
 	"log"
 	"net/http"
 )
 
+type ErrorResponse struct {
+	Message string                `json:"message"`
+	User    *structs.UserResponse `json:"user,omitempty"`
+}
+
 func errorServer(w http.ResponseWriter, r *http.Request, code int) {
 	w.WriteHeader(code)
+	w.Header().Set("Content-Type", "application/json")
 
-	view := errorView{}
+	view := ErrorResponse{}
 	sessionUser := GetUser(r)
 	if sessionUser != nil {
 		view.User = &structs.UserResponse{
@@ -35,7 +42,7 @@ func errorServer(w http.ResponseWriter, r *http.Request, code int) {
 		view.Message = http.StatusText(code)
 	}
 
-	err := templates.ExecuteTemplate(w, "error.html", view)
+	err := json.NewEncoder(w).Encode(view)
 	if err != nil {
 		log.Printf("errorServer: %s\n", err.Error())
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

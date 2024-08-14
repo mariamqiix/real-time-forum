@@ -5,7 +5,7 @@ function settingsHandler() {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.json();
         })
@@ -68,7 +68,7 @@ function fetchAndAppendModerators() {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.json();
         })
@@ -169,7 +169,7 @@ function PromotionRequests() {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.text(); // Read the response as text
         })
@@ -200,7 +200,7 @@ function PromotionRequests() {
 
                     rejectButton.classList.add("reject-button");
                     rejectButton.textContent = "Reject";
-                    rejectButton.setAttribute("onclick", `RejectPromotion(${request.UserId})`);
+                    rejectButton.setAttribute("onclick", `RejectPromotion(${request.Id})`);
 
                     rejectButtonCell.appendChild(rejectButton);
                     row.appendChild(rejectButtonCell);
@@ -229,7 +229,7 @@ function ShowPromotion(Id) {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.text(); // Read the response as text
         })
@@ -247,7 +247,7 @@ function ShowPromotion(Id) {
                 approveButton.setAttribute("onclick", `ApprovePromotion(${data.UserId})`);
 
                 const rejectButton = document.querySelector(".ShowPromotionRequestReject-button");
-                rejectButton.setAttribute("onclick", `RejectPromotion(${data.UserId})`);
+                rejectButton.setAttribute("onclick", `RejectPromotion(${Id})`);
 
                 promotionRequestsList.appendChild(approveButton);
                 promotionRequestsList.appendChild(rejectButton);
@@ -431,7 +431,7 @@ function ChangeUserInformation() {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Network response was not ok");
+                handleErrorResponse(response);
             }
             return response.text(); // Get response as text
         })
@@ -531,7 +531,7 @@ function ManageReports(Reporter) {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.text(); // Read the response as text
         })
@@ -576,6 +576,7 @@ function ManageReports(Reporter) {
 }
 
 function showReportRequest(report, Reporter) {
+    console.log(report);
     toggleDiv("Report-requests");
 
     console.log("Report:", report); // Debugging line
@@ -675,9 +676,7 @@ function reportUserOrPost(report, replyText, rejected) {
         })
         .then((response) => {
             if (!response.ok) {
-                return response.text().then((errorText) => {
-                    throw new Error("Failed to update report: " + errorText);
-                });
+                handleErrorResponse(response);
             }
             return response.json();
         })
@@ -685,7 +684,7 @@ function reportUserOrPost(report, replyText, rejected) {
             console.log(result.message);
 
             if (report.is_post_reported && !rejected) {
-                deletePost(report.id);
+                deletePost(report.reported_post_id);
             } else if (!rejected) {
                 banUser(report.reported_id);
             }
@@ -693,7 +692,7 @@ function reportUserOrPost(report, replyText, rejected) {
         .catch((error) => {
             console.error("Error:", error);
         });
-    toggleDiv("Report-requests");
+    toggleDiv("ReportDetails");
 }
 
 function banUser(userId) {
@@ -705,9 +704,7 @@ function banUser(userId) {
         })
         .then((response) => {
             if (!response.ok) {
-                return response.text().then((errorText) => {
-                    throw new Error(`Failed to ban user: ${errorText}`);
-                });
+                handleErrorResponse(response);
             }
             return response.text();
         })
@@ -730,7 +727,7 @@ function ShowReports() {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.text(); // Read the response as text
         })

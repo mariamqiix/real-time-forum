@@ -34,7 +34,6 @@ socket.onmessage = function(event) {
             typingIcon.style.display = "none";
             UserPic.style.backgroundColor = "none";
             UserPic.style.opacity = "1";
-
         }, 3000); // H
     } else {
         if (id == messageData.SenderId) {
@@ -95,7 +94,7 @@ function SendMessage(ReceiverId) {
             })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error("Error: " + response.status);
+                    handleErrorResponse(response);
                 }
                 return response.text(); // Get response as text
             })
@@ -170,7 +169,7 @@ function notifyTyping(Receiver) {
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error: " + response.status);
+                handleErrorResponse(response);
             }
             return response.text(); // Get response as text
         })

@@ -110,6 +110,46 @@ func mapPosts(oldArr []structs.Post, loggedUserId int) []structs.PostResponse {
 
 }
 
+func mapPost(old structs.Post, loggedUserId int) structs.PostResponse {
+	user, err := database.GetUserById(old.UserId)
+
+	author := structs.UserResponse{}
+	// if the user is not found, set the author to unknown
+	if err != nil {
+		log.Printf("mapPost: %s\n", err.Error())
+		author.Username = "[Unknown]"
+		author.Type = userTypeToResponse(structs.UserTypeIdUser)
+	} else {
+		author.Id = user.Id
+		author.Username = user.Username
+		author.FirstName = user.FirstName
+		author.LastName = user.LastName
+		author.DateOfBirth = user.DateOfBirth
+		author.Location = user.Country
+		author.Type = userTypeToResponse(user.Type)
+		author.ImageURL = GetImageData(user.ImageId)
+	}
+
+	postResponse := structs.PostResponse{
+		Id:         old.Id,
+		Author:     author,
+		Title:      old.Title,
+		Message:    old.Message,
+		ImageURL:   imageIdToUrl(old.ImageId),
+		Categories: mapCategoriesForPost(old.CategoriesIDs),
+		Reactions:  mapReactionsForPost(&old, loggedUserId),
+		CreatedAt:  old.Time.UTC().Format("2006-01-02 15:04:05"),
+	}
+
+	if old.ParentId == nil {
+		postResponse.ParentId = -1
+	} else {
+		postResponse.ParentId = *old.ParentId
+	}
+
+	return postResponse
+}
+
 func mapReactionsForPost(post *structs.Post, loggedUserId int) []structs.PostReactionResponse {
 	reactionsResp := []structs.PostReactionResponse{}
 
@@ -299,7 +339,6 @@ func ConvertToReportRequestResponse(reports []structs.Report) ([]structs.ReportR
 		} else {
 			postTitle = ""
 		}
-		fmt.Print(report.IsPostReport)
 		response := structs.ReportRequestResponse{
 			Id:                report.Id,
 			ReporterId:        report.ReporterId,
@@ -314,7 +353,6 @@ func ConvertToReportRequestResponse(reports []structs.Report) ([]structs.ReportR
 			IsPending:         report.IsPending,
 			ReportResponse:    report.ReportResponse,
 		}
-		fmt.Println(response)
 		responses = append(responses, response)
 	}
 
@@ -356,5 +394,163 @@ func ImageURLToBytes(imagePath string) ([]byte, error) {
 	return imageData, nil
 }
 
+func ConvertToNotificationResponse(notifications []structs.UserNotification) ([]structs.NotificationResponse, error) {
+	var responses []structs.NotificationResponse
+	for _, notification := range notifications {
+		if notification.PostReactionID == 0 && notification.CommentID == 0 && notification.ReportID == 0 && notification.PromoteRequestID == 0 {
+			continue
+		}
+		react := false
+		comment := false
+		report := false
+		PromoteRequestID := false
+		if notification.PostReactionID != 0 {
+			react = true
+		} else if notification.CommentID != 0 {
+			comment = true
+		} else if notification.ReportID != 0 {
+			report = true
+		} else if notification.PromoteRequestID != 0 {
+			PromoteRequestID = true
+		}
+		if react {
+			response := structs.NotificationResponse{
+				IsReact:          react,
+				IsComment:        comment,
+				IsReport:         report,
+				IsPromoteRequest: PromoteRequestID,
+			}
+			React, err := database.GetReactionById(notification.PostReactionID)
+			if err != nil {
+				return nil, err
+			}
+			if React == nil {
+				return nil, fmt.Errorf("reaction not found for PostReactionID: %d", notification.PostReactionID)
+			}
+			reactionn := "like"
+			if React.ReactionId == 2 {
+				reactionn = "dislike"
+			}
+			username, err := database.GetUsernameByUserId(React.UserId)
+			if err != nil {
+				return nil, err
+			}
+			Post, err := database.GetPost(React.PostId)
+			if err != nil {
+				return nil, err
+			}
+			if Post == nil {
+				return nil, fmt.Errorf("post not found for PostId: %d", React.PostId)
+			}
+			reactionNotification := structs.ReactionNotification{
+				PostId:   React.PostId,
+				Username: username,
+				Post:     mapPost(*Post, notification.UserId),
+				Reaction: reactionn,
+			}
+			response.ReactionNotifi = reactionNotification
+			responses = append(responses, response)
+		} else if comment {
+			response := structs.NotificationResponse{
+				IsReact:          react,
+				IsComment:        comment,
+				IsReport:         report,
+				IsPromoteRequest: PromoteRequestID,
+			}
+			Post, err := database.GetPost(notification.CommentID)
+			if err != nil {
+				return nil, err
+			}
+			if Post == nil {
+				return nil, fmt.Errorf("post not found for CommentID: %d", notification.CommentID)
+			}
 
-ConvertToNotificationResponse
+			var parentId int
+			if Post.ParentId != nil {
+				parentId = *Post.ParentId
+			}
+			ParentPost, err := database.GetPost(parentId)
+			if err != nil {
+				return nil, err
+			}
+			if ParentPost == nil {
+				return nil, fmt.Errorf("post not found for CommentID: %d", notification.CommentID)
+			}
+			username, err := database.GetUsernameByUserId(Post.UserId)
+			if err != nil {
+				return nil, err
+			}
+			commentNotification := structs.CommentNotification{
+				ParentId: *Post.ParentId,
+				Username: username,
+				Post:     mapPost(*ParentPost, notification.UserId),
+			}
+			response.CommentNotifi = commentNotification
+			responses = append(responses, response)
+		} else if PromoteRequestID {
+			response := structs.NotificationResponse{
+				IsReact:          react,
+				IsComment:        comment,
+				IsReport:         report,
+				IsPromoteRequest: PromoteRequestID,
+			}
+			PromoteRequest, err := database.GetRequest(notification.PromoteRequestID)
+			if err != nil {
+				return nil, err
+			}
+			User, err := database.GetUserById(PromoteRequest.UserId)
+			if err != nil {
+				return nil, err
+			}
+			accepted := false
+			if User.Type == 2 {
+				accepted = true
+			}
+			promoteNotification := structs.PromoteRequestNotification{
+				Reason:   PromoteRequest.Reason,
+				Accepted: accepted,
+			}
+			response.PromoteRequestNotifi = promoteNotification
+			responses = append(responses, response)
+		} else if report {
+			response := structs.NotificationResponse{
+				IsReact:          react,
+				IsComment:        comment,
+				IsReport:         report,
+				IsPromoteRequest: PromoteRequestID,
+			}
+			Report, err := database.GetReport(notification.ReportID)
+			if err != nil {
+				return nil, err
+			}
+			reported, err := database.GetUsernameByUserId(Report.ReportedId)
+			if err != nil {
+				return nil, err
+			}
+			accepted := false
+			if Report.ReportResponse != "" {
+				accepted = true
+			}
+			PostTitle := ""
+			if Report.IsPostReport {
+				Post, err := database.GetPost(Report.PostId)
+				if err != nil {
+					return nil, err
+				}
+				if Post == nil {
+					return nil, fmt.Errorf("post not found for PostId: %d", Report.PostId)
+				}
+				PostTitle = Post.Title
+			}
+			reportNotification := structs.ReportRequestNotification{
+				Reason:            Report.Reason,
+				Accepted:          accepted,
+				ReportedUsername:  reported,
+				ReportedPostTitle: PostTitle,
+			}
+			response.ReportRequestNotifi = reportNotification
+			responses = append(responses, response)
+		}
+	}
+	return responses, nil
+}
