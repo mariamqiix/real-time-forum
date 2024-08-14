@@ -860,7 +860,7 @@ span.framer-text:not([data-text-fill]) {
     font-size: 30px;
     padding-left: 5%;
     width: 80%;
-    height: 80%;
+    height: auto;
 }
 
 #formReg label {
@@ -881,6 +881,11 @@ span.framer-text:not([data-text-fill]) {
     text-align: left;
 }
 
+#uploadImage {
+    width: 400px;
+    height: 60px;
+}
+
 #formReg button {
     float: right;
     clear: both;
@@ -888,6 +893,15 @@ span.framer-text:not([data-text-fill]) {
     border-radius: 20px;
     height: 50px;
     width: 100px;
+}
+
+.RegChange {
+    background-color: greenyellow;
+    float: left;
+    clear: left;
+    margin: 3%;
+    margin-top: 0;
+    width: auto;
 }
 
 #formReg button[disabled]:hover {
@@ -899,10 +913,13 @@ span.framer-text:not([data-text-fill]) {
     margin: 0 auto;
     font-size: 25px;
     color: rgba(217, 211, 198, 1);
+    float: left;
+    clear: both;
     text-align: left;
-    height: 80%;
+    height: auto;
     width: 100%;
     table-layout: fixed;
+    overflow: hidden;
 }
 
 .search-container {
@@ -1227,14 +1244,7 @@ button:hover {
     background-color: #eac176;
 }
 
-.RegChange {
-    background-color: greenyellow;
-    float: left;
-    clear: left;
-    margin: 3%;
-    margin-top: 0;
-    width: 110px;
-}
+
 
 .RegChange:hover {
     background-color: rgb(160, 210, 86);
@@ -1536,10 +1546,6 @@ button:hover {
     /* Adjust font size if needed */
     text-align: center;
     /* Center the text inside the button */
-}
-
-#RegChange {
-    width: auto;
 }
 
 .title-span {
