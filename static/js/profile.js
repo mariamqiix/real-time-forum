@@ -190,4 +190,4 @@ function ChatView() {
 ChatView();
 
 // Set an interval to refresh the chat view every 5 seconds
-setInterval(ChatView, 5000);
+// setInterval(ChatView, 5000);

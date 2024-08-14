@@ -22,14 +22,20 @@ socket.onmessage = function(event) {
             typingIndicator.style.display = "block";
             setTimeout(() => {
                 typingIndicator.style.display = "none";
-            }, 5000); // Hide after 2 seconds
+            }, 3000); // Hide after 2 seconds
         }
 
         const typingIcon = messageBox.querySelector(".typingIcon");
         typingIcon.style.display = "block";
+        const UserPic = messageBox.querySelector(".chatUserPic");
+        UserPic.style.backgroundColor = "white";
+        UserPic.style.opacity = "0.6";
         setTimeout(() => {
             typingIcon.style.display = "none";
-        }, 5000); // H
+            UserPic.style.backgroundColor = "none";
+            UserPic.style.opacity = "1";
+
+        }, 3000); // H
     } else {
         if (id == messageData.SenderId) {
             const chatDiv = document.createElement("div");
