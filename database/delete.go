@@ -41,6 +41,7 @@ func RemoveReactionFromPost(postId, reactionTypeId, reacterId int) error {
 
 	return nil
 }
+
 func RemovePost(postID int) error {
 	// Lock the mutex before accessing the database
 	mutex.Lock()
@@ -53,6 +54,13 @@ func RemovePost(postID int) error {
 
 	// Delete the notifications associated with the post reactions from the UserNotification table
 	_, err = tx.Exec("DELETE FROM UserNotification WHERE post_reaction_id IN (SELECT id FROM PostReaction WHERE post_id = ?)", postID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Delete the notifications associated with comments on the post from the UserNotification table
+	_, err = tx.Exec("DELETE FROM UserNotification WHERE comment_id IN (SELECT id FROM Post WHERE parent_id = ?)", postID)
 	if err != nil {
 		tx.Rollback()
 		return err
