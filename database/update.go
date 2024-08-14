@@ -241,3 +241,25 @@ func removeSession(tx *sql.Tx, userId int) error {
 
 	return nil
 }
+
+// UpdateImage updates the image data in the UploadedImage table.
+func UpdateImage(imageID int, imageData []byte) error {
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Prepare the SQL statement to update the image data
+	stmt, err := db.Prepare(`UPDATE UploadedImage SET data = ? WHERE id = ?`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	// Execute the SQL statement to update the image data
+	_, err = stmt.Exec(imageData, imageID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

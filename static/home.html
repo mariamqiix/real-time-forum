@@ -64,6 +64,7 @@
 
                 <div class="profile navigationContent">
                     <div class="userPic" id="userPic"></div>
+                    <button id="ReportProfile-button" class="Report-button">Report</button>
 
                     <h1 class="profileUsername" id="profileUsername">UserName</h1>
                     <h2 class="userInfo" id="userInfo">Age: 12, location: Bahrain</h2>
@@ -211,6 +212,10 @@
                                     </select>
                                 </td>
                                 <td class="error"><span id="genderError" class="error"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="formReg-label"><label for="uploadImage">Your Image:</label></td>
+                                <td class="formReg-input"> <input type="file" id="uploadImage" name="uploadImage" accept="image/*"></td>
                             </tr>
                         </table>
 
@@ -414,37 +419,41 @@
     <div class="exitButton" onclick="toggleDiv( 'user-info')"></div>
     <table>
         <tr>
-            <th><label for="ChangeUserName">Username</label></th>
+            <th><label class="formUpdate-label" for="ChangeUserName">Username</label></th>
             <td><input type="text" id="ChangeUserName" name="ChangeUserName" required></td>
         </tr>
         <tr>
-            <th><label for="ChangeFirstName">First Name</label></th>
+            <th><label class="formUpdate-label" for="ChangeFirstName">First Name</label></th>
             <td><input type="text" id="ChangeFirstName" name="ChangeFirstName" required></td>
         </tr>
         <tr>
-            <th><label for="ChangeLastName">Last Name</label></th>
+            <th><label class="formUpdate-label" for="ChangeLastName">Last Name</label></th>
             <td><input type="text" id="ChangeLastName" name="ChangeLastName" required></td>
         </tr>
         <tr>
-            <th><label for="ChangeEmail">Email</label></th>
+            <th><label class="formUpdate-label" for="ChangeEmail">Email</label></th>
             <td><input type="email" id="ChangeEmail" name="ChangeEmail" required></td>
         </tr>
         <tr>
-            <th><label for="ChangeDOB">Date of Birth</label></th>
+            <th><label class="formUpdate-label" for="ChangeDOB">Date of Birth</label></th>
             <td><input type="date" id="ChangeDOB" name="ChangeDOB" required></td>
         </tr>
         <tr>
-            <th><label for="ChangeCountry">Country</label></th>
+            <th><label class="formUpdate-label" for="ChangeCountry">Country</label></th>
             <td><input type="text" id="ChangeCountry" name="ChangeCountry" required></td>
         </tr>
         <tr>
-            <th><label for="ChangeGender">Gender</label></th>
+            <th><label class="formUpdate-label" for="ChangeGender">Gender</label></th>
             <td>
                 <select id="ChangeGender" name="ChangeGender">
                     <option value="female">Female</option>
                     <option value="male">Male</option>
                 </select>
             </td>
+        </tr>
+        <tr>
+            <td class="formUpdate-label"><label for="ChangeUploadedImage">Your Image:</label></td>
+            <td class="formUpdate-label"> <input type="file" id="ChangeUploadedImage" name="ChangeUploadedImage" accept="image/*"></td>
         </tr>
     </table>
     <br>

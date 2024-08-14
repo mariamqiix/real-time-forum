@@ -463,6 +463,7 @@ function UpdateUserInformation() {
     const dateOfBirth = document.getElementById("ChangeDOB").value;
     const country = document.getElementById("ChangeCountry").value;
     const gender = document.getElementById("ChangeGender").value;
+    const image = document.getElementById("ChangeUploadedImage").files[0];
 
     if (
         username.trim() === "" ||
@@ -484,6 +485,8 @@ function UpdateUserInformation() {
     formData.append("dateOfBirth", dateOfBirth);
     formData.append("country", country);
     formData.append("gender", gender);
+    formData.append("image", image);
+
     if (confirm("Are you sure you want to proceed?")) {
         fetch("http://localhost:8080/updateUserInfo", {
                 method: "POST",

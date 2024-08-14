@@ -3,10 +3,13 @@ package Server
 import (
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"slices"
 	"sort"
@@ -84,7 +87,7 @@ func mapPosts(oldArr []structs.Post, loggedUserId int) []structs.PostResponse {
 			author.DateOfBirth = user.DateOfBirth
 			author.Location = user.Country
 			author.Type = userTypeToResponse(user.Type)
-			author.ImageURL = imageIdToUrl(user.ImageId)
+			author.ImageURL = GetImageData(user.ImageId)
 		}
 		newArr[i] = structs.PostResponse{
 			Id:         old.Id,
@@ -306,4 +309,39 @@ func ConvertToReportRequestResponse(reports []structs.Report) ([]structs.ReportR
 	}
 
 	return responses, nil
+}
+
+// / GetImageData retrieves the image data from the database and returns it as a base64-encoded string.
+func GetImageData(imageID int) string {
+	// Retrieve the image data from the database
+	imageData, err := database.GetImage(imageID)
+	if err != nil {
+		return ""
+	}
+
+	if imageData == nil {
+		return ""
+	}
+
+	// Encode the image data to base64
+	base64Image := base64.StdEncoding.EncodeToString(imageData)
+	return base64Image
+}
+
+// ImageURLToBytes reads an image from the given file path and returns it as a byte slice.
+func ImageURLToBytes(imagePath string) ([]byte, error) {
+	// Open the image file
+	file, err := os.Open(imagePath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	// Read the image data from the file
+	imageData, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+
+	return imageData, nil
 }

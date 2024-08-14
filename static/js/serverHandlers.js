@@ -340,7 +340,7 @@ function PostPageHandler(data) {
                         ReporBtutton.style.display = "none";
                     } else {
                         editPostButton.style.display = "none";
-                        ReporBtutton.setAttribute("onclick", `ReportPost(${data.id})`);
+                        ReporBtutton.setAttribute("onclick", `ReportPost(${data.id},false,true)`);
                     }
                 } catch (error) {
                     console.error("JSON parsing error:", error);
@@ -781,48 +781,79 @@ function deletePost(id) {
         });
 }
 
-function ReportPost(id) {
+function ReportPost(id, user, post) {
     toggleDiv("ReportDiv");
     const ReportBtn = document.getElementById("ReportDiv-button");
     ReportBtn.onclick = function() {
-        ReportPostHandler(id);
+        ReportPostHandler(id, user, post);
     };
 }
 
-function ReportPostHandler(id) {
+function ReportPostHandler(id, user, post) {
     const reportDescription = document.getElementById("ReportDescription").value;
     console.log(reportDescription);
-    const postReportRequest = {
-        post_id: id,
-        reason: reportDescription,
-    };
+    if (post) {
+        const postReportRequest = {
+            post_id: id,
+            reason: reportDescription,
+        };
 
-    fetch(`http://localhost:8080/post/${id}/report`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(postReportRequest),
-        })
-        .then((response) => {
-            if (response.ok) {
-                const reportDescription2 = document.getElementById("ReportDescription");
-                reportDescription2.innerHTML = "";
-                toggleDiv("ReportDiv");
-                HomePageRequest();
-                console.log("Post reported successfully");
-            } else {
-                response.text().then((error) => {
-                    console.error("Post reporting failed:", error);
-                });
-            }
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+        fetch(`http://localhost:8080/post/${id}/report`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(postReportRequest),
+            })
+            .then((response) => {
+                if (response.ok) {
+                    const reportDescription2 = document.getElementById("ReportDescription");
+                    reportDescription2.innerHTML = "";
+                    toggleDiv("ReportDiv");
+                    HomePageRequest();
+                    console.log("Post reported successfully");
+                } else {
+                    response.text().then((error) => {
+                        console.error("Post reporting failed:", error);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    } else if (user) {
+        const postReportRequest = {
+            username: id,
+            reason: reportDescription,
+        };
+
+        fetch(`http://localhost:8080/user/${id}/report`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(postReportRequest),
+            })
+            .then((response) => {
+                if (response.ok) {
+                    const reportDescription2 = document.getElementById("ReportDescription");
+                    reportDescription2.innerHTML = "";
+                    toggleDiv("ReportDiv");
+                    HomePageRequest();
+                    console.log("Post reported successfully");
+                } else {
+                    response.text().then((error) => {
+                        console.error("Post reporting failed:", error);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
 }
 
-var chatContainer = document.getElementById('UserChat');
+var chatContainer = document.getElementById("UserChat");
 
 // Function to scroll the chat container to the bottom
 function scrollToBottom() {
@@ -830,11 +861,11 @@ function scrollToBottom() {
 }
 
 // Call the function to scroll to the bottom when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function() {
     scrollToBottom();
 });
 
 // Auto scroll to bottom when content is added
-chatContainer.addEventListener('DOMSubtreeModified', function() {
+chatContainer.addEventListener("DOMSubtreeModified", function() {
     scrollToBottom();
 });

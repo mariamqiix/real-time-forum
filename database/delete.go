@@ -220,3 +220,39 @@ func RemovePostCategory(categoryId int) error {
 	// Return no error if the deletion was successful
 	return nil
 }
+
+
+
+// RemoveUser removes a user by their ID
+func RemoveUser(userID int) error {
+    // Lock the mutex before accessing the database
+    mutex.Lock()
+    defer mutex.Unlock()
+
+    tx, err := db.Begin()
+    if err != nil {
+        return err
+    }
+
+    // Prepare the SQL statement to delete a user
+    stmt, err := tx.Prepare("DELETE FROM User WHERE id = ?")
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
+    defer stmt.Close()
+
+    // Execute the SQL statement to delete the user
+    _, err = stmt.Exec(userID)
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
+
+    err = tx.Commit()
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
+    return nil
+}

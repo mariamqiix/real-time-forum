@@ -146,7 +146,7 @@ func homePageDataHuncler(w http.ResponseWriter, r *http.Request) {
 			LastName:    sessionUser.LastName,
 			DateOfBirth: sessionUser.DateOfBirth,
 			Location:    sessionUser.Country,
-			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			ImageURL:    GetImageData(sessionUser.ImageId),
 			Type:        userTypeToResponse(sessionUser.Type),
 		}
 	}

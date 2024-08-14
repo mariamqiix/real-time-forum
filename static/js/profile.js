@@ -13,6 +13,29 @@ function calculateAge(birthDateString) {
 }
 
 function profile(userId, caseString) {
+    const ReporBtutton = document.getElementById("ReportProfile-button");
+
+    // Send the form data to the Go server
+    fetch("http://localhost:8080/userType", {
+            method: "GET",
+        })
+        .then((response) => {
+            if (!response.ok) {
+                ReporBtutton.style.display = "none";
+            }
+            return response.json();
+        })
+        .then((type) => {
+            if (type.name === "Guest" || type.name === "User") {
+                ReporBtutton.style.display = "none";
+            } else if (userId != -1) {
+                ReporBtutton.style.display = "block";
+            }
+        })
+        .catch((error) => {
+            ReporBtutton.style.display = "none";
+        });
+
     const url = new URL("http://localhost:8080/userProfile");
     url.searchParams.append("user_id", userId);
     url.searchParams.append("case", caseString);
@@ -27,6 +50,9 @@ function profile(userId, caseString) {
             return response.json();
         })
         .then((data) => {
+            if (data.User && data.User.id != data.UserProfile.id) {
+                ReporBtutton.setAttribute("onclick", `ReportPost(${data.UserProfile.id},true,false)`);
+            }
             const profileUsername = document.getElementById("profileUsername");
             profileUsername.innerHTML = data.UserProfile.username;
 
@@ -38,7 +64,7 @@ function profile(userId, caseString) {
 
             // console.log('userPic', data.UserProfile.image_url)
             const userPic = document.getElementById("userPic");
-            userPic.style.backgroundImage = `url(${data.UserProfile.image_url})`;
+            userPic.style.backgroundImage = `url(data:image/jpeg;base64,${data.UserProfile.image_url})`;
             // Update the onclick attributes with the userId
 
             // Update the onclick attributes with the userId
@@ -126,12 +152,14 @@ function ChatView() {
                     messageBox.id = `messageBox-${chat.UserId}`;
                     const chatUserPic = document.createElement("div");
                     chatUserPic.className = "chatUserPic";
-                    chatUserPic.style.backgroundImage = `url(${chat.Image})`;
+                    chatUserPic.style.backgroundImage = `url(data:image/jpeg;base64,${chat.Image})`;
+                    chatUserPic.style.backgroundSize = "cover"; // Ensure the image covers the element
+
                     // Set border color based on online status
                     if (chat.Online) {
                         chatUserPic.style.border = " 3px solid rgb(74, 250, 58);";
                     } else {
-                        chatUserPic.style.border = " 3px solid red";
+                        chatUserPic.style.border = " 3px solid rgb(251, 217, 152, 0.7)";
                     }
 
                     const chatUserName = document.createElement("div");

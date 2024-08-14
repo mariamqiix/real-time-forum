@@ -54,6 +54,8 @@ function createPost(Posts, divName, caseString) {
         postBox.setAttribute("id", `${post.id}`);
         const postUserPic = document.createElement("div");
         postUserPic.classList.add("postUserPic");
+        postUserPic.style.backgroundImage = `url(data:image/jpeg;base64,${post.author.image_url})`;
+        postUserPic.style.backgroundSize = "cover"; // Ensure the image covers the element
         postBox.appendChild(postUserPic);
 
         const postTitle = document.createElement("div");

@@ -33,7 +33,6 @@ async function submitLoginForm() {
         console.error("Error:", error);
     }
 }
-
 async function submitForm() {
     // Get the form values
     const firstName = document.getElementById("firstName").value;
@@ -44,6 +43,8 @@ async function submitForm() {
     const country = document.getElementById("country").value;
     const password = document.getElementById("password").value;
     const gender = document.getElementById("gender").value;
+    const photo = document.getElementById("uploadImage").files[0]; // Get the photo file
+
     // Create the request body
     const formData = new FormData();
     formData.append("firstName", firstName);
@@ -54,6 +55,7 @@ async function submitForm() {
     formData.append("username", username);
     formData.append("dob", dob);
     formData.append("password", password);
+    formData.append("image", photo);
 
     try {
         // Send the POST request
@@ -84,6 +86,8 @@ async function submitForm() {
             country.innerHTML = "";
             const gender = document.getElementById("gender");
             gender.innerHTML = "";
+            document.getElementById("uploadImage").value = ""; // Clear the photo input
+
             initializeWebSocket();
         } else {
             const error = await response.text();

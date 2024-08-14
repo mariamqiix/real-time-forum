@@ -156,8 +156,6 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 
 	view := profileView{}
 	if dbUser != nil {
-		fmt.Println("lolllll\n\n\n")
-
 		view.UserProfile = structs.UserResponse{
 			Id:          dbUser.Id,
 			Username:    dbUser.Username,
@@ -165,7 +163,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 			LastName:    dbUser.LastName,
 			DateOfBirth: dbUser.DateOfBirth,
 			Location:    dbUser.Country,
-			ImageURL:    imageIdToUrl(dbUser.ImageId),
+			ImageURL:    GetImageData(dbUser.ImageId),
 			Type:        userTypeToResponse(dbUser.Type),
 		}
 	}
@@ -263,16 +261,45 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	imageID := 0
-	// if userData.Image != nil {
-	// 	isImage, _ := IsDataImage(userData.Image)
-	// 	if isImage {
-	// 		imageID, err = database.UploadImage(userData.Image)
-	// 		if err != nil {
-	// 			log.Printf("SignupHandler: %s\n", err.Error())
-	// 		}
-	// 	}
-	// }
+	// Get the uploaded image file
+	file, fh, err := r.FormFile("image")
+	if err != nil {
+		fmt.Print(err)
+		http.Error(w, "No such file", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	UserImageId := 0
+	haveImage := fh.Size != 0
+	if haveImage && fh.Size > maxImageSize {
+		http.Error(w, "Image size too large", http.StatusBadRequest)
+		return
+	}
+	if haveImage {
+
+		// Read the file data into a buffer
+		imageBuff, err := io.ReadAll(file)
+		if err != nil {
+			http.Error(w, "Unable to read file", http.StatusInternalServerError)
+			return
+		}
+
+		// Check if the content is an image
+		isImage, _ := IsDataImage(imageBuff)
+		if !isImage {
+			http.Error(w, "File type not allowed", http.StatusUnsupportedMediaType)
+			return
+		}
+
+		// Upload the image and get the image ID
+		imageId, err := database.UploadImage(imageBuff)
+		if err != nil {
+			http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+			return
+		}
+		UserImageId = imageId
+	}
 
 	// structure
 	hashedPassword, hashErr := GetHash(password)
@@ -290,13 +317,14 @@ func signupPostHandler(w http.ResponseWriter, r *http.Request) {
 		Country:        country,
 		DateOfBirth:    dob,
 		HashedPassword: hashedPassword,
-		ImageId:        imageID,
+		ImageId:        UserImageId,
 		GithubName:     "",
 		LinkedinName:   "",
 		TwitterName:    "",
 		Bio:            "",
 		Gender:         gender,
 	}
+
 	err = database.CreateUser(cleanedUserData)
 	if err != nil {
 		http.Error(w, "could not create a user, please try again later", http.StatusBadRequest)
@@ -482,7 +510,7 @@ func categoryPostsHandler(w http.ResponseWriter, r *http.Request) {
 			LastName:    sessionUser.LastName,
 			DateOfBirth: sessionUser.DateOfBirth,
 			Location:    sessionUser.Country,
-			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			ImageURL:    GetImageData(sessionUser.ImageId),
 			Type:        userTypeToResponse(sessionUser.Type),
 		}
 	}
@@ -535,7 +563,7 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 			LastName:    sessionUser.LastName,
 			DateOfBirth: sessionUser.DateOfBirth,
 			Location:    sessionUser.Country,
-			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			ImageURL:    GetImageData(sessionUser.ImageId),
 			Type:        userTypeToResponse(sessionUser.Type),
 		}
 		view.Post = mapPosts([]structs.Post{*post}, sessionUser.Id)[0]
@@ -635,7 +663,7 @@ func editPostHandler(w http.ResponseWriter, r *http.Request) {
 				LastName:    sessionUser.LastName,
 				DateOfBirth: sessionUser.DateOfBirth,
 				Location:    sessionUser.Country,
-				ImageURL:    imageIdToUrl(sessionUser.ImageId),
+				ImageURL:    GetImageData(sessionUser.ImageId),
 				Type:        userTypeToResponse(sessionUser.Type),
 			}
 			view.Post = mapPosts([]structs.Post{*post}, sessionUser.Id)[0]
@@ -762,7 +790,7 @@ func addPostHandlerGet(w http.ResponseWriter, r *http.Request) {
 				LastName:    sessionUser.LastName,
 				DateOfBirth: sessionUser.DateOfBirth,
 				Location:    sessionUser.Country,
-				ImageURL:    imageIdToUrl(sessionUser.ImageId),
+				ImageURL:    GetImageData(sessionUser.ImageId),
 				Type:        userTypeToResponse(sessionUser.Type),
 			},
 			Categories: nil,
@@ -900,26 +928,29 @@ func reportUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Add error handling for user not logged in
-	session, ok := LoggedOrNot(w, r)
-	if !ok || session == nil {
-		writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
-		errorServer(w, r, http.StatusUnauthorized)
-		return
-	}
+	// // Add error handling for user not logged in
+	// session, ok := LoggedOrNot(w, r)
+	// if !ok || session == nil {
+	// 	writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
+	// 	errorServer(w, r, http.StatusUnauthorized)
+	// 	return
+	// }
 
-	// Add error handling for user not found
-	user, err := database.GetUserById(*session.UserId) // Dereference the pointer value
-	if err != nil || user == nil {
-		writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
-		errorServer(w, r, http.StatusNotFound)
-		return
-	}
+	// // Add error handling for user not found
+	// user, err := database.GetUserById(*session.UserId) // Dereference the pointer value
+	// if err != nil || user == nil {
+	// 	writeToJson(map[string]string{"message": "Could not perform operation, please try again later"}, w)
+	// 	errorServer(w, r, http.StatusNotFound)
+	// 	return
+	// }
 
 	// Add error handling for post not found
 	report := structs.Report{
-		ReportedId: reportRequest.Username,
-		Reason:     reportRequest.Reason,
+		ReporterId:   sessionUser.Id,
+		IsPostReport: false,
+		Time:         time.Now(),
+		ReportedId:   reportRequest.Username,
+		Reason:       reportRequest.Reason,
 	}
 
 	err2 := database.AddReport(report)
@@ -1165,7 +1196,7 @@ func addCommentPostHandler(w http.ResponseWriter, r *http.Request) {
 			LastName:    sessionUser.LastName,
 			DateOfBirth: sessionUser.DateOfBirth,
 			Location:    sessionUser.Country,
-			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			ImageURL:    GetImageData(sessionUser.ImageId),
 			Type:        userTypeToResponse(sessionUser.Type),
 		}
 		view.Post = mapPosts([]structs.Post{*post}, sessionUser.Id)[0]
@@ -1229,7 +1260,7 @@ func addCommentGetHandler(w http.ResponseWriter, r *http.Request) {
 			LastName:    sessionUser.LastName,
 			DateOfBirth: sessionUser.DateOfBirth,
 			Location:    sessionUser.Country,
-			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			ImageURL:    GetImageData(sessionUser.ImageId),
 			Type:        userTypeToResponse(sessionUser.Type),
 		},
 		Categories: nil,
@@ -1292,7 +1323,7 @@ func searchPostHandler(w http.ResponseWriter, r *http.Request) {
 			LastName:    sessionUser.LastName,
 			DateOfBirth: sessionUser.DateOfBirth,
 			Location:    sessionUser.Country,
-			ImageURL:    imageIdToUrl(sessionUser.ImageId),
+			ImageURL:    GetImageData(sessionUser.ImageId),
 			Type:        userTypeToResponse(sessionUser.Type),
 		}
 	}
@@ -1738,6 +1769,45 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid date of birth format", http.StatusBadRequest)
 		return
 	}
+	// Get the uploaded image file
+	file, fh, err := r.FormFile("image")
+	if err != nil {
+		fmt.Print(err)
+		http.Error(w, "No such file", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	UserImageId := sessionUser.ImageId
+	haveImage := fh.Size != 0
+	if haveImage && fh.Size > maxImageSize {
+		http.Error(w, "Image size too large", http.StatusBadRequest)
+		return
+	}
+	if haveImage {
+
+		// Read the file data into a buffer
+		imageBuff, err := io.ReadAll(file)
+		if err != nil {
+			http.Error(w, "Unable to read file", http.StatusInternalServerError)
+			return
+		}
+
+		// Check if the content is an image
+		isImage, _ := IsDataImage(imageBuff)
+		if !isImage {
+			http.Error(w, "File type not allowed", http.StatusUnsupportedMediaType)
+			return
+		}
+
+		// Upload the image and get the image ID
+		imageId, err := database.UploadImage(imageBuff)
+		if err != nil {
+			http.Error(w, "Internal server error, try again later", http.StatusInternalServerError)
+			return
+		}
+		UserImageId = imageId
+	}
 
 	newUser := structs.User{
 		Id:             sessionUser.Id,
@@ -1748,7 +1818,7 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 		LastName:       lastName,
 		Country:        country,
 		HashedPassword: sessionUser.HashedPassword,
-		ImageId:        sessionUser.ImageId,
+		ImageId:        UserImageId,
 		Type:           sessionUser.Type,
 		BannedUntil:    sessionUser.BannedUntil,
 		GithubName:     "",
@@ -1784,7 +1854,7 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 			chat := structs.Chats{
 				UserId:   user.Id,
 				Username: user.Username,
-				Image:    imageIdToUrl(user.ImageId),
+				Image:    GetImageData(user.ImageId),
 				Online:   IsUserOnline(user.Id),
 			}
 			chats = append(chats, chat)
@@ -1804,7 +1874,7 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 				chat := structs.Chats{
 					UserId:   user.Id,
 					Username: user.Username,
-					Image:    imageIdToUrl(user.ImageId),
+					Image:    GetImageData(user.ImageId),
 					Online:   IsUserOnline(user.Id),
 				}
 				chats = append(chats, chat)
