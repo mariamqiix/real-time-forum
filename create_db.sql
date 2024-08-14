@@ -100,10 +100,13 @@ CREATE TABLE Post (
 -- Create the Notification table
 CREATE TABLE UserNotification (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
     comment_id VARCHAR(10),
     PostReaction_id VARCHAR(150),
+    messages VARCHAR(150), -- "accept promotion, depromtion, report accepted, not accepted (replay)"
     read BOOLEAN DEFAULT FALSE, -- Add this line
     FOREIGN KEY (comment_id) REFERENCES Post(id),
+    FOREIGN KEY (user_id) REFERENCES User(id),
     FOREIGN KEY (PostReaction_id) REFERENCES PostReaction(id)
 );
 
