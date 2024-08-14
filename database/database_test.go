@@ -406,7 +406,7 @@ func TestGetReports(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	_, err = database.GetReports(true)
+	_, err = database.GetReports(1)
 
 	if err != nil {
 		t.Error(err.Error())

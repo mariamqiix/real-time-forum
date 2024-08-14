@@ -77,6 +77,7 @@ func GoLive(port string) {
 	http.HandleFunc("/Reports", ReportsHandler)
 	http.HandleFunc("/banUser", BanUserHandler)
 	http.HandleFunc("/updateReport", updateReportHandler)
+	http.HandleFunc("/ReportsByUser", ReportsByUserHandler)
 	// http.HandleFunc("GET /notifications/", notificationsHandler)
 	// http.HandleFunc("POST /notifications/{notification_id}/read", markNotificationReadHandler)
 

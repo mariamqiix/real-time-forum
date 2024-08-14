@@ -51,7 +51,12 @@ function profile(userId, caseString) {
         })
         .then((data) => {
             if (data.User && data.User.id != data.UserProfile.id) {
-                ReporBtutton.setAttribute("onclick", `ReportPost(${data.UserProfile.id},true,false)`);
+                ReporBtutton.setAttribute(
+                    "onclick",
+                    `ReportPost(${data.UserProfile.id},true,false)`
+                );
+            } else {
+                ReporBtutton.style.display = "none";
             }
             const profileUsername = document.getElementById("profileUsername");
             profileUsername.innerHTML = data.UserProfile.username;
@@ -190,4 +195,4 @@ function ChatView() {
 ChatView();
 
 // Set an interval to refresh the chat view every 5 seconds
-// setInterval(ChatView, 5000);
+setInterval(ChatView, 5000);

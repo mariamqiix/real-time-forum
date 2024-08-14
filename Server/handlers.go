@@ -393,8 +393,8 @@ func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid password", http.StatusConflict)
 		return
 	}
-
-	if !user.BannedUntil.IsZero() && user.BannedUntil.After(time.Now()) {
+fmt.Print(user.BannedUntil)
+	if user.BannedUntil.After(time.Now()) {
 		http.Error(w, "User is blocked", http.StatusForbidden)
 		return
 	}
@@ -2066,4 +2066,28 @@ func updateReportHandler(w http.ResponseWriter, r *http.Request) {
 	// Send a success response
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"message": "Report updated successfully"}`))
+}
+
+func ReportsByUserHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	sessionUser := GetUser(r)
+	if sessionUser == nil {
+		errorServer(w, r, http.StatusUnauthorized)
+		return
+	}
+	fmt.Println("hello")
+	reports, err := database.GetReportsByUserId(sessionUser.Id)
+	if err != nil {
+		fmt.Println("hi")
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	convertedR, err := ConvertToReportRequestResponse(reports)
+	if err != nil {
+		errorServer(w, r, http.StatusNotFound)
+		return
+	}
+	writeToJson(convertedR, w)
 }

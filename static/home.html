@@ -110,8 +110,11 @@
                             <li onclick="ManageCategories()">
                                 <img src="/images/arrow.png" class="icon" />Manage Categories
                             </li>
-                            <li onclick="ManageReports()">
+                            <li onclick="ManageReports(false)">
                                 <img src="/images/arrow.png" class="icon" />Manage Reports
+                            </li>
+                            <li onclick="ManageReports(true)">
+                                <img src="/images/arrow.png" class="icon" />Show Reports
                             </li>
                         </ul>
                     </div>
@@ -223,7 +226,7 @@
 
                     </div>
 
-                        <button class="RegChange" onclick="toggleVisibility('login')">Login</button>
+                    <button class="RegChange" onclick="toggleVisibility('login')">Login</button>
 
                 </div>
 
@@ -327,7 +330,7 @@
                             <div class="msgTime">12:00pm</div>
                         </div>
                     </div>
-                
+
                     <div class="typingIndicatorContainer">
                         <div id="typingIndicator" style="display: none;"></div>
                     </div>

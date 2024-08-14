@@ -16,7 +16,8 @@ function settingsHandler() {
                         li.innerHTML.includes("List of Moderators") ||
                         li.innerHTML.includes("Promotion Requests") ||
                         li.innerHTML.includes("Manage Categories") ||
-                        li.innerHTML.includes("Manage Reports")
+                        li.innerHTML.includes("Manage Reports") ||
+                        li.innerHTML.includes("Show Reports")
                     ) {
                         li.style.display = "none";
                     }
@@ -30,7 +31,10 @@ function settingsHandler() {
                         li.innerHTML.includes("Manage Reports")
                     ) {
                         li.style.display = "block";
-                    } else if (li.innerHTML.includes("Request to be Moderator")) {
+                    } else if (
+                        li.innerHTML.includes("Request to be Moderator") ||
+                        li.innerHTML.includes("Show Reports")
+                    ) {
                         li.style.display = "none";
                     }
                 });
@@ -44,6 +48,8 @@ function settingsHandler() {
                         li.innerHTML.includes("Manage Reports")
                     ) {
                         li.style.display = "none";
+                    } else if (li.innerHTML.includes("Show Reports")) {
+                        li.style.display = "block";
                     }
                 });
             }
@@ -512,11 +518,15 @@ function UpdateUserInformation() {
     }
 }
 
-function ManageReports() {
+function ManageReports(Reporter) {
+    console.log(Reporter);
     const reportRequestsList = document.querySelector("#Report-requests ul");
     reportRequestsList.innerHTML = ""; // Clear existing list items
-
-    fetch("http://localhost:8080/Reports", {
+    url = "http://localhost:8080/Reports";
+    if (Reporter) {
+        url = "http://localhost:8080/ReportsByUser";
+    }
+    fetch(url, {
             method: "GET",
         })
         .then((response) => {
@@ -547,19 +557,9 @@ function ManageReports() {
                     showButton.textContent = "Show";
                     showButton.setAttribute(
                         "onclick",
-                        `showReportRequest(${JSON.stringify(request)})`
+                        `showReportRequest(${JSON.stringify(request)},${Reporter})`
                     );
                     listItem.appendChild(showButton);
-
-                    const rejectButton = document.createElement("button");
-                    rejectButton.classList.add("reject-button");
-                    rejectButton.textContent = "Reject";
-                    rejectButton.setAttribute(
-                        "onclick",
-                        `reportUserOrPost(${JSON.stringify(request)}, "Report Rejected", true)`
-                    );
-                    listItem.appendChild(rejectButton);
-
                     reportRequestsList.appendChild(listItem);
                 });
             } catch (error) {
@@ -575,7 +575,7 @@ function ManageReports() {
     toggleDiv("Report-requests");
 }
 
-function showReportRequest(report) {
+function showReportRequest(report, Reporter) {
     toggleDiv("Report-requests");
 
     console.log("Report:", report); // Debugging line
@@ -601,7 +601,9 @@ function showReportRequest(report) {
     if (report.is_post_reported) {
         console.log;
         fields.push({ title: "Reported Post Title", info: report.reported_post_title });
-        replyButton.textContent = "Delete Post";
+        if (!Reporter) {
+            replyButton.textContent = "Delete Post";
+        }
     }
 
     fields.forEach((field) => {
@@ -619,40 +621,41 @@ function showReportRequest(report) {
         li.appendChild(infoSpan);
         ul.appendChild(li);
     });
+    if (!Reporter) {
+        // Add reply label, input, and button in a new li
+        const replyLi = document.createElement("li");
 
-    // Add reply label, input, and button in a new li
-    const replyLi = document.createElement("li");
+        const replyLabel = document.createElement("label");
+        replyLabel.textContent = "Response :";
+        replyLabel.classList.add("reply-label");
 
-    const replyLabel = document.createElement("label");
-    replyLabel.textContent = "Response :";
-    replyLabel.classList.add("reply-label");
+        const replyInput = document.createElement("textarea");
+        replyInput.id = "replyInput";
+        replyInput.classList.add("reply-input");
+        replyInput.onfocus = replyInput.oninput = function() {
+            replyButton.disabled = replyInput.value.trim() === "";
+        };
+        replyButton.onclick = function() {
+            const replyText = document.getElementById("replyInput").value;
+            reportUserOrPost(report, replyText, false);
+            document.getElementById("replyInput").innerHTML = "";
+            console.log("Reply:", replyText);
+            // Add your reply handling logic here
+        };
+        replyLi.appendChild(replyLabel);
+        replyLi.appendChild(replyInput);
+        ul.appendChild(replyLi);
 
-    const replyInput = document.createElement("textarea");
-    replyInput.id = "replyInput";
-    replyInput.classList.add("reply-input");
-    replyInput.onfocus = replyInput.oninput = function() {
-        replyButton.disabled = replyInput.value.trim() === "";
-    };
-    replyButton.onclick = function() {
-        const replyText = document.getElementById("replyInput").value;
-        reportUserOrPost(report, replyText, false);
-        document.getElementById("replyInput").innerHTML = "";
-        console.log("Reply:", replyText);
-        // Add your reply handling logic here
-    };
-    replyLi.appendChild(replyLabel);
-    replyLi.appendChild(replyInput);
-    ul.appendChild(replyLi);
-
-    const rejectButton = document.createElement("button");
-    rejectButton.textContent = "Reject";
-    rejectButton.classList.add("rejectReport-button");
-    rejectButton.onclick = function() {
-        reportUserOrPost(report, "Report Rejected", true);
-    };
+        const rejectButton = document.createElement("button");
+        rejectButton.textContent = "Reject";
+        rejectButton.classList.add("rejectReport-button");
+        rejectButton.onclick = function() {
+            reportUserOrPost(report, "Report Rejected", true);
+        };
+        reportDetailsDiv.appendChild(replyButton);
+        reportDetailsDiv.appendChild(rejectButton);
+    }
     reportDetailsDiv.appendChild(ul);
-    reportDetailsDiv.appendChild(replyButton);
-    reportDetailsDiv.appendChild(rejectButton);
 
     toggleDiv("ReportDetails");
 }
@@ -716,4 +719,57 @@ function banUser(userId) {
             console.error("Error:", error);
             alert(`Error: ${error.message}`);
         });
+}
+
+function ShowReports() {
+    const reportRequestsList = document.querySelector("#Report-requests ul");
+    reportRequestsList.innerHTML = ""; // Clear existing list items
+
+    fetch("http://localhost:8080/ReportsByUser", {
+            method: "GET",
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error: " + response.status);
+            }
+            return response.text(); // Read the response as text
+        })
+        .then((text) => {
+            try {
+                const data = JSON.parse(text); // Attempt to parse the text as JSON
+
+                data.forEach((request) => {
+                    const listItem = document.createElement("li");
+
+                    const reporterUsernameSpan = document.createElement("span");
+                    reporterUsernameSpan.classList.add("ReporterUsername");
+                    reporterUsernameSpan.textContent = request.reporter_username;
+                    listItem.appendChild(reporterUsernameSpan);
+
+                    const reportedUsernameSpan = document.createElement("span");
+                    reportedUsernameSpan.classList.add("ReportedUsername");
+                    reportedUsernameSpan.textContent = request.reported_username;
+                    listItem.appendChild(reportedUsernameSpan);
+
+                    const showButton = document.createElement("button");
+                    showButton.classList.add("show-button");
+                    showButton.textContent = "Show";
+                    showButton.setAttribute(
+                        "onclick",
+                        `showReportRequest(${JSON.stringify(request)},Reporter)`
+                    );
+                    listItem.appendChild(showButton);
+                    reportRequestsList.appendChild(listItem);
+                });
+            } catch (error) {
+                const paragraph = document.createElement("p");
+                paragraph.textContent = "No requests found.";
+                reportRequestsList.appendChild(paragraph);
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching promotion requests:", error);
+        });
+
+    toggleDiv("Report-requests");
 }

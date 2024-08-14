@@ -24,8 +24,6 @@ func GetUserByUsername(username string) (*structs.User, error) {
 	}
 	defer stmt.Close()
 
-	var bannedUntil sql.NullTime
-
 	// Execute the SQL statement and retrieve the user information
 	var u structs.User
 	err = stmt.QueryRow(username).Scan(
@@ -39,7 +37,7 @@ func GetUserByUsername(username string) (*structs.User, error) {
 		&u.Email,
 		&u.HashedPassword,
 		&u.ImageId,
-		bannedUntil,
+		&u.BannedUntil,
 		&u.GithubName,
 		&u.LinkedinName,
 		&u.TwitterName,
@@ -48,17 +46,6 @@ func GetUserByUsername(username string) (*structs.User, error) {
 
 	if err == sql.ErrNoRows {
 		return nil, nil // User doesn't exist, return nil with no error
-	}
-
-	if err != nil && bannedUntil.Valid {
-		return nil, err
-	}
-
-	// Assign the value from sql.NullTime to u.BannedUntil
-	if bannedUntil.Valid {
-		u.BannedUntil = bannedUntil.Time
-	} else {
-		u.BannedUntil = time.Time{} // Set a default value for u.BannedUntil (e.g., time.Time{})
 	}
 
 	return &u, nil
@@ -744,6 +731,58 @@ func GetImage(imageID int) ([]byte, error) {
 	}
 
 	return imageData, nil
+}
+
+// GetReportsByUserId retrieves reports from the database based on the user ID.
+func GetReportsByUserId(userId int) ([]structs.Report, error) {
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Prepare the SELECT statement
+	stmt, err := db.Prepare(`SELECT id, reporter_user_id, reported_user_id, report_message, reported_post_id, 
+                            time, is_post_report, is_pending, report_response
+                            FROM Report 
+                            WHERE reporter_user_id = ?`)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	// Execute the SELECT statement with the user ID
+	rows, err := stmt.Query(userId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Initialize a slice to store the retrieved reports
+	var reports []structs.Report
+
+	// Iterate over the result set and scan the values into the Report structs
+	for rows.Next() {
+		var report structs.Report
+		err = rows.Scan(
+			&report.Id,
+			&report.ReporterId,
+			&report.ReportedId,
+			&report.Reason,
+			&report.PostId,
+			&report.Time,
+			&report.IsPostReport,
+			&report.IsPending,
+			&report.ReportResponse)
+		if err != nil {
+			return nil, err
+		}
+		reports = append(reports, report)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return reports, nil
 }
 
 // retrieves a report from the database based on the provided report Id and returns the corresponding Report-struct
