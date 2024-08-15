@@ -40,7 +40,6 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 
 	user := GetUser(r)
 	if user == nil {
-		log.Println("User not authenticated")
 		return
 	}
 

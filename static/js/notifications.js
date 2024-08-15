@@ -9,8 +9,14 @@ async function fetchNotifications() {
         // Log the notifications to debug
         console.log("Fetched notifications:", notifications);
 
-        if (!notifications || !Array.isArray(notifications)) {
-            throw new Error("Invalid notifications data");
+        if (!notifications || !Array.isArray(notifications) || notifications.length === 0) {
+            const notificationList = document.querySelector(".notification-list");
+            notificationList.innerHTML = ""; // Clear existing notifications
+            const noNotificationsParagraph = document.createElement("p");
+            noNotificationsParagraph.textContent = "No notifications";
+            notificationList.appendChild(noNotificationsParagraph);
+            toggleVisibility("notifications");
+            return;
         }
 
         const notificationList = document.querySelector(".notification-list");
