@@ -112,8 +112,6 @@ CREATE TABLE UserNotification (
     FOREIGN KEY (post_reaction_id) REFERENCES PostReaction(id),
     FOREIGN KEY (report_id) REFERENCES Report(id),
     FOREIGN KEY (promote_request_id) REFERENCES PromoteRequest(id)
-
-
 );
 
 -- Create the Category table
@@ -204,7 +202,6 @@ VALUES (
 );
 
 
-
 INSERT INTO User
     (type_id, username, first_name, last_name, country, date_of_birth, email, hashed_password, image_id, banned_until, github_name, linkedin_name, twitter_name, bio, gender) 
     VALUES
@@ -215,3 +212,81 @@ INSERT INTO User
     (3, 'maabbas', 'mariam', 'Abbas', 'Bahrain', '2004-12-15', 'maiam.abbas@example.com', '$2a$10$yMwcWmnuJKVvHwDR4zRmQO0DmyWzt0wwU2BqdwGAOEcM0MIKjSZ/O', 0, NULL, 'maiam.abbas', 'maiam.abbas', 'maiam.abbas', 'Fitness enthusiast and wellness advocate.', 'Female');
 
 
+INSERT INTO Post 
+    (user_id, parent_id, title, message, image_id, time, like_count, dislike_count) 
+    VALUES 
+    (1, NULL, 'Exciting News!', 'Just landed a new job today. Feeling grateful and excited for the new opportunity.', 0, '2024-08-15', 0, 0),
+    (2, NULL, 'Weekend Adventure', 'Spent the weekend hiking in the mountains. The views were breathtaking!', 0, '2024-08-16', 0, 0),
+    (3, NULL, 'Movie Night', 'Watched the latest blockbuster movie last night. It was so good!', 0, '2024-08-17', 0, 0),
+    (4, NULL, 'Cooking Experiment', 'Tried a new recipe today. Surprisingly, it turned out delicious!', 0, '2024-08-18', 0, 0),
+    (5, NULL, 'Fitness Journey', 'Completed my first 5k run today. Feeling accomplished!', 0, '2024-08-19', 0, 0),
+    (1, NULL, 'Travel Plans', 'Excited to announce my upcoming trip to Europe. Cant wait to explore new places!', 0, '2024-08-20', 0, 0),
+    (2, NULL, 'Artistic Inspiration', 'Visited a local art gallery today. Feeling inspired to create something beautiful.', 0, '2024-08-21', 0, 0),
+    (3, NULL, 'Tech Update', 'Just got my hands on the latest smartphone. The technology is simply amazing!', 0, '2024-08-22', 0, 0),
+    (4, NULL, 'Book Recommendation', 'Finished reading an incredible book today. Highly recommend it to all book lovers!', 0, '2024-08-23', 0, 0),
+    (5, NULL, 'Gardening Delight', 'Spent the afternoon in my garden. Theres something so therapeutic about gardening.', 0, '2024-08-24', 0, 0),
+    (1, NULL, 'New Art Project', 'Started working on a new art project today. Cant wait to see how it turns out!', 0, '2024-08-25', 0, 0),
+    (2, NULL, 'Productivity Tips', 'Sharing my top productivity tips to help you stay focused and motivated.', 0, '2024-08-26', 0, 0),
+    (3, NULL, 'DIY Project', 'Completed a fun DIY project over the weekend. It turned out better than expected!', 0, '2024-08-27', 0, 0),
+    (4, NULL, 'Music Discovery', 'Discovered a new favorite band today. Their music is so catchy!', 0, '2024-08-28', 0, 0),
+    (5, NULL, 'Family Time', 'Had a wonderful family get-together today. Cherishing these moments.', 0, '2024-08-29', 0, 0),
+    (1, NULL, 'Coding Milestone', 'Reached a coding milestone today. Hard work pays off!', 0, '2024-08-30', 0, 0),
+    (2, NULL, 'Outdoor Adventure', 'Spent the day kayaking on the river. Nature never fails to amaze me.', 0, '2024-08-31', 0, 0),
+    (3, NULL, 'Healthy Eating', 'Trying out a new healthy eating plan. Heres to a healthier lifestyle!', 0, '2024-09-01', 0, 0),
+    (4, NULL, 'Home Decor', 'Redecorated my living room today. Loving the new cozy vibe!', 0, '2024-09-02', 0, 0),
+    (5, NULL, 'Volunteering Experience', 'Had a rewarding volunteering experience today. Giving back feels amazing!', 0, '2024-09-03', 0, 0);
+
+--insertion on postCategory table:
+INSERT INTO PostCategory (post_id, category_id) VALUES
+    (1, 1),
+    (1, 2),
+
+    (2, 2),
+
+    (3, 3),
+
+    (4, 1),
+
+    (5, 1),
+    (5, 3),
+
+    (6, 1),
+
+    (7, 1),
+    (7, 3),
+
+    (8, 1),
+    (8, 2),
+
+    (9, 1),
+    (9, 2),
+    (9, 3),
+
+    (10, 2),
+    (10, 3),
+
+    (11, 1),
+    (11, 2),
+
+    (12, 1),
+
+    (13, 1),
+    (13, 3),
+
+    (14, 1),
+    (14, 3),
+
+    (15, 2),
+    (15, 3),
+
+    (16, 1),
+    (16, 2),
+
+    (17, 1),
+    (17, 2),
+
+    (18, 1),
+
+    (19, 2),
+
+    (20, 3);
