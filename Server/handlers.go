@@ -4,6 +4,7 @@ import (
 	"RealTimeForum/database"
 	"RealTimeForum/structs"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -2137,6 +2138,7 @@ func notificationsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	convertedN, err := ConvertToNotificationResponse(notifications)
 	if err != nil {
+		fmt.Print(err)
 		errorServer(w, r, http.StatusNotFound)
 		return
 	}

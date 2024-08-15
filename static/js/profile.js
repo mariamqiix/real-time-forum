@@ -21,7 +21,8 @@ function profile(userId, caseString) {
         })
         .then((response) => {
             if (!response.ok) {
-                handleErrorResponse(response);
+                // handleErrorResponse(response);
+                console.log("user not found");
             }
             return response.json();
         })

@@ -770,3 +770,26 @@ function ShowReports() {
 
     toggleDiv("Report-requests");
 }
+
+function validateCategoryForm() {
+    const categoryName = document.getElementById("categoryName").value.trim();
+    const categoryDescription = document.getElementById("CategoryDescription").value.trim();
+    const addButton = document.getElementById("addCategoryButton");
+
+    if (categoryName !== "" && categoryDescription !== "") {
+        addButton.disabled = false;
+        addButton.classList.remove("disabled");
+    } else {
+        addButton.disabled = true;
+        addButton.classList.add("disabled");
+    }
+}
+
+// Call validateCategoryForm on page load to set the initial state
+document.addEventListener("DOMContentLoaded", () => {
+    validateCategoryForm();
+
+    // Add event listeners to the input fields
+    document.getElementById("categoryName").addEventListener("input", validateCategoryForm);
+    document.getElementById("CategoryDescription").addEventListener("input", validateCategoryForm);
+});

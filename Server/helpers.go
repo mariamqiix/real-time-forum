@@ -533,7 +533,8 @@ func ConvertToNotificationResponse(notifications []structs.UserNotification) ([]
 				accepted = true
 			}
 			PostTitle := ""
-			if Report.IsPostReport {
+			if Report.IsPostReport && Report.ReportResponse == "Report Rejected" {
+				fmt.Print("hi")
 				Post, err := database.GetPost(Report.PostId)
 				if err != nil {
 					return nil, err

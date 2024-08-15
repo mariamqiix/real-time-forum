@@ -3,15 +3,17 @@ async function fetchNotifications() {
         const response = await fetch("/notifications");
         if (!response.ok) {
             handleErrorResponse(response);
+            return; // Ensure we don't proceed if the response is not ok
         }
         const notifications = await response.json();
 
         // Log the notifications to debug
         console.log("Fetched notifications:", notifications);
 
+        const notificationList = document.querySelector(".notification-list");
+        notificationList.innerHTML = ""; // Clear existing notifications
+
         if (!notifications || !Array.isArray(notifications) || notifications.length === 0) {
-            const notificationList = document.querySelector(".notification-list");
-            notificationList.innerHTML = ""; // Clear existing notifications
             const noNotificationsParagraph = document.createElement("p");
             noNotificationsParagraph.textContent = "No notifications";
             notificationList.appendChild(noNotificationsParagraph);
@@ -19,16 +21,13 @@ async function fetchNotifications() {
             return;
         }
 
-        const notificationList = document.querySelector(".notification-list");
-        notificationList.innerHTML = ""; // Clear existing notifications
-
         notifications.forEach((notification) => {
             let message = "";
 
             if (notification.is_react) {
                 message = `${notification.ReactionNotifi.username} ${notification.ReactionNotifi.reaction}d to your post: ${notification.ReactionNotifi.PostResponse.title}`;
             } else if (notification.is_comment) {
-                message = `${notification.CommentNotifi.username} commented on your post: ${notification.CommentNotifi.post_title}`;
+                message = `${notification.CommentNotifi.username} commented on your post: ${notification.CommentNotifi.PostResponse.title}`;
             } else if (notification.is_report) {
                 message = `Your report on ${
                     notification.ReportRequestNotifi.reported_post_id
