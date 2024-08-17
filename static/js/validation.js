@@ -56,7 +56,7 @@ function validateField(input, type = 0) {
 
     // Validate first name
     if (fieldName === "firstName") {
-        if (value === "" || value.length < 4 || value.length > 20) {
+        if (value === "" || value.length < 5 || value.length > 20) {
             errorElement.textContent = "First name is required.";
         } else {
             errorElement.textContent = "";
@@ -65,7 +65,7 @@ function validateField(input, type = 0) {
 
     // Validate last name
     if (fieldName === "lastName") {
-        if (value === "" || value.length < 4 || value.length > 20) {
+        if (value === "" || value.length < 5 || value.length > 20) {
             errorElement.textContent = "Last name is required.";
         } else {
             errorElement.textContent = "";
@@ -94,8 +94,9 @@ function validateField(input, type = 0) {
 
     // Validate date of birth
     if (fieldName === "dob") {
-        if (value === "") {
-            errorElement.textContent = "Date of birth is required.";
+        const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+        if (value === "" || value > today) {
+            errorElement.textContent = "Date of birth is required and cannot be in the future.";
         } else {
             errorElement.textContent = "";
         }
@@ -154,12 +155,12 @@ function checkFormValidity() {
 
     // Add event listeners to the input fields
     const inputFields = document.querySelectorAll("#formReg input");
-    inputFields.forEach(function(input) {
+    inputFields.forEach(function (input) {
         input.addEventListener("input", checkFormValidity);
     });
 
     // Check if all input fields are filled
-    inputFields.forEach(function(input) {
+    inputFields.forEach(function (input) {
         if (input.value.trim() === "") {
             allFieldsFilled = false;
         }
@@ -167,7 +168,7 @@ function checkFormValidity() {
 
     // Check if any error messages are displayed
     const errorMessages = document.querySelectorAll(".error");
-    errorMessages.forEach(function(error) {
+    errorMessages.forEach(function (error) {
         if (error.textContent.trim() !== "") {
             console.log(error.textContent);
 
@@ -192,12 +193,12 @@ function checkLogFormValidity() {
 
     // Add event listeners to the input fields
     const inputFields = document.querySelectorAll("#formLog input");
-    inputFields.forEach(function(input) {
+    inputFields.forEach(function (input) {
         input.addEventListener("input", checkLogFormValidity);
     });
 
     // Check if all input fields are filled
-    inputFields.forEach(function(input) {
+    inputFields.forEach(function (input) {
         if (input.value.trim() === "") {
             allFieldsFilled = false;
         }
@@ -205,7 +206,7 @@ function checkLogFormValidity() {
 
     // Check if any error messages are displayed
     const errorMessages = document.querySelectorAll(".errorLogin");
-    errorMessages.forEach(function(error) {
+    errorMessages.forEach(function (error) {
         if (error.textContent.trim() !== "") {
             allErrorsEmpty = false;
         }
@@ -229,6 +230,7 @@ function validateUserInfoForm() {
     const lastName = document.getElementById("ChangeLastName").value.trim();
     const email = document.getElementById("ChangeEmail").value.trim();
     const dateOfBirth = document.getElementById("ChangeDOB").value.trim();
+    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
     if (!username) {
         alert("Username is required.");
@@ -258,7 +260,7 @@ function validateUserInfoForm() {
         alert("Invalid email format.");
         return false;
     }
-    if (!dateOfBirth) {
+    if (!dateOfBirth || dateOfBirth > today) {
         alert("Date of Birth is required.");
         return false;
     } else if (dateOfBirth > new Date()) {
