@@ -572,15 +572,15 @@
 </div>
 
 <div id="addCategory" class="popup" style="display: none">
-    <div class="exitButton" onclick="toggleDiv( 'addCategory')"></div>
+    <div class="exitButton" onclick="toggleDiv('addCategory')"></div>
     <table>
         <tr>
             <td><label for="categoryName">Category Name</label></td>
-            <td><input id="categoryName" name="categoryName" /></td>
+            <td><input id="categoryName" name="categoryName" onfocus="validateAddCategory()" onblur="validateAddCategory()" oninput="validateAddCategory()"/></td>
         </tr>
         <tr>
             <td><label for="CategoryDescription">Category Description</label></td>
-            <td><textarea id="CategoryDescription" name="CategoryDescription" rows="5"></textarea></td>
+            <td><textarea id="CategoryDescription" name="CategoryDescription" rows="5" onfocus="validateAddCategory()" onblur="validateAddCategory()" oninput="validateAddCategory()"></textarea></td>
         </tr>
     </table>
     <br>

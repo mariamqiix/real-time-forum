@@ -954,9 +954,9 @@ span.framer-text:not([data-text-fill]) {
     margin-bottom: 1%;
     text-align: left;
     transition: transform 0.3s;
-    /* Add smooth transition effect */
 }
 
+.notification-item:hover,
 .postResult:hover,
 .postBox:hover {
     transform: scale(1.1);
@@ -997,6 +997,7 @@ span.framer-text:not([data-text-fill]) {
     background-color: #f2f2f2;
     border-radius: 10px;
     opacity: 0.5;
+    transition: transform 0.3s;
 }
 
 .navigationBarBtns span:hover {

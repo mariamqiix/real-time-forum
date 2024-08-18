@@ -221,6 +221,13 @@ function appendCategory(name, Id) {
     checkbox.value = Id;
     checkbox.classList.add("checkBoxCateg");
 
+
+    // Add the change event listener
+    checkbox.addEventListener("change", function() {
+        validateCreatePost();
+    });
+
+
     // Create the category name text node
     const categoryText = document.createTextNode(name);
 

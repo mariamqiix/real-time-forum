@@ -21,6 +21,22 @@ function validateCreatePost(input) {
     }
 }
 
+
+function validateAddCategory() {
+    var categoryName = document.getElementById("categoryName").value;
+    var CategoryDescription = document.getElementById("CategoryDescription").value;
+    var submitButton = document.getElementById("addCategoryButton");
+
+
+    if (categoryName.trim() !== "" && CategoryDescription.trim() !== "") {
+        submitButton.style.cursor = "pointer";
+        submitButton.style.opacity = "1";
+    } else {
+        submitButton.style.cursor = "not-allowed";
+        submitButton.style.opacity = "0.5";
+    }
+}
+
 function validateLogInField(input) {
     const fieldName = input.id;
     const errorId = fieldName + "Error";
