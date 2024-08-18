@@ -1,6 +1,6 @@
 socket = new WebSocket(`ws://localhost:8080/ws`);
 
-socket.onopen = function(event) {
+socket.onopen = function (event) {
     console.log("WebSocket is open now.");
 };
 
@@ -8,7 +8,7 @@ function initializeWebSocket() {
     location.reload();
 }
 
-socket.onmessage = function(event) {
+socket.onmessage = function (event) {
     const messageData = JSON.parse(event.data);
     // Assuming the received data is a JSON string representing a structs.Message
     const messageBox = document.getElementById(`messageBox-${messageData.SenderId}`);
@@ -37,11 +37,10 @@ socket.onmessage = function(event) {
         }, 3000); // H
     } else {
         // const paragraph = messageBox.querySelector("p").textContent;
-        // console.log("hello");
+        // console.log("");
 
         // const messageBox = document.getElementById(`messageBox-${messageData.SenderId}`);
         const paragraph = messageBox.querySelector("p").textContent;
-        console.log("hello");
 
         // Display the alert message
         const alertDiv = document.getElementById("messageAlert");
@@ -89,11 +88,11 @@ socket.onmessage = function(event) {
     }
 };
 
-socket.onclose = function(event) {
+socket.onclose = function (event) {
     console.log("WebSocket is closed now.");
 };
 
-socket.onerror = function(error) {
+socket.onerror = function (error) {
     console.error("WebSocket error observed:", error);
 };
 
@@ -108,8 +107,8 @@ function SendMessage(ReceiverId) {
     if (Messag != "" && Messag.trim() != "") {
         document.getElementById("msgType").value = "";
         fetch(`http://localhost:8080/user`, {
-                method: "GET",
-            })
+            method: "GET",
+        })
             .then((response) => {
                 if (!response.ok) {
                     handleErrorResponse(response);
@@ -166,9 +165,9 @@ function SendMessage(ReceiverId) {
 
 function checkUserOnline(userID) {
     fetch(`http://localhost:8080/checkUserOnline?userID=${userID}`, {
-            method: "POST",
-            body: formData,
-        })
+        method: "POST",
+        body: formData,
+    })
         .then((response) => {
             if (response.ok) {
                 console.log(`User ${userID} is online`);
@@ -183,8 +182,8 @@ function checkUserOnline(userID) {
 
 function notifyTyping(Receiver) {
     fetch(`http://localhost:8080/user`, {
-            method: "GET",
-        })
+        method: "GET",
+    })
         .then((response) => {
             if (!response.ok) {
                 handleErrorResponse(response);

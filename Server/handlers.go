@@ -1903,7 +1903,6 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 				chats = append(chats, chat)
 			}
 		}
-		fmt.Print("hello")
 		sortedChats := UpdateAndSortChats(sessionUser.Id, chats)
 		writeToJson(sortedChats, w)
 	}
