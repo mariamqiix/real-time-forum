@@ -3,6 +3,7 @@ package database
 import (
 	"RealTimeForum/structs"
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -655,51 +656,51 @@ func GetReactionId(reactionType structs.PostReactionType) (int, error) {
 }
 
 func GetPost(postID int) (*structs.Post, error) {
-    // Lock the mutex before accessing the database
-    mutex.Lock()
-    defer mutex.Unlock()
+	// Lock the mutex before accessing the database
+	mutex.Lock()
+	defer mutex.Unlock()
 
-    // Prepare the query statement
-    stmt, err := db.Prepare(`SELECT id, user_id, parent_id, title, message, image_id, time
+	// Prepare the query statement
+	stmt, err := db.Prepare(`SELECT id, user_id, parent_id, title, message, image_id, time
                             FROM Post 
                             WHERE id = ?`)
 
-    if err != nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
-    defer stmt.Close()
+	defer stmt.Close()
 
-    // Execute the query with the provided postID as a parameter
-    row := stmt.QueryRow(postID)
+	// Execute the query with the provided postID as a parameter
+	row := stmt.QueryRow(postID)
 
-    // Initialize a new Post structure
-    post := &structs.Post{}
+	// Initialize a new Post structure
+	post := &structs.Post{}
 
-    // Scan the retrieved values into the Post structure
-    err = row.Scan(
-        &post.Id,
-        &post.UserId,
-        &post.ParentId,
-        &post.Title,
-        &post.Message,
-        &post.ImageId,
-        &post.Time)
+	// Scan the retrieved values into the Post structure
+	err = row.Scan(
+		&post.Id,
+		&post.UserId,
+		&post.ParentId,
+		&post.Title,
+		&post.Message,
+		&post.ImageId,
+		&post.Time)
 
-    if err != nil {
-        if err == sql.ErrNoRows {
-            // Post with the given ID not found
-            return nil, nil
-        }
-        return nil, err
-    }
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// Post with the given ID not found
+			return nil, nil
+		}
+		return nil, err
+	}
 
-    post.CategoriesIDs, err = getPostCategories(post.Id)
-    if err != nil {
-        return nil, err
-    }
+	post.CategoriesIDs, err = getPostCategories(post.Id)
+	if err != nil {
+		return nil, err
+	}
 
-    return post, nil
+	return post, nil
 }
 
 func GetImage(imageID int) ([]byte, error) {
@@ -1312,4 +1313,28 @@ func GetReactionById(reactionId int) (*structs.PostReaction, error) {
 	}
 
 	return &reaction, nil
+}
+
+// GetLastMessage retrieves the last message between two users
+func GetLastMessage(userId1, userId2 int) (structs.UserMessage, error) {
+	var message structs.UserMessage
+
+	query := `
+        SELECT id, sender_id, receiver_id, messag, time 
+        FROM UserMessage 
+        WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)
+        ORDER BY time DESC
+        LIMIT 1
+    `
+
+	row := db.QueryRow(query, userId1, userId2, userId2, userId1)
+	err := row.Scan(&message.Id, &message.SenderId, &message.ReceiverId, &message.Messag, &message.Time)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return message, errors.New("no messages found")
+		}
+		return message, err
+	}
+
+	return message, nil
 }

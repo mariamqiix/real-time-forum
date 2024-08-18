@@ -136,8 +136,10 @@ type UserMessage struct {
 }
 
 type Chats struct {
-	UserId   int
-	Username string
-	Image    string
-	Online   bool
+	UserId          int
+	Username        string
+	Image           string
+	Online          bool
+	LastMessageTime time.Time // Add this field
+
 }

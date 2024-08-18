@@ -15,6 +15,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var emailRegex = regexp.MustCompile(`^[\w]+@[\w]+\.[a-zA-Z]{2,}$`)
@@ -304,7 +305,10 @@ func ConvertToPromoteRequestResponse(promotionRequests []structs.PromoteRequest)
 // SortChatsByOnline sorts the chats slice so that online chats are at the top
 func SortChatsByOnline(chats []structs.Chats) []structs.Chats {
 	sort.SliceStable(chats, func(i, j int) bool {
-		return chats[i].Online && !chats[j].Online
+		if chats[i].Online != chats[j].Online {
+			return chats[i].Online && !chats[j].Online
+		}
+		return chats[i].Username < chats[j].Username
 	})
 	return chats
 }
@@ -534,7 +538,6 @@ func ConvertToNotificationResponse(notifications []structs.UserNotification) ([]
 			}
 			PostTitle := ""
 			if Report.IsPostReport && Report.ReportResponse == "Report Rejected" {
-				fmt.Print("hi")
 				Post, err := database.GetPost(Report.PostId)
 				if err != nil {
 					return nil, err
@@ -555,4 +558,33 @@ func ConvertToNotificationResponse(notifications []structs.UserNotification) ([]
 		}
 	}
 	return responses, nil
+}
+
+// UpdateAndSortChats updates the LastMessageTime for each chat and sorts them
+func UpdateAndSortChats(userId int, chats []structs.Chats) []structs.Chats {
+    // Update LastMessageTime for each chat
+    for i, chat := range chats {
+        lastMessage, err := database.GetLastMessage(chat.UserId, userId)
+        if err == nil {
+            chats[i].LastMessageTime = lastMessage.Time
+        } else {
+            chats[i].LastMessageTime = time.Time{}
+        }
+    }
+
+    // Sort the chats
+    sort.SliceStable(chats, func(i, j int) bool {
+        if chats[i].Online != chats[j].Online {
+            return chats[i].Online && !chats[j].Online
+        }
+        if chats[i].LastMessageTime.IsZero() != chats[j].LastMessageTime.IsZero() {
+            return !chats[i].LastMessageTime.IsZero()
+        }
+        if !chats[i].LastMessageTime.IsZero() && !chats[j].LastMessageTime.IsZero() {
+            return chats[i].LastMessageTime.After(chats[j].LastMessageTime)
+        }
+        return chats[i].Username < chats[j].Username
+    })
+
+    return chats
 }

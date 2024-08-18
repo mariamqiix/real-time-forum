@@ -954,7 +954,6 @@ func reportUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	err2 = writeToJson(report, w)
 	if err2 != nil {
 		log.Printf("reportPostHandler: %s\n", err2.Error())
@@ -1863,7 +1862,6 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
-
 func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
@@ -1873,7 +1871,6 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 		var chats []structs.Chats
 		users, err := database.GetUsers()
 		if err != nil {
-
 			errorServer(w, r, http.StatusNotFound)
 			return
 		}
@@ -1885,7 +1882,6 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 				Online:   IsUserOnline(user.Id),
 			}
 			chats = append(chats, chat)
-
 		}
 		sortedChats := SortChatsByOnline(chats)
 		writeToJson(sortedChats, w)
@@ -1907,7 +1903,8 @@ func ChatViewHandler(w http.ResponseWriter, r *http.Request) {
 				chats = append(chats, chat)
 			}
 		}
-		sortedChats := SortChatsByOnline(chats)
+		fmt.Print("hello")
+		sortedChats := UpdateAndSortChats(sessionUser.Id, chats)
 		writeToJson(sortedChats, w)
 	}
 }
