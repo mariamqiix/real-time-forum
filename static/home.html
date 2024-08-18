@@ -10,6 +10,7 @@
 
 <body>
     <div class="container">
+
         <div class="navigationBar">
             <div class="navigationBarImage"></div>
 
@@ -61,7 +62,9 @@
 
                     <div class="homeContent" id="homeContent"></div>
                 </div>
-
+                <div id="messageAlert" class="message-alert" style="display: none;">
+                    <p id="alertMessage"></p>
+                </div>
                 <div class="profile navigationContent">
                     <div class="userPic" id="userPic"></div>
                     <button id="ReportProfile-button" class="Report-button">Report</button>
@@ -576,7 +579,7 @@
     <table>
         <tr>
             <td><label for="categoryName">Category Name</label></td>
-            <td><input id="categoryName" name="categoryName" onfocus="validateAddCategory()" onblur="validateAddCategory()" oninput="validateAddCategory()"/></td>
+            <td><input id="categoryName" name="categoryName" onfocus="validateAddCategory()" onblur="validateAddCategory()" oninput="validateAddCategory()" /></td>
         </tr>
         <tr>
             <td><label for="CategoryDescription">Category Description</label></td>

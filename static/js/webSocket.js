@@ -36,6 +36,24 @@ socket.onmessage = function(event) {
             UserPic.style.opacity = "1";
         }, 3000); // H
     } else {
+        // const paragraph = messageBox.querySelector("p").textContent;
+        // console.log("hello");
+
+        // const messageBox = document.getElementById(`messageBox-${messageData.SenderId}`);
+        const paragraph = messageBox.querySelector("p").textContent;
+        console.log("hello");
+
+        // Display the alert message
+        const alertDiv = document.getElementById("messageAlert");
+        const alertMessage = document.getElementById("alertMessage");
+        alertMessage.textContent = paragraph + " sent you a message";
+        alertDiv.style.display = "block";
+
+        // Hide the alert after a few seconds
+        setTimeout(() => {
+            alertDiv.style.display = "none";
+        }, 5000);
+        // alert(paragraph + " sent you a message");
         if (id == messageData.SenderId) {
             const chatDiv = document.createElement("div");
             chatDiv.className = "fullMessage";

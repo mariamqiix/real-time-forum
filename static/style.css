@@ -867,6 +867,25 @@ span.framer-text:not([data-text-fill]) {
     margin: 1%;
 }
 
+#messageAlert {
+    position: fixed;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    border-radius: 15px;
+    background-color: #f2f2f2;
+    opacity: 0.5;
+    height: auto;
+    width: 30%;
+    text-align: center;
+    padding: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
 #gender,
 #formReg input,
 #formReg Image {

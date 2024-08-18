@@ -55,18 +55,18 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	for {
 		_, p, err := conn.ReadMessage()
 		if err != nil {
-			log.Println("Error reading message:", err)
+			// log.Println("Error reading message:", err)
 			return
 		}
 		MessageRequest := BodyToMessage(p)
 		if MessageRequest == nil {
-			log.Println("Message is nil or invalid.")
+			// log.Println("Message is nil or invalid.")
 			continue
 		}
 
 		SenderId, err := database.GetUserByUsername(MessageRequest.SenderId)
 		if err != nil {
-			log.Println("Error getting user by username:", err)
+			// log.Println("Error getting user by username:", err)
 			return
 		}
 		if SenderId == nil {
